@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSMC 程式題庫練習平台</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">🏢 TSMC 程式題庫練習平台</h1>
+                <nav class="nav">
+                    <a href="#" class="nav-link active">題目列表</a>
+                    <a href="#" class="nav-link">統計分析</a>
+                    <a href="#" class="nav-link">關於</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h2 class="hero-title">台積電程式題庫 - 完整版</h2>
+                <p class="hero-subtitle">80 題完整收錄 | Python & C++ & Java 詳解</p>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-problems">80</div>
+                        <div class="stat-label">總題數</div>
+                    </div>
+                    <div class="stat-card easy">
+                        <div class="stat-number" id="easy-problems">35</div>
+                        <div class="stat-label">Easy</div>
+                    </div>
+                    <div class="stat-card medium">
+                        <div class="stat-number" id="medium-problems">30</div>
+                        <div class="stat-label">Medium</div>
+                    </div>
+                    <div class="stat-card hard">
+                        <div class="stat-number" id="hard-problems">15</div>
+                        <div class="stat-label">Hard</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filters">
+            <div class="container">
+                <h3 class="filter-title">難度篩選</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">全部題目 (<span id="all-count">80</span>)</button>
+                    <button class="filter-btn" data-filter="easy">Easy (<span id="easy-count">35</span>)</button>
+                    <button class="filter-btn" data-filter="medium">Medium (<span id="medium-count">30</span>)</button>
+                    <button class="filter-btn" data-filter="hard">Hard (<span id="hard-count">15</span>)</button>
+                </div>
+                
+                <h3 class="filter-title" style="margin-top: 20px;">分類篩選</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn category-btn active" data-category="all">全部分類</button>
+                    <button class="filter-btn category-btn" data-category="array">Array</button>
+                    <button class="filter-btn category-btn" data-category="string">String</button>
+                    <button class="filter-btn category-btn" data-category="linked-list">Linked List</button>
+                    <button class="filter-btn category-btn" data-category="tree">Tree</button>
+                    <button class="filter-btn category-btn" data-category="dp">Dynamic Programming</button>
+                    <button class="filter-btn category-btn" data-category="oop">OOP Design</button>
+                    <button class="filter-btn category-btn" data-category="database">Database</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="problems" id="problems-section">
+            <div class="container">
+                <!-- 題目將由 JavaScript 動態生成 -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>TSMC 程式題庫練習平台 - 針對台積電面試題型設計</p>
+            <p>持續更新中... | 建議使用 Chrome 或 Firefox 瀏覽器</p>
+        </div>
+    </footer>
+
+    <script src="problems-data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
