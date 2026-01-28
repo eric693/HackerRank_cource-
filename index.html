@@ -473,70 +473,70 @@
         // 題目資料
         const problemsData = [
             // Array & Two Pointers
-            { id: 1, number: "#1", title: "Two Sum", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "給定一個整數陣列和目標值，找出陣列中兩個數字相加等於目標值的索引位置。", tags: ["Array", "Hash Table"] },
-            { id: 2, number: "#26", title: "Remove Duplicates from Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "從已排序陣列中移除重複元素，使用雙指標原地操作。", tags: ["Array", "Two Pointers"] },
-            { id: 3, number: "#88", title: "Merge Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "合併兩個已排序陣列，使用雙指標從後往前填充。", tags: ["Array", "Two Pointers", "Sorting"] },
-            { id: 4, number: "#283", title: "Move Zeroes", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "將陣列中的 0 移到末尾，保持非零元素順序。", tags: ["Array", "Two Pointers"] },
-            { id: 5, number: "#704", title: "Binary Search", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "標準二分搜尋實現，必須熟練掌握的基本算法。", tags: ["Array", "Binary Search"] },
-            { id: 6, number: "#11", title: "Container With Most Water", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出可以容納最多水的兩條線，使用雙指標技巧。", tags: ["Array", "Two Pointers", "Greedy"] },
-            { id: 7, number: "#15", title: "3Sum", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出陣列中所有總和為 0 的三元組，使用排序和雙指標。", tags: ["Array", "Two Pointers", "Sorting"] },
-            { id: 8, number: "#33", title: "Search in Rotated Sorted Array", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "在旋轉排序陣列中搜尋目標值，使用二分搜尋。", tags: ["Array", "Binary Search"] },
-            { id: 9, number: "#53", title: "Maximum Subarray", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出最大子陣列和，使用 Kadane 算法。", tags: ["Array", "Dynamic Programming"] },
-            { id: 10, number: "#238", title: "Product of Array Except Self", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "計算除自身以外陣列的乘積，不使用除法。", tags: ["Array", "Prefix Sum"] },
-            { id: 11, number: "#42", title: "Trapping Rain Water", difficulty: "hard", category: "Array & Two Pointers", categorySlug: "array", description: "計算可以接住的雨水量，使用雙指標或動態規劃。", tags: ["Array", "Two Pointers", "Dynamic Programming"] },
+            { id: 1, number: "#1", title: "Two Sum", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "給定一個整數陣列和目標值，找出陣列中兩個數字相加等於目標值的索引位置。", tags: ["Array", "Hash Table"], detailFile: "problems/two-sum.html" },
+            { id: 2, number: "#26", title: "Remove Duplicates from Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "從已排序陣列中移除重複元素，使用雙指標原地操作。", tags: ["Array", "Two Pointers"], detailFile: "problems/remove-duplicates.html" },
+            { id: 3, number: "#88", title: "Merge Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "合併兩個已排序陣列，使用雙指標從後往前填充。", tags: ["Array", "Two Pointers", "Sorting"], detailFile: "problems/merge-sorted-array.html" },
+            { id: 4, number: "#283", title: "Move Zeroes", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "將陣列中的 0 移到末尾，保持非零元素順序。", tags: ["Array", "Two Pointers"], detailFile: "problems/move-zeroes.html" },
+            { id: 5, number: "#704", title: "Binary Search", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "標準二分搜尋實現，必須熟練掌握的基本算法。", tags: ["Array", "Binary Search"], detailFile: "problems/binary-search.html" },
+            { id: 6, number: "#11", title: "Container With Most Water", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出可以容納最多水的兩條線，使用雙指標技巧。", tags: ["Array", "Two Pointers", "Greedy"], detailFile: "problems/container-water.html" },
+            { id: 7, number: "#15", title: "3Sum", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出陣列中所有總和為 0 的三元組，使用排序和雙指標。", tags: ["Array", "Two Pointers", "Sorting"], detailFile: "problems/three-sum.html" },
+            { id: 8, number: "#33", title: "Search in Rotated Sorted Array", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "在旋轉排序陣列中搜尋目標值，使用二分搜尋。", tags: ["Array", "Binary Search"], detailFile: "problems/search-rotated.html" },
+            { id: 9, number: "#53", title: "Maximum Subarray", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出最大子陣列和，使用 Kadane 算法。", tags: ["Array", "Dynamic Programming"], detailFile: "problems/maximum-subarray.html" },
+            { id: 10, number: "#238", title: "Product of Array Except Self", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "計算除自身以外陣列的乘積，不使用除法。", tags: ["Array", "Prefix Sum"], detailFile: "problems/product-array.html" },
+            { id: 11, number: "#42", title: "Trapping Rain Water", difficulty: "hard", category: "Array & Two Pointers", categorySlug: "array", description: "計算可以接住的雨水量，使用雙指標或動態規劃。", tags: ["Array", "Two Pointers", "Dynamic Programming"], detailFile: "problems/trapping-rain-water.html" },
             
             // String
-            { id: 12, number: "#20", title: "Valid Parentheses", difficulty: "easy", category: "String", categorySlug: "string", description: "驗證括號字串是否有效，使用堆疊資料結構。", tags: ["String", "Stack"] },
-            { id: 13, number: "#125", title: "Valid Palindrome", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷字串是否為回文，忽略大小寫和非字母數字字符。", tags: ["Two Pointers", "String"] },
-            { id: 14, number: "#242", title: "Valid Anagram", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷兩個字串是否為字母異位詞。", tags: ["Hash Table", "String", "Sorting"] },
-            { id: 15, number: "#344", title: "Reverse String", difficulty: "easy", category: "String", categorySlug: "string", description: "反轉字串，使用雙指標原地操作。", tags: ["Two Pointers", "String"] },
-            { id: 16, number: "#3", title: "Longest Substring Without Repeating Characters", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長無重複字符子字串，使用滑動視窗。", tags: ["String", "Hash Table", "Sliding Window"] },
-            { id: 17, number: "#5", title: "Longest Palindromic Substring", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長回文子字串，使用中心擴展或動態規劃。", tags: ["String", "Dynamic Programming"] },
-            { id: 18, number: "#49", title: "Group Anagrams", difficulty: "medium", category: "String", categorySlug: "string", description: "將字母異位詞分組，使用哈希表和排序。", tags: ["Hash Table", "String", "Sorting"] },
-            { id: 19, number: "#76", title: "Minimum Window Substring", difficulty: "hard", category: "String", categorySlug: "string", description: "找出包含所有目標字符的最小子字串，使用滑動視窗。", tags: ["Hash Table", "String", "Sliding Window"] },
+            { id: 12, number: "#20", title: "Valid Parentheses", difficulty: "easy", category: "String", categorySlug: "string", description: "驗證括號字串是否有效，使用堆疊資料結構。", tags: ["String", "Stack"], detailFile: "problems/valid-parentheses.html" },
+            { id: 13, number: "#125", title: "Valid Palindrome", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷字串是否為回文，忽略大小寫和非字母數字字符。", tags: ["Two Pointers", "String"], detailFile: "problems/valid-palindrome.html" },
+            { id: 14, number: "#242", title: "Valid Anagram", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷兩個字串是否為字母異位詞。", tags: ["Hash Table", "String", "Sorting"], detailFile: "problems/valid-anagram.html" },
+            { id: 15, number: "#344", title: "Reverse String", difficulty: "easy", category: "String", categorySlug: "string", description: "反轉字串，使用雙指標原地操作。", tags: ["Two Pointers", "String"], detailFile: "problems/reverse-string.html" },
+            { id: 16, number: "#3", title: "Longest Substring Without Repeating Characters", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長無重複字符子字串，使用滑動視窗。", tags: ["String", "Hash Table", "Sliding Window"], detailFile: "problems/longest-substring.html" },
+            { id: 17, number: "#5", title: "Longest Palindromic Substring", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長回文子字串，使用中心擴展或動態規劃。", tags: ["String", "Dynamic Programming"], detailFile: "problems/longest-palindrome.html" },
+            { id: 18, number: "#49", title: "Group Anagrams", difficulty: "medium", category: "String", categorySlug: "string", description: "將字母異位詞分組，使用哈希表和排序。", tags: ["Hash Table", "String", "Sorting"], detailFile: "problems/group-anagrams.html" },
+            { id: 19, number: "#76", title: "Minimum Window Substring", difficulty: "hard", category: "String", categorySlug: "string", description: "找出包含所有目標字符的最小子字串，使用滑動視窗。", tags: ["Hash Table", "String", "Sliding Window"], detailFile: "problems/minimum-window.html" },
             
             // Linked List
-            { id: 20, number: "#21", title: "Merge Two Sorted Lists", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "合併兩個已排序的鏈結串列成一個新的已排序串列。", tags: ["Linked List", "Recursion"] },
-            { id: 21, number: "#141", title: "Linked List Cycle", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "判斷鏈結串列是否有環，使用快慢指標。", tags: ["Linked List", "Two Pointers"] },
-            { id: 22, number: "#206", title: "Reverse Linked List", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "反轉鏈結串列，使用迭代或遞迴，必考經典題。", tags: ["Linked List", "Recursion"] },
-            { id: 23, number: "#2", title: "Add Two Numbers", difficulty: "medium", category: "Linked List", categorySlug: "linked-list", description: "將兩個非空鏈結串列中儲存的數字相加，每個節點包含一位數字。", tags: ["Linked List", "Math"] },
-            { id: 24, number: "#146", title: "LRU Cache", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "實現 LRU 快取機制，使用雙向鏈結串列和哈希表。", tags: ["Hash Table", "Linked List", "Design"] },
+            { id: 20, number: "#21", title: "Merge Two Sorted Lists", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "合併兩個已排序的鏈結串列成一個新的已排序串列。", tags: ["Linked List", "Recursion"], detailFile: "problems/merge-sorted-lists.html" },
+            { id: 21, number: "#141", title: "Linked List Cycle", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "判斷鏈結串列是否有環，使用快慢指標。", tags: ["Linked List", "Two Pointers"], detailFile: "problems/linked-list-cycle.html" },
+            { id: 22, number: "#206", title: "Reverse Linked List", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "反轉鏈結串列，使用迭代或遞迴，必考經典題。", tags: ["Linked List", "Recursion"], detailFile: "problems/reverse-linked-list.html" },
+            { id: 23, number: "#2", title: "Add Two Numbers", difficulty: "medium", category: "Linked List", categorySlug: "linked-list", description: "將兩個非空鏈結串列中儲存的數字相加，每個節點包含一位數字。", tags: ["Linked List", "Math"], detailFile: "problems/add-two-numbers.html" },
+            { id: 24, number: "#146", title: "LRU Cache", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "實現 LRU 快取機制，使用雙向鏈結串列和哈希表。", tags: ["Hash Table", "Linked List", "Design"], detailFile: "problems/lru-cache.html" },
             
             // Tree
-            { id: 25, number: "#104", title: "Maximum Depth of Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "計算二元樹的最大深度，遞迴基礎題。", tags: ["Tree", "DFS", "BFS"] },
-            { id: 26, number: "#226", title: "Invert Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "翻轉二元樹，使用遞迴或迭代。", tags: ["Tree", "DFS", "BFS"] },
-            { id: 27, number: "#102", title: "Binary Tree Level Order Traversal", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "二元樹的層序遍歷，使用佇列實現 BFS。", tags: ["Tree", "BFS"] },
-            { id: 28, number: "#98", title: "Validate Binary Search Tree", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "驗證是否為有效的二元搜尋樹。", tags: ["Tree", "DFS", "BST"] },
-            { id: 29, number: "#124", title: "Binary Tree Maximum Path Sum", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "找出二元樹中的最大路徑和，使用後序遍歷。", tags: ["Tree", "DFS", "Dynamic Programming"] },
+            { id: 25, number: "#104", title: "Maximum Depth of Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "計算二元樹的最大深度，遞迴基礎題。", tags: ["Tree", "DFS", "BFS"], detailFile: "problems/max-depth-tree.html" },
+            { id: 26, number: "#226", title: "Invert Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "翻轉二元樹，使用遞迴或迭代。", tags: ["Tree", "DFS", "BFS"], detailFile: "problems/invert-tree.html" },
+            { id: 27, number: "#102", title: "Binary Tree Level Order Traversal", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "二元樹的層序遍歷，使用佇列實現 BFS。", tags: ["Tree", "BFS"], detailFile: "problems/level-order-traversal.html" },
+            { id: 28, number: "#98", title: "Validate Binary Search Tree", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "驗證是否為有效的二元搜尋樹。", tags: ["Tree", "DFS", "BST"], detailFile: "problems/validate-bst.html" },
+            { id: 29, number: "#124", title: "Binary Tree Maximum Path Sum", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "找出二元樹中的最大路徑和，使用後序遍歷。", tags: ["Tree", "DFS", "Dynamic Programming"], detailFile: "problems/max-path-sum.html" },
             
             // Dynamic Programming
-            { id: 30, number: "#70", title: "Climbing Stairs", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "爬樓梯的方法數，經典動態規劃入門題。", tags: ["Math", "Dynamic Programming"] },
-            { id: 31, number: "#121", title: "Best Time to Buy and Sell Stock", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "只能交易一次的股票最大利潤。", tags: ["Array", "Dynamic Programming"] },
-            { id: 32, number: "#62", title: "Unique Paths", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "計算從左上到右下的不同路徑數，使用動態規劃。", tags: ["Math", "Dynamic Programming"] },
-            { id: 33, number: "#198", title: "House Robber", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "打家劫舍問題，使用動態規劃。", tags: ["Array", "Dynamic Programming"] },
-            { id: 34, number: "#300", title: "Longest Increasing Subsequence", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出最長遞增子序列的長度，使用 DP 或二分搜尋。", tags: ["Array", "Binary Search", "Dynamic Programming"] },
-            { id: 35, number: "#322", title: "Coin Change", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出湊成總金額的最少硬幣數，使用動態規劃。", tags: ["Array", "Dynamic Programming"] },
-            { id: 36, number: "#72", title: "Edit Distance", difficulty: "hard", category: "Dynamic Programming", categorySlug: "dp", description: "計算兩個字串的最小編輯距離，使用動態規劃。", tags: ["String", "Dynamic Programming"] },
+            { id: 30, number: "#70", title: "Climbing Stairs", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "爬樓梯的方法數，經典動態規劃入門題。", tags: ["Math", "Dynamic Programming"], detailFile: "problems/climbing-stairs.html" },
+            { id: 31, number: "#121", title: "Best Time to Buy and Sell Stock", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "只能交易一次的股票最大利潤。", tags: ["Array", "Dynamic Programming"], detailFile: "problems/stock-buy-sell.html" },
+            { id: 32, number: "#62", title: "Unique Paths", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "計算從左上到右下的不同路徑數，使用動態規劃。", tags: ["Math", "Dynamic Programming"], detailFile: "problems/unique-paths.html" },
+            { id: 33, number: "#198", title: "House Robber", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "打家劫舍問題，使用動態規劃。", tags: ["Array", "Dynamic Programming"], detailFile: "problems/house-robber.html" },
+            { id: 34, number: "#300", title: "Longest Increasing Subsequence", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出最長遞增子序列的長度，使用 DP 或二分搜尋。", tags: ["Array", "Binary Search", "Dynamic Programming"], detailFile: "problems/longest-increasing-subsequence.html" },
+            { id: 35, number: "#322", title: "Coin Change", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出湊成總金額的最少硬幣數，使用動態規劃。", tags: ["Array", "Dynamic Programming"], detailFile: "problems/coin-change.html" },
+            { id: 36, number: "#72", title: "Edit Distance", difficulty: "hard", category: "Dynamic Programming", categorySlug: "dp", description: "計算兩個字串的最小編輯距離，使用動態規劃。", tags: ["String", "Dynamic Programming"], detailFile: "problems/edit-distance.html" },
             
             // OOP Design
-            { id: 37, number: "#OOP-1", title: "設計停車場系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個停車場管理系統，需要考慮不同車型、收費機制、停車位管理等。", tags: ["OOP", "Design", "System Design"] },
-            { id: 38, number: "#OOP-2", title: "設計電梯系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個電梯控制系統，包含多台電梯的調度邏輯、樓層管理等。", tags: ["OOP", "Design", "Algorithm"] },
-            { id: 39, number: "#OOP-3", title: "設計圖書館管理系統", difficulty: "easy", category: "OOP Design", categorySlug: "oop", description: "設計一個圖書館管理系統，包含借還書、會員管理、書籍管理等功能。", tags: ["OOP", "Design"] },
-            { id: 40, number: "#OOP-4", title: "設計線上購物車", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個線上購物車系統，需要處理商品管理、價格計算、優惠券等。", tags: ["OOP", "Design"] },
+            { id: 37, number: "#OOP-1", title: "設計停車場系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個停車場管理系統，需要考慮不同車型、收費機制、停車位管理等。", tags: ["OOP", "Design", "System Design"], detailFile: "problems/parking-lot.html" },
+            { id: 38, number: "#OOP-2", title: "設計電梯系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個電梯控制系統，包含多台電梯的調度邏輯、樓層管理等。", tags: ["OOP", "Design", "Algorithm"], detailFile: "problems/elevator-system.html" },
+            { id: 39, number: "#OOP-3", title: "設計圖書館管理系統", difficulty: "easy", category: "OOP Design", categorySlug: "oop", description: "設計一個圖書館管理系統，包含借還書、會員管理、書籍管理等功能。", tags: ["OOP", "Design"], detailFile: "problems/library-system.html" },
+            { id: 40, number: "#OOP-4", title: "設計線上購物車", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個線上購物車系統，需要處理商品管理、價格計算、優惠券等。", tags: ["OOP", "Design"], detailFile: "problems/shopping-cart.html" },
             
             // Database
-            { id: 41, number: "#SQL-1", title: "Employee Salary Query", difficulty: "easy", category: "Database", categorySlug: "database", description: "查詢員工薪資資訊，包含基本的 SELECT、WHERE、ORDER BY 操作。", tags: ["SQL", "Database"] },
-            { id: 42, number: "#SQL-2", title: "Department Highest Salary", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出每個部門薪資最高的員工，使用 JOIN 和子查詢。", tags: ["SQL", "Database", "JOIN"] },
-            { id: 43, number: "#SQL-3", title: "Consecutive Numbers", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出連續出現至少三次的數字，考驗自連接(Self Join)的使用。", tags: ["SQL", "Database"] },
-            { id: 44, number: "#SQL-4", title: "Rank Scores", difficulty: "medium", category: "Database", categorySlug: "database", description: "對分數進行排名，使用視窗函數(Window Function)。", tags: ["SQL", "Database", "Window Function"] },
+            { id: 41, number: "#SQL-1", title: "Employee Salary Query", difficulty: "easy", category: "Database", categorySlug: "database", description: "查詢員工薪資資訊，包含基本的 SELECT、WHERE、ORDER BY 操作。", tags: ["SQL", "Database"], detailFile: "problems/employee-salary.html" },
+            { id: 42, number: "#SQL-2", title: "Department Highest Salary", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出每個部門薪資最高的員工，使用 JOIN 和子查詢。", tags: ["SQL", "Database", "JOIN"], detailFile: "problems/department-salary.html" },
+            { id: 43, number: "#SQL-3", title: "Consecutive Numbers", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出連續出現至少三次的數字，考驗自連接(Self Join)的使用。", tags: ["SQL", "Database"], detailFile: "problems/consecutive-numbers.html" },
+            { id: 44, number: "#SQL-4", title: "Rank Scores", difficulty: "medium", category: "Database", categorySlug: "database", description: "對分數進行排名，使用視窗函數(Window Function)。", tags: ["SQL", "Database", "Window Function"], detailFile: "problems/rank-scores.html" },
             
             // Additional
-            { id: 45, number: "#155", title: "Min Stack", difficulty: "medium", category: "Stack & Queue", categorySlug: "array", description: "設計支援 O(1) 時間獲取最小值的堆疊。", tags: ["Stack", "Design"] },
-            { id: 46, number: "#200", title: "Number of Islands", difficulty: "medium", category: "Graph", categorySlug: "tree", description: "計算島嶼數量，使用 DFS 或 BFS。", tags: ["Array", "DFS", "BFS", "Matrix"] },
-            { id: 47, number: "#128", title: "Longest Consecutive Sequence", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出最長連續序列的長度，要求 O(n) 時間。", tags: ["Array", "Hash Table"] },
-            { id: 48, number: "#347", title: "Top K Frequent Elements", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出前 K 個高頻元素，使用堆積或桶排序。", tags: ["Array", "Hash Table", "Heap"] },
-            { id: 49, number: "#23", title: "Merge k Sorted Lists", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "合併 k 個已排序的鏈結串列，使用最小堆積優化。", tags: ["Linked List", "Heap", "Divide and Conquer"] },
-            { id: 50, number: "#297", title: "Serialize and Deserialize Binary Tree", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "序列化和反序列化二元樹，使用前序遍歷。", tags: ["Tree", "DFS", "BFS", "Design"] }
+            { id: 45, number: "#155", title: "Min Stack", difficulty: "medium", category: "Stack & Queue", categorySlug: "array", description: "設計支援 O(1) 時間獲取最小值的堆疊。", tags: ["Stack", "Design"], detailFile: "problems/min-stack.html" },
+            { id: 46, number: "#200", title: "Number of Islands", difficulty: "medium", category: "Graph", categorySlug: "tree", description: "計算島嶼數量，使用 DFS 或 BFS。", tags: ["Array", "DFS", "BFS", "Matrix"], detailFile: "problems/number-of-islands.html" },
+            { id: 47, number: "#128", title: "Longest Consecutive Sequence", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出最長連續序列的長度，要求 O(n) 時間。", tags: ["Array", "Hash Table"], detailFile: "problems/longest-consecutive.html" },
+            { id: 48, number: "#347", title: "Top K Frequent Elements", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出前 K 個高頻元素，使用堆積或桶排序。", tags: ["Array", "Hash Table", "Heap"], detailFile: "problems/top-k-frequent.html" },
+            { id: 49, number: "#23", title: "Merge k Sorted Lists", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "合併 k 個已排序的鏈結串列，使用最小堆積優化。", tags: ["Linked List", "Heap", "Divide and Conquer"], detailFile: "problems/merge-k-lists.html" },
+            { id: 50, number: "#297", title: "Serialize and Deserialize Binary Tree", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "序列化和反序列化二元樹，使用前序遍歷。", tags: ["Tree", "DFS", "BFS", "Design"], detailFile: "problems/serialize-tree.html" }
         ];
 
         let currentDifficulty = 'all';
@@ -572,6 +572,7 @@
                 grouped[category].forEach(problem => {
                     const card = document.createElement('div');
                     card.className = 'problem-card';
+                    card.style.cursor = 'pointer';
                     card.innerHTML = `
                         <div class="problem-header">
                             <span class="problem-number">${problem.number}</span>
@@ -583,6 +584,14 @@
                             ${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                         </div>
                     `;
+                    
+                    // 添加點擊事件
+                    if (problem.detailFile) {
+                        card.addEventListener('click', function() {
+                            window.location.href = problem.detailFile;
+                        });
+                    }
+                    
                     section.appendChild(card);
                 });
 
