@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#1 Two Sum - TSMC 程式題庫</title>
+    <link rel="stylesheet" href="../problem-detail.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <h1 class="logo">🏢 TSMC 程式題庫</h1>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#1</span>
+                        <span class="difficulty easy">Easy</span>
+                    </div>
+                    <h1 class="problem-title">Two Sum</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Hash Table</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個整數陣列 <code>nums</code> 和一個整數目標值 <code>target</code>，請你在該陣列中找出和為目標值 <code>target</code> 的那兩個整數，並返回它們的陣列索引。</p>
+                        <p>你可以假設每種輸入只會對應一個答案。但是，陣列中同一個元素在答案裡不能重複出現。</p>
+                        <p>你可以按任意順序返回答案。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：nums = [2,7,11,15], target = 9
+輸出：[0,1]
+解釋：因為 nums[0] + nums[1] == 9，返回 [0, 1]。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：nums = [3,2,4], target = 6
+輸出：[1,2]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：nums = [3,3], target = 6
+輸出：[0,1]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>2 <= nums.length <= 10<sup>4</sup></code></li>
+                            <li><code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code></li>
+                            <li><code>-10<sup>9</sup> <= target <= 10<sup>9</sup></code></li>
+                            <li>只會存在一個有效答案</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：暴力法（Brute Force）</h3>
+                        <p>最直觀的方法是使用兩層迴圈，逐一檢查所有可能的配對。</p>
+                        <ul>
+                            <li>時間複雜度：O(n²)</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>方法二：哈希表（Hash Table）- 推薦</h3>
+                        <p>使用哈希表來儲存已經遍歷過的元素及其索引，只需要一次遍歷即可找到答案。</p>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+                        <p><strong>台積電面試重點：</strong>面試官通常期望你能想到哈希表的解法，並能夠解釋為什麼這個方法比暴力法更好。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法：哈希表（最優解）</h3>
+                        <pre><code class="language-python">class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        """
+        使用哈希表來存儲已經遍歷過的數字及其索引
+        
+        時間複雜度：O(n) - 只需要遍歷一次陣列
+        空間複雜度：O(n) - 需要額外的哈希表空間
+        """
+        # 創建一個字典來存儲數字和它的索引
+        num_map = {}
+        
+        # 遍歷陣列
+        for i, num in enumerate(nums):
+            # 計算需要找的另一個數字
+            complement = target - num
+            
+            # 如果這個數字已經在字典中，說明找到答案了
+            if complement in num_map:
+                return [num_map[complement], i]
+            
+            # 將當前數字和索引存入字典
+            num_map[num] = i
+        
+        # 題目保證有解，所以不會執行到這裡
+        return []
+
+
+# 測試用例
+def test_two_sum():
+    solution = Solution()
+    
+    # 測試案例 1
+    assert solution.twoSum([2,7,11,15], 9) == [0,1]
+    
+    # 測試案例 2
+    assert solution.twoSum([3,2,4], 6) == [1,2]
+    
+    # 測試案例 3
+    assert solution.twoSum([3,3], 6) == [0,1]
+    
+    print("所有測試通過！")
+
+if __name__ == "__main__":
+    test_two_sum()</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法：哈希表（最優解）</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;unordered_map&gt;
+using namespace std;
+
+class Solution {
+public:
+    /**
+     * 使用哈希表來存儲已經遍歷過的數字及其索引
+     * 
+     * 時間複雜度：O(n) - 只需要遍歷一次陣列
+     * 空間複雜度：O(n) - 需要額外的哈希表空間
+     */
+    vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
+        // 創建一個 unordered_map 來存儲數字和它的索引
+        unordered_map&lt;int, int&gt; numMap;
+        
+        // 遍歷陣列
+        for (int i = 0; i < nums.size(); i++) {
+            // 計算需要找的另一個數字
+            int complement = target - nums[i];
+            
+            // 如果這個數字已經在 map 中，說明找到答案了
+            if (numMap.find(complement) != numMap.end()) {
+                return {numMap[complement], i};
+            }
+            
+            // 將當前數字和索引存入 map
+            numMap[nums[i]] = i;
+        }
+        
+        // 題目保證有解，所以不會執行到這裡
+        return {};
+    }
+};
+
+// 測試用例
+int main() {
+    Solution solution;
+    
+    // 測試案例 1
+    vector&lt;int&gt; nums1 = {2, 7, 11, 15};
+    vector&lt;int&gt; result1 = solution.twoSum(nums1, 9);
+    // result1 應該是 [0, 1]
+    
+    // 測試案例 2
+    vector&lt;int&gt; nums2 = {3, 2, 4};
+    vector&lt;int&gt; result2 = solution.twoSum(nums2, 6);
+    // result2 應該是 [1, 2]
+    
+    return 0;
+}</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法：哈希表（最優解）</h3>
+                        <pre><code class="language-java">import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    /**
+     * 使用哈希表來存儲已經遍歷過的數字及其索引
+     * 
+     * 時間複雜度：O(n) - 只需要遍歷一次陣列
+     * 空間複雜度：O(n) - 需要額外的哈希表空間
+     */
+    public int[] twoSum(int[] nums, int target) {
+        // 創建一個 HashMap 來存儲數字和它的索引
+        Map&lt;Integer, Integer&gt; numMap = new HashMap&lt;&gt;();
+        
+        // 遍歷陣列
+        for (int i = 0; i < nums.length; i++) {
+            // 計算需要找的另一個數字
+            int complement = target - nums[i];
+            
+            // 如果這個數字已經在 map 中，說明找到答案了
+            if (numMap.containsKey(complement)) {
+                return new int[] { numMap.get(complement), i };
+            }
+            
+            // 將當前數字和索引存入 map
+            numMap.put(nums[i], i);
+        }
+        
+        // 題目保證有解，所以不會執行到這裡
+        return new int[] {};
+    }
+    
+    // 測試用例
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        
+        // 測試案例 1
+        int[] nums1 = {2, 7, 11, 15};
+        int[] result1 = solution.twoSum(nums1, 9);
+        // result1 應該是 [0, 1]
+        
+        // 測試案例 2
+        int[] nums2 = {3, 2, 4};
+        int[] result2 = solution.twoSum(nums2, 6);
+        // result2 應該是 [1, 2]
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>台積電面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>💡 常見追問</h3>
+                            <ul>
+                                <li>如果陣列是已排序的，有更好的解法嗎？（雙指標法）</li>
+                                <li>如果需要找三個數的和呢？（3Sum 問題）</li>
+                                <li>為什麼使用哈希表比暴力法好？</li>
+                                <li>空間複雜度可以優化到 O(1) 嗎？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>🎯 面試技巧</h3>
+                            <ul>
+                                <li>先說出暴力法，再優化到哈希表</li>
+                                <li>清楚解釋時間和空間複雜度</li>
+                                <li>考慮邊界條件（如空陣列、只有兩個元素）</li>
+                                <li>可以現場 Live Coding 展示解法</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>⚠️ 常見錯誤</h3>
+                            <ul>
+                                <li>忘記檢查是否存在於哈希表中就直接訪問</li>
+                                <li>返回了數值而不是索引</li>
+                                <li>使用同一個元素兩次</li>
+                                <li>沒有考慮負數的情況</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>相關題目</h2>
+                    <div class="related-problems">
+                        <a href="three-sum.html" class="related-link">
+                            <span class="related-number">#15</span>
+                            <span class="related-title">3Sum</span>
+                            <span class="difficulty medium">Medium</span>
+                        </a>
+                        <a href="two-sum-ii.html" class="related-link">
+                            <span class="related-number">#167</span>
+                            <span class="related-title">Two Sum II - Input Array Is Sorted</span>
+                            <span class="difficulty easy">Easy</span>
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>TSMC 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    <script src="../problem-detail.js"></script>
+</body>
+</html>
