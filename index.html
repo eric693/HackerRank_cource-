@@ -3,17 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TSMC 程式題庫練習平台</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>HackerRank 程式題庫練習平台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --secondary-color: #39424E;
+            --success-color: #00EA64;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --hover-bg: #EDF1F5;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .logo svg {
+            flex-shrink: 0;
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background-color: var(--hover-bg);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(0, 234, 100, 0.08);
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 48px 0;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-muted);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card.stat-easy {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .stat-card.stat-medium {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .stat-card.stat-hard {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Filters */
+        .filters {
+            background-color: var(--card-bg);
+            padding: 24px 0;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: rgba(0, 234, 100, 0.04);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Problems Section */
+        .problems {
+            padding: 24px 0 48px;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .problem-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .problem-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-color);
+            transform: translateX(4px);
+        }
+
+        .problem-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .problem-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 50px;
+        }
+
+        .problem-difficulty {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .problem-difficulty.easy {
+            background-color: rgba(0, 234, 100, 0.12);
+            color: #00C853;
+        }
+
+        .problem-difficulty.medium {
+            background-color: rgba(255, 193, 7, 0.12);
+            color: #F57C00;
+        }
+
+        .problem-difficulty.hard {
+            background-color: rgba(244, 67, 54, 0.12);
+            color: #D32F2F;
+        }
+
+        .problem-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .problem-description {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .problem-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background-color: var(--hover-bg);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 32px 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .footer p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 24px;
+            }
+
+            .hero-subtitle {
+                font-size: 14px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-number {
+                font-size: 36px;
+            }
+
+            .nav {
+                gap: 4px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .logo {
+                font-size: 16px;
+            }
+
+            .logo svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .problem-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .problem-title {
+                width: 100%;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <h1 class="logo">🏢 TSMC 程式題庫練習平台</h1>
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="32" height="32" rx="4" fill="#00EA64"/>
+                        <path d="M8 12H24M8 16H24M8 20H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span>HackerRank 程式題庫</span>
+                </div>
                 <nav class="nav">
                     <a href="#" class="nav-link active">題目列表</a>
                     <a href="#" class="nav-link">統計分析</a>
@@ -26,24 +407,24 @@
     <main class="main">
         <section class="hero">
             <div class="container">
-                <h2 class="hero-title">台積電程式題庫 - 完整版</h2>
-                <p class="hero-subtitle">80 題完整收錄 | Python & C++ & Java 詳解</p>
+                <h1 class="hero-title">程式題庫 - 完整版</h1>
+                <p class="hero-subtitle">50 題完整收錄 | Python & C++ & Java 詳解</p>
                 
                 <div class="stats">
                     <div class="stat-card">
-                        <div class="stat-number" id="total-problems">80</div>
+                        <div class="stat-number">50</div>
                         <div class="stat-label">總題數</div>
                     </div>
-                    <div class="stat-card easy">
-                        <div class="stat-number" id="easy-problems">35</div>
+                    <div class="stat-card stat-easy">
+                        <div class="stat-number">18</div>
                         <div class="stat-label">Easy</div>
                     </div>
-                    <div class="stat-card medium">
-                        <div class="stat-number" id="medium-problems">30</div>
+                    <div class="stat-card stat-medium">
+                        <div class="stat-number">25</div>
                         <div class="stat-label">Medium</div>
                     </div>
-                    <div class="stat-card hard">
-                        <div class="stat-number" id="hard-problems">15</div>
+                    <div class="stat-card stat-hard">
+                        <div class="stat-number">7</div>
                         <div class="stat-label">Hard</div>
                     </div>
                 </div>
@@ -53,29 +434,29 @@
         <section class="filters">
             <div class="container">
                 <h3 class="filter-title">難度篩選</h3>
-                <div class="filter-buttons">
-                    <button class="filter-btn active" data-filter="all">全部題目 (<span id="all-count">80</span>)</button>
-                    <button class="filter-btn" data-filter="easy">Easy (<span id="easy-count">35</span>)</button>
-                    <button class="filter-btn" data-filter="medium">Medium (<span id="medium-count">30</span>)</button>
-                    <button class="filter-btn" data-filter="hard">Hard (<span id="hard-count">15</span>)</button>
+                <div class="filter-buttons" id="difficulty-filters">
+                    <button class="filter-btn active" data-filter="all">全部題目 (50)</button>
+                    <button class="filter-btn" data-filter="easy">Easy (18)</button>
+                    <button class="filter-btn" data-filter="medium">Medium (25)</button>
+                    <button class="filter-btn" data-filter="hard">Hard (7)</button>
                 </div>
                 
                 <h3 class="filter-title" style="margin-top: 20px;">分類篩選</h3>
-                <div class="filter-buttons">
-                    <button class="filter-btn category-btn active" data-category="all">全部分類</button>
-                    <button class="filter-btn category-btn" data-category="array">Array</button>
-                    <button class="filter-btn category-btn" data-category="string">String</button>
-                    <button class="filter-btn category-btn" data-category="linked-list">Linked List</button>
-                    <button class="filter-btn category-btn" data-category="tree">Tree</button>
-                    <button class="filter-btn category-btn" data-category="dp">Dynamic Programming</button>
-                    <button class="filter-btn category-btn" data-category="oop">OOP Design</button>
-                    <button class="filter-btn category-btn" data-category="database">Database</button>
+                <div class="filter-buttons" id="category-filters">
+                    <button class="filter-btn active" data-category="all">全部分類</button>
+                    <button class="filter-btn" data-category="array">Array</button>
+                    <button class="filter-btn" data-category="string">String</button>
+                    <button class="filter-btn" data-category="linked-list">Linked List</button>
+                    <button class="filter-btn" data-category="tree">Tree</button>
+                    <button class="filter-btn" data-category="dp">Dynamic Programming</button>
+                    <button class="filter-btn" data-category="oop">OOP Design</button>
+                    <button class="filter-btn" data-category="database">Database</button>
                 </div>
             </div>
         </section>
 
-        <section class="problems" id="problems-section">
-            <div class="container">
+        <section class="problems">
+            <div class="container" id="problems-container">
                 <!-- 題目將由 JavaScript 動態生成 -->
             </div>
         </section>
@@ -83,12 +464,175 @@
 
     <footer class="footer">
         <div class="container">
-            <p>TSMC 程式題庫練習平台 - 針對台積電面試題型設計</p>
+            <p>HackerRank 程式題庫練習平台</p>
             <p>持續更新中... | 建議使用 Chrome 或 Firefox 瀏覽器</p>
         </div>
     </footer>
 
-    <script src="problems-data.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // 題目資料
+        const problemsData = [
+            // Array & Two Pointers
+            { id: 1, number: "#1", title: "Two Sum", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "給定一個整數陣列和目標值，找出陣列中兩個數字相加等於目標值的索引位置。", tags: ["Array", "Hash Table"] },
+            { id: 2, number: "#26", title: "Remove Duplicates from Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "從已排序陣列中移除重複元素，使用雙指標原地操作。", tags: ["Array", "Two Pointers"] },
+            { id: 3, number: "#88", title: "Merge Sorted Array", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "合併兩個已排序陣列，使用雙指標從後往前填充。", tags: ["Array", "Two Pointers", "Sorting"] },
+            { id: 4, number: "#283", title: "Move Zeroes", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "將陣列中的 0 移到末尾，保持非零元素順序。", tags: ["Array", "Two Pointers"] },
+            { id: 5, number: "#704", title: "Binary Search", difficulty: "easy", category: "Array & Two Pointers", categorySlug: "array", description: "標準二分搜尋實現，必須熟練掌握的基本算法。", tags: ["Array", "Binary Search"] },
+            { id: 6, number: "#11", title: "Container With Most Water", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出可以容納最多水的兩條線，使用雙指標技巧。", tags: ["Array", "Two Pointers", "Greedy"] },
+            { id: 7, number: "#15", title: "3Sum", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出陣列中所有總和為 0 的三元組，使用排序和雙指標。", tags: ["Array", "Two Pointers", "Sorting"] },
+            { id: 8, number: "#33", title: "Search in Rotated Sorted Array", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "在旋轉排序陣列中搜尋目標值，使用二分搜尋。", tags: ["Array", "Binary Search"] },
+            { id: 9, number: "#53", title: "Maximum Subarray", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "找出最大子陣列和，使用 Kadane 算法。", tags: ["Array", "Dynamic Programming"] },
+            { id: 10, number: "#238", title: "Product of Array Except Self", difficulty: "medium", category: "Array & Two Pointers", categorySlug: "array", description: "計算除自身以外陣列的乘積，不使用除法。", tags: ["Array", "Prefix Sum"] },
+            { id: 11, number: "#42", title: "Trapping Rain Water", difficulty: "hard", category: "Array & Two Pointers", categorySlug: "array", description: "計算可以接住的雨水量，使用雙指標或動態規劃。", tags: ["Array", "Two Pointers", "Dynamic Programming"] },
+            
+            // String
+            { id: 12, number: "#20", title: "Valid Parentheses", difficulty: "easy", category: "String", categorySlug: "string", description: "驗證括號字串是否有效，使用堆疊資料結構。", tags: ["String", "Stack"] },
+            { id: 13, number: "#125", title: "Valid Palindrome", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷字串是否為回文，忽略大小寫和非字母數字字符。", tags: ["Two Pointers", "String"] },
+            { id: 14, number: "#242", title: "Valid Anagram", difficulty: "easy", category: "String", categorySlug: "string", description: "判斷兩個字串是否為字母異位詞。", tags: ["Hash Table", "String", "Sorting"] },
+            { id: 15, number: "#344", title: "Reverse String", difficulty: "easy", category: "String", categorySlug: "string", description: "反轉字串，使用雙指標原地操作。", tags: ["Two Pointers", "String"] },
+            { id: 16, number: "#3", title: "Longest Substring Without Repeating Characters", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長無重複字符子字串，使用滑動視窗。", tags: ["String", "Hash Table", "Sliding Window"] },
+            { id: 17, number: "#5", title: "Longest Palindromic Substring", difficulty: "medium", category: "String", categorySlug: "string", description: "找出最長回文子字串，使用中心擴展或動態規劃。", tags: ["String", "Dynamic Programming"] },
+            { id: 18, number: "#49", title: "Group Anagrams", difficulty: "medium", category: "String", categorySlug: "string", description: "將字母異位詞分組，使用哈希表和排序。", tags: ["Hash Table", "String", "Sorting"] },
+            { id: 19, number: "#76", title: "Minimum Window Substring", difficulty: "hard", category: "String", categorySlug: "string", description: "找出包含所有目標字符的最小子字串，使用滑動視窗。", tags: ["Hash Table", "String", "Sliding Window"] },
+            
+            // Linked List
+            { id: 20, number: "#21", title: "Merge Two Sorted Lists", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "合併兩個已排序的鏈結串列成一個新的已排序串列。", tags: ["Linked List", "Recursion"] },
+            { id: 21, number: "#141", title: "Linked List Cycle", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "判斷鏈結串列是否有環，使用快慢指標。", tags: ["Linked List", "Two Pointers"] },
+            { id: 22, number: "#206", title: "Reverse Linked List", difficulty: "easy", category: "Linked List", categorySlug: "linked-list", description: "反轉鏈結串列，使用迭代或遞迴，必考經典題。", tags: ["Linked List", "Recursion"] },
+            { id: 23, number: "#2", title: "Add Two Numbers", difficulty: "medium", category: "Linked List", categorySlug: "linked-list", description: "將兩個非空鏈結串列中儲存的數字相加，每個節點包含一位數字。", tags: ["Linked List", "Math"] },
+            { id: 24, number: "#146", title: "LRU Cache", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "實現 LRU 快取機制，使用雙向鏈結串列和哈希表。", tags: ["Hash Table", "Linked List", "Design"] },
+            
+            // Tree
+            { id: 25, number: "#104", title: "Maximum Depth of Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "計算二元樹的最大深度，遞迴基礎題。", tags: ["Tree", "DFS", "BFS"] },
+            { id: 26, number: "#226", title: "Invert Binary Tree", difficulty: "easy", category: "Tree", categorySlug: "tree", description: "翻轉二元樹，使用遞迴或迭代。", tags: ["Tree", "DFS", "BFS"] },
+            { id: 27, number: "#102", title: "Binary Tree Level Order Traversal", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "二元樹的層序遍歷，使用佇列實現 BFS。", tags: ["Tree", "BFS"] },
+            { id: 28, number: "#98", title: "Validate Binary Search Tree", difficulty: "medium", category: "Tree", categorySlug: "tree", description: "驗證是否為有效的二元搜尋樹。", tags: ["Tree", "DFS", "BST"] },
+            { id: 29, number: "#124", title: "Binary Tree Maximum Path Sum", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "找出二元樹中的最大路徑和，使用後序遍歷。", tags: ["Tree", "DFS", "Dynamic Programming"] },
+            
+            // Dynamic Programming
+            { id: 30, number: "#70", title: "Climbing Stairs", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "爬樓梯的方法數，經典動態規劃入門題。", tags: ["Math", "Dynamic Programming"] },
+            { id: 31, number: "#121", title: "Best Time to Buy and Sell Stock", difficulty: "easy", category: "Dynamic Programming", categorySlug: "dp", description: "只能交易一次的股票最大利潤。", tags: ["Array", "Dynamic Programming"] },
+            { id: 32, number: "#62", title: "Unique Paths", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "計算從左上到右下的不同路徑數，使用動態規劃。", tags: ["Math", "Dynamic Programming"] },
+            { id: 33, number: "#198", title: "House Robber", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "打家劫舍問題，使用動態規劃。", tags: ["Array", "Dynamic Programming"] },
+            { id: 34, number: "#300", title: "Longest Increasing Subsequence", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出最長遞增子序列的長度，使用 DP 或二分搜尋。", tags: ["Array", "Binary Search", "Dynamic Programming"] },
+            { id: 35, number: "#322", title: "Coin Change", difficulty: "medium", category: "Dynamic Programming", categorySlug: "dp", description: "找出湊成總金額的最少硬幣數，使用動態規劃。", tags: ["Array", "Dynamic Programming"] },
+            { id: 36, number: "#72", title: "Edit Distance", difficulty: "hard", category: "Dynamic Programming", categorySlug: "dp", description: "計算兩個字串的最小編輯距離，使用動態規劃。", tags: ["String", "Dynamic Programming"] },
+            
+            // OOP Design
+            { id: 37, number: "#OOP-1", title: "設計停車場系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個停車場管理系統，需要考慮不同車型、收費機制、停車位管理等。", tags: ["OOP", "Design", "System Design"] },
+            { id: 38, number: "#OOP-2", title: "設計電梯系統", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個電梯控制系統，包含多台電梯的調度邏輯、樓層管理等。", tags: ["OOP", "Design", "Algorithm"] },
+            { id: 39, number: "#OOP-3", title: "設計圖書館管理系統", difficulty: "easy", category: "OOP Design", categorySlug: "oop", description: "設計一個圖書館管理系統，包含借還書、會員管理、書籍管理等功能。", tags: ["OOP", "Design"] },
+            { id: 40, number: "#OOP-4", title: "設計線上購物車", difficulty: "medium", category: "OOP Design", categorySlug: "oop", description: "設計一個線上購物車系統，需要處理商品管理、價格計算、優惠券等。", tags: ["OOP", "Design"] },
+            
+            // Database
+            { id: 41, number: "#SQL-1", title: "Employee Salary Query", difficulty: "easy", category: "Database", categorySlug: "database", description: "查詢員工薪資資訊，包含基本的 SELECT、WHERE、ORDER BY 操作。", tags: ["SQL", "Database"] },
+            { id: 42, number: "#SQL-2", title: "Department Highest Salary", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出每個部門薪資最高的員工，使用 JOIN 和子查詢。", tags: ["SQL", "Database", "JOIN"] },
+            { id: 43, number: "#SQL-3", title: "Consecutive Numbers", difficulty: "medium", category: "Database", categorySlug: "database", description: "找出連續出現至少三次的數字，考驗自連接(Self Join)的使用。", tags: ["SQL", "Database"] },
+            { id: 44, number: "#SQL-4", title: "Rank Scores", difficulty: "medium", category: "Database", categorySlug: "database", description: "對分數進行排名，使用視窗函數(Window Function)。", tags: ["SQL", "Database", "Window Function"] },
+            
+            // Additional
+            { id: 45, number: "#155", title: "Min Stack", difficulty: "medium", category: "Stack & Queue", categorySlug: "array", description: "設計支援 O(1) 時間獲取最小值的堆疊。", tags: ["Stack", "Design"] },
+            { id: 46, number: "#200", title: "Number of Islands", difficulty: "medium", category: "Graph", categorySlug: "tree", description: "計算島嶼數量，使用 DFS 或 BFS。", tags: ["Array", "DFS", "BFS", "Matrix"] },
+            { id: 47, number: "#128", title: "Longest Consecutive Sequence", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出最長連續序列的長度，要求 O(n) 時間。", tags: ["Array", "Hash Table"] },
+            { id: 48, number: "#347", title: "Top K Frequent Elements", difficulty: "medium", category: "Hash Table", categorySlug: "array", description: "找出前 K 個高頻元素，使用堆積或桶排序。", tags: ["Array", "Hash Table", "Heap"] },
+            { id: 49, number: "#23", title: "Merge k Sorted Lists", difficulty: "hard", category: "Linked List", categorySlug: "linked-list", description: "合併 k 個已排序的鏈結串列，使用最小堆積優化。", tags: ["Linked List", "Heap", "Divide and Conquer"] },
+            { id: 50, number: "#297", title: "Serialize and Deserialize Binary Tree", difficulty: "hard", category: "Tree", categorySlug: "tree", description: "序列化和反序列化二元樹，使用前序遍歷。", tags: ["Tree", "DFS", "BFS", "Design"] }
+        ];
+
+        let currentDifficulty = 'all';
+        let currentCategory = 'all';
+
+        // 渲染題目
+        function renderProblems(problems) {
+            const container = document.getElementById('problems-container');
+            container.innerHTML = '';
+
+            if (problems.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 3rem; color: #6b7280;">沒有符合條件的題目</p>';
+                return;
+            }
+
+            // 按分類分組
+            const grouped = {};
+            problems.forEach(p => {
+                if (!grouped[p.category]) grouped[p.category] = [];
+                grouped[p.category].push(p);
+            });
+
+            // 渲染每個分類
+            Object.keys(grouped).forEach(category => {
+                const section = document.createElement('div');
+                section.className = 'category-section';
+                
+                const title = document.createElement('h2');
+                title.className = 'category-title';
+                title.textContent = category;
+                section.appendChild(title);
+
+                grouped[category].forEach(problem => {
+                    const card = document.createElement('div');
+                    card.className = 'problem-card';
+                    card.innerHTML = `
+                        <div class="problem-header">
+                            <span class="problem-number">${problem.number}</span>
+                            <span class="problem-difficulty ${problem.difficulty}">${problem.difficulty.toUpperCase()}</span>
+                            <h3 class="problem-title">${problem.title}</h3>
+                        </div>
+                        <p class="problem-description">${problem.description}</p>
+                        <div class="problem-tags">
+                            ${problem.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    `;
+                    section.appendChild(card);
+                });
+
+                container.appendChild(section);
+            });
+        }
+
+        // 篩選題目
+        function filterProblems() {
+            let filtered = problemsData;
+
+            if (currentDifficulty !== 'all') {
+                filtered = filtered.filter(p => p.difficulty === currentDifficulty);
+            }
+
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(p => p.categorySlug === currentCategory);
+            }
+
+            renderProblems(filtered);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProblems(problemsData);
+
+            // 難度篩選
+            document.getElementById('difficulty-filters').addEventListener('click', function(e) {
+                if (e.target.classList.contains('filter-btn')) {
+                    document.querySelectorAll('#difficulty-filters .filter-btn').forEach(btn => 
+                        btn.classList.remove('active')
+                    );
+                    e.target.classList.add('active');
+                    currentDifficulty = e.target.dataset.filter;
+                    filterProblems();
+                }
+            });
+
+            // 分類篩選
+            document.getElementById('category-filters').addEventListener('click', function(e) {
+                if (e.target.classList.contains('filter-btn')) {
+                    document.querySelectorAll('#category-filters .filter-btn').forEach(btn => 
+                        btn.classList.remove('active')
+                    );
+                    e.target.classList.add('active');
+                    currentCategory = e.target.dataset.category;
+                    filterProblems();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
