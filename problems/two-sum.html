@@ -3,16 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#1 Two Sum - TSMC 程式題庫</title>
-    <link rel="stylesheet" href="../problem-detail.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>#1 Two Sum - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        code {
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 16px 0;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 32px 0;
+        }
+
+        .problem-content {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Problem Header */
+        .problem-header {
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .problem-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .problem-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .difficulty {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .difficulty.easy {
+            background-color: rgba(0, 234, 100, 0.12);
+            color: #00C853;
+        }
+
+        .difficulty.medium {
+            background-color: rgba(255, 193, 7, 0.12);
+            color: #F57C00;
+        }
+
+        .difficulty.hard {
+            background-color: rgba(244, 67, 54, 0.12);
+            color: #D32F2F;
+        }
+
+        .problem-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .problem-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            background-color: #EDF1F5;
+            color: var(--text-secondary);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .content-box {
+            background-color: var(--bg-color);
+            border-left: 3px solid var(--primary-color);
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .content-box p {
+            margin-bottom: 12px;
+        }
+
+        .content-box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-box ul, .content-box ol {
+            margin-left: 24px;
+            margin-top: 8px;
+        }
+
+        .content-box li {
+            margin-bottom: 8px;
+        }
+
+        .content-box code {
+            background-color: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .example-box {
+            background-color: var(--bg-color);
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .example-box h3 {
+            margin-top: 0;
+        }
+
+        .example-box pre {
+            background-color: var(--code-bg);
+            color: #abb2bf;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+
+        .example-box pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Code Tabs */
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .code-content pre {
+            background-color: var(--code-bg);
+            border-radius: 6px;
+            padding: 16px;
+            overflow-x: auto;
+            margin-top: 12px;
+        }
+
+        .code-content pre code {
+            color: #abb2bf;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Interview Tips */
+        .interview-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #00EA64 0%, #00C853 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .tip-box h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            margin-top: 0;
+            color: white;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .tip-box ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .tip-box li {
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .tip-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 24px 0;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 48px;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .problem-content {
+                padding: 20px;
+            }
+
+            .problem-title {
+                font-size: 24px;
+            }
+
+            .interview-tips {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.html" class="back-link">← 返回題目列表</a>
-            <h1 class="logo">🏢 TSMC 程式題庫</h1>
+            <a href="../index-single.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
         </div>
     </header>
 
@@ -22,7 +369,7 @@
                 <div class="problem-header">
                     <div class="problem-meta">
                         <span class="problem-number">#1</span>
-                        <span class="difficulty easy">Easy</span>
+                        <span class="difficulty easy">EASY</span>
                     </div>
                     <h1 class="problem-title">Two Sum</h1>
                     <div class="problem-tags">
@@ -75,20 +422,20 @@
                 <section class="section">
                     <h2>解題思路</h2>
                     <div class="content-box">
-                        <h3>方法一：暴力法（Brute Force）</h3>
+                        <h3>方法一：暴力法 (Brute Force)</h3>
                         <p>最直觀的方法是使用兩層迴圈，逐一檢查所有可能的配對。</p>
                         <ul>
                             <li>時間複雜度：O(n²)</li>
                             <li>空間複雜度：O(1)</li>
                         </ul>
 
-                        <h3>方法二：哈希表（Hash Table）- 推薦</h3>
+                        <h3>方法二：哈希表 (Hash Table) - 推薦</h3>
                         <p>使用哈希表來儲存已經遍歷過的元素及其索引，只需要一次遍歷即可找到答案。</p>
                         <ul>
                             <li>時間複雜度：O(n)</li>
                             <li>空間複雜度：O(n)</li>
                         </ul>
-                        <p><strong>台積電面試重點：</strong>面試官通常期望你能想到哈希表的解法，並能夠解釋為什麼這個方法比暴力法更好。</p>
+                        <p><strong>面試重點：</strong>面試官通常期望你能想到哈希表的解法，並能夠解釋為什麼這個方法比暴力法更好。</p>
                     </div>
                 </section>
 
@@ -127,26 +474,7 @@
             num_map[num] = i
         
         # 題目保證有解，所以不會執行到這裡
-        return []
-
-
-# 測試用例
-def test_two_sum():
-    solution = Solution()
-    
-    # 測試案例 1
-    assert solution.twoSum([2,7,11,15], 9) == [0,1]
-    
-    # 測試案例 2
-    assert solution.twoSum([3,2,4], 6) == [1,2]
-    
-    # 測試案例 3
-    assert solution.twoSum([3,3], 6) == [0,1]
-    
-    print("所有測試通過！")
-
-if __name__ == "__main__":
-    test_two_sum()</code></pre>
+        return []</code></pre>
                     </div>
 
                     <div class="code-content cpp">
@@ -157,12 +485,6 @@ using namespace std;
 
 class Solution {
 public:
-    /**
-     * 使用哈希表來存儲已經遍歷過的數字及其索引
-     * 
-     * 時間複雜度：O(n) - 只需要遍歷一次陣列
-     * 空間複雜度：O(n) - 需要額外的哈希表空間
-     */
     vector&lt;int&gt; twoSum(vector&lt;int&gt;& nums, int target) {
         // 創建一個 unordered_map 來存儲數字和它的索引
         unordered_map&lt;int, int&gt; numMap;
@@ -184,24 +506,7 @@ public:
         // 題目保證有解，所以不會執行到這裡
         return {};
     }
-};
-
-// 測試用例
-int main() {
-    Solution solution;
-    
-    // 測試案例 1
-    vector&lt;int&gt; nums1 = {2, 7, 11, 15};
-    vector&lt;int&gt; result1 = solution.twoSum(nums1, 9);
-    // result1 應該是 [0, 1]
-    
-    // 測試案例 2
-    vector&lt;int&gt; nums2 = {3, 2, 4};
-    vector&lt;int&gt; result2 = solution.twoSum(nums2, 6);
-    // result2 應該是 [1, 2]
-    
-    return 0;
-}</code></pre>
+};</code></pre>
                     </div>
 
                     <div class="code-content java">
@@ -210,12 +515,6 @@ int main() {
 import java.util.Map;
 
 class Solution {
-    /**
-     * 使用哈希表來存儲已經遍歷過的數字及其索引
-     * 
-     * 時間複雜度：O(n) - 只需要遍歷一次陣列
-     * 空間複雜度：O(n) - 需要額外的哈希表空間
-     */
     public int[] twoSum(int[] nums, int target) {
         // 創建一個 HashMap 來存儲數字和它的索引
         Map&lt;Integer, Integer&gt; numMap = new HashMap&lt;&gt;();
@@ -237,30 +536,15 @@ class Solution {
         // 題目保證有解，所以不會執行到這裡
         return new int[] {};
     }
-    
-    // 測試用例
-    public static void main(String[] args) {
-        Solution solution = new Solution();
-        
-        // 測試案例 1
-        int[] nums1 = {2, 7, 11, 15};
-        int[] result1 = solution.twoSum(nums1, 9);
-        // result1 應該是 [0, 1]
-        
-        // 測試案例 2
-        int[] nums2 = {3, 2, 4};
-        int[] result2 = solution.twoSum(nums2, 6);
-        // result2 應該是 [1, 2]
-    }
 }</code></pre>
                     </div>
                 </section>
 
                 <section class="section">
-                    <h2>台積電面試要點</h2>
+                    <h2>面試要點</h2>
                     <div class="interview-tips">
                         <div class="tip-box">
-                            <h3>💡 常見追問</h3>
+                            <h3>常見追問</h3>
                             <ul>
                                 <li>如果陣列是已排序的，有更好的解法嗎？（雙指標法）</li>
                                 <li>如果需要找三個數的和呢？（3Sum 問題）</li>
@@ -269,7 +553,7 @@ class Solution {
                             </ul>
                         </div>
                         <div class="tip-box">
-                            <h3>🎯 面試技巧</h3>
+                            <h3>面試技巧</h3>
                             <ul>
                                 <li>先說出暴力法，再優化到哈希表</li>
                                 <li>清楚解釋時間和空間複雜度</li>
@@ -278,7 +562,7 @@ class Solution {
                             </ul>
                         </div>
                         <div class="tip-box">
-                            <h3>⚠️ 常見錯誤</h3>
+                            <h3>常見錯誤</h3>
                             <ul>
                                 <li>忘記檢查是否存在於哈希表中就直接訪問</li>
                                 <li>返回了數值而不是索引</li>
@@ -288,29 +572,13 @@ class Solution {
                         </div>
                     </div>
                 </section>
-
-                <section class="section">
-                    <h2>相關題目</h2>
-                    <div class="related-problems">
-                        <a href="three-sum.html" class="related-link">
-                            <span class="related-number">#15</span>
-                            <span class="related-title">3Sum</span>
-                            <span class="difficulty medium">Medium</span>
-                        </a>
-                        <a href="two-sum-ii.html" class="related-link">
-                            <span class="related-number">#167</span>
-                            <span class="related-title">Two Sum II - Input Array Is Sorted</span>
-                            <span class="difficulty easy">Easy</span>
-                        </a>
-                    </div>
-                </section>
             </div>
         </div>
     </main>
 
     <footer class="footer">
         <div class="container">
-            <p>TSMC 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+            <p>HackerRank 程式題庫練習平台 | <a href="../index-single.html">返回首頁</a></p>
         </div>
     </footer>
 
@@ -318,6 +586,36 @@ class Solution {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
-    <script src="../problem-detail.js"></script>
+    
+    <script>
+        // 初始化程式碼高亮
+        hljs.highlightAll();
+
+        // 處理程式語言切換標籤
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+
+                // 移除所有 active class
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+
+                // 添加 active class 到當前選擇的標籤和內容
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+
+                // 重新高亮當前顯示的程式碼
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
