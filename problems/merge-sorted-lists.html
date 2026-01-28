@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#70 Climbing Stairs - HackerRank 程式題庫</title>
+    <title>#21 Merge Two Sorted Lists - HackerRank 程式題庫</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
     
@@ -89,22 +89,20 @@
             <div class="problem-content">
                 <div class="problem-header">
                     <div class="problem-meta">
-                        <span class="problem-number">#70</span>
+                        <span class="problem-number">#21</span>
                         <span class="difficulty easy">EASY</span>
                     </div>
-                    <h1 class="problem-title">Climbing Stairs</h1>
+                    <h1 class="problem-title">Merge Two Sorted Lists</h1>
                     <div class="problem-tags">
-                        <span class="tag">Math</span>
-                        <span class="tag">Dynamic Programming</span>
-                        <span class="tag">Memoization</span>
+                        <span class="tag">Linked List</span>
+                        <span class="tag">Recursion</span>
                     </div>
                 </div>
 
                 <section class="section">
                     <h2>題目描述</h2>
                     <div class="content-box">
-                        <p>假設你正在爬樓梯。需要 <code>n</code> 階才能到達樓頂。</p>
-                        <p>每次你可以爬 <code>1</code> 或 <code>2</code> 個階梯。你有多少種不同的方法可以爬到樓頂呢？</p>
+                        <p>將兩個升序鏈結串列合併為一個新的<strong>升序</strong>鏈結串列並返回。新串列是通過拼接給定的兩個串列的所有節點組成的。</p>
                     </div>
                 </section>
 
@@ -112,20 +110,23 @@
                     <h2>範例</h2>
                     <div class="example-box">
                         <h3>範例 1:</h3>
-                        <pre><code>輸入：n = 2
-輸出：2
-解釋：有兩種方法可以爬到樓頂。
-1. 1 階 + 1 階
-2. 2 階</code></pre>
+                        <pre><code>輸入：list1 = [1,2,4], list2 = [1,3,4]
+輸出：[1,1,2,3,4,4]
+
+說明：
+list1: 1 -> 2 -> 4
+list2: 1 -> 3 -> 4
+結果:  1 -> 1 -> 2 -> 3 -> 4 -> 4</code></pre>
                     </div>
                     <div class="example-box">
                         <h3>範例 2:</h3>
-                        <pre><code>輸入：n = 3
-輸出：3
-解釋：有三種方法可以爬到樓頂。
-1. 1 階 + 1 階 + 1 階
-2. 1 階 + 2 階
-3. 2 階 + 1 階</code></pre>
+                        <pre><code>輸入：list1 = [], list2 = []
+輸出：[]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：list1 = [], list2 = [0]
+輸出：[0]</code></pre>
                     </div>
                 </section>
 
@@ -133,7 +134,9 @@
                     <h2>限制條件</h2>
                     <div class="content-box">
                         <ul>
-                            <li><code>1 <= n <= 45</code></li>
+                            <li>兩個鏈結串列的節點數目範圍是 <code>[0, 50]</code></li>
+                            <li><code>-100 <= Node.val <= 100</code></li>
+                            <li><code>list1</code> 和 <code>list2</code> 均按<strong>非遞減順序</strong>排列</li>
                         </ul>
                     </div>
                 </section>
@@ -141,29 +144,24 @@
                 <section class="section">
                     <h2>解題思路</h2>
                     <div class="content-box">
-                        <h3>核心觀察</h3>
-                        <p>這是一個經典的動態規劃問題，本質上就是 Fibonacci 數列：</p>
+                        <h3>方法一：迭代法（推薦）</h3>
+                        <p>使用虛擬頭節點（dummy node）簡化邊界處理：</p>
+                        <ol>
+                            <li>創建一個虛擬頭節點</li>
+                            <li>使用指標遍歷兩個串列</li>
+                            <li>每次選擇較小的節點連接到結果串列</li>
+                            <li>處理剩餘節點</li>
+                        </ol>
                         <ul>
-                            <li>到達第 n 階的方法數 = 到達第 (n-1) 階的方法數 + 到達第 (n-2) 階的方法數</li>
-                            <li>因為你可以從第 (n-1) 階爬 1 階，或從第 (n-2) 階爬 2 階到達第 n 階</li>
+                            <li>時間複雜度：O(m + n)</li>
+                            <li>空間複雜度：O(1)</li>
                         </ul>
 
-                        <h3>方法一：動態規劃（推薦）</h3>
+                        <h3>方法二：遞迴法</h3>
+                        <p>使用遞迴的方式合併：</p>
                         <ul>
-                            <li>時間複雜度：O(n)</li>
-                            <li>空間複雜度：O(1) - 只需要兩個變數</li>
-                        </ul>
-
-                        <h3>方法二：遞迴 + 記憶化</h3>
-                        <ul>
-                            <li>時間複雜度：O(n)</li>
-                            <li>空間複雜度：O(n)</li>
-                        </ul>
-
-                        <h3>方法三：純遞迴（不推薦）</h3>
-                        <ul>
-                            <li>時間複雜度：O(2^n) - 會超時</li>
-                            <li>空間複雜度：O(n)</li>
+                            <li>時間複雜度：O(m + n)</li>
+                            <li>空間複雜度：O(m + n) - 遞迴堆疊</li>
                         </ul>
                     </div>
                 </section>
@@ -179,143 +177,132 @@
 
                     <div class="code-content python active">
                         <h3>Python 解法</h3>
-                        <pre><code class="language-python">class Solution:
-    def climbStairs(self, n: int) -> int:
+                        <pre><code class="language-python">class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         """
-        動態規劃解法 - 最優解
+        迭代法 - 使用虛擬頭節點
         
-        時間複雜度：O(n)
+        時間複雜度：O(m + n)
         空間複雜度：O(1)
         """
-        if n <= 2:
-            return n
+        # 創建虛擬頭節點
+        dummy = ListNode(0)
+        current = dummy
         
-        # 初始化前兩階的方法數
-        prev2 = 1  # n=1 時的方法數
-        prev1 = 2  # n=2 時的方法數
+        # 當兩個串列都不為空時
+        while list1 and list2:
+            if list1.val <= list2.val:
+                current.next = list1
+                list1 = list1.next
+            else:
+                current.next = list2
+                list2 = list2.next
+            current = current.next
         
-        # 從第 3 階開始計算
-        for i in range(3, n + 1):
-            current = prev1 + prev2
-            prev2 = prev1
-            prev1 = current
+        # 連接剩餘的節點
+        current.next = list1 if list1 else list2
         
-        return prev1
+        return dummy.next
 
 
-# 方法二：使用陣列的 DP
+# 方法二：遞迴法
 class Solution2:
-    def climbStairs(self, n: int) -> int:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         """
-        使用陣列的動態規劃
+        遞迴法
         
-        時間複雜度：O(n)
-        空間複雜度：O(n)
+        時間複雜度：O(m + n)
+        空間複雜度：O(m + n)
         """
-        if n <= 2:
-            return n
+        # 基本情況
+        if not list1:
+            return list2
+        if not list2:
+            return list1
         
-        dp = [0] * (n + 1)
-        dp[1] = 1
-        dp[2] = 2
-        
-        for i in range(3, n + 1):
-            dp[i] = dp[i-1] + dp[i-2]
-        
-        return dp[n]
-
-
-# 方法三：遞迴 + 記憶化
-class Solution3:
-    def climbStairs(self, n: int) -> int:
-        """
-        遞迴 + 記憶化
-        
-        時間複雜度：O(n)
-        空間複雜度：O(n)
-        """
-        memo = {}
-        
-        def climb(n):
-            if n <= 2:
-                return n
-            
-            if n in memo:
-                return memo[n]
-            
-            memo[n] = climb(n-1) + climb(n-2)
-            return memo[n]
-        
-        return climb(n)
-
-
-# 方法四：數學公式（進階）
-class Solution4:
-    def climbStairs(self, n: int) -> int:
-        """
-        使用 Fibonacci 數列的數學公式
-        
-        時間複雜度：O(1)
-        空間複雜度：O(1)
-        """
-        import math
-        
-        sqrt5 = math.sqrt(5)
-        phi = (1 + sqrt5) / 2
-        psi = (1 - sqrt5) / 2
-        
-        # Binet's formula
-        result = (phi ** (n + 1) - psi ** (n + 1)) / sqrt5
-        return int(round(result))</code></pre>
+        # 遞迴合併
+        if list1.val <= list2.val:
+            list1.next = self.mergeTwoLists(list1.next, list2)
+            return list1
+        else:
+            list2.next = self.mergeTwoLists(list1, list2.next)
+            return list2</code></pre>
                     </div>
 
                     <div class="code-content cpp">
                         <h3>C++ 解法</h3>
-                        <pre><code class="language-cpp">class Solution {
+                        <pre><code class="language-cpp">struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution {
 public:
-    int climbStairs(int n) {
-        // 動態規劃解法
-        if (n <= 2) {
-            return n;
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        // 創建虛擬頭節點
+        ListNode dummy(0);
+        ListNode* current = &dummy;
+        
+        // 當兩個串列都不為空時
+        while (list1 && list2) {
+            if (list1->val <= list2->val) {
+                current->next = list1;
+                list1 = list1->next;
+            } else {
+                current->next = list2;
+                list2 = list2->next;
+            }
+            current = current->next;
         }
         
-        // 初始化前兩階的方法數
-        int prev2 = 1;  // n=1 時的方法數
-        int prev1 = 2;  // n=2 時的方法數
+        // 連接剩餘的節點
+        current->next = list1 ? list1 : list2;
         
-        // 從第 3 階開始計算
-        for (int i = 3; i <= n; i++) {
-            int current = prev1 + prev2;
-            prev2 = prev1;
-            prev1 = current;
-        }
-        
-        return prev1;
+        return dummy.next;
     }
 };</code></pre>
                     </div>
 
                     <div class="code-content java">
                         <h3>Java 解法</h3>
-                        <pre><code class="language-java">class Solution {
-    public int climbStairs(int n) {
-        // 動態規劃解法
-        if (n <= 2) {
-            return n;
+                        <pre><code class="language-java">class ListNode {
+    int val;
+    ListNode next;
+    ListNode() {}
+    ListNode(int val) { this.val = val; }
+    ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+}
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        // 創建虛擬頭節點
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+        
+        // 當兩個串列都不為空時
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                current.next = list1;
+                list1 = list1.next;
+            } else {
+                current.next = list2;
+                list2 = list2.next;
+            }
+            current = current.next;
         }
         
-        // 初始化前兩階的方法數
-        int prev2 = 1;  // n=1 時的方法數
-        int prev1 = 2;  // n=2 時的方法數
+        // 連接剩餘的節點
+        current.next = list1 != null ? list1 : list2;
         
-        // 從第 3 階開始計算
-        for (int i = 3; i <= n; i++) {
-            int current = prev1 + prev2;
-            prev2 = prev1;
-            prev1 = current;
-        }
-        
-        return prev1;
+        return dummy.next;
     }
 }</code></pre>
                     </div>
@@ -327,42 +314,30 @@ public:
                         <div class="tip-box">
                             <h3>常見追問</h3>
                             <ul>
-                                <li>如果每次可以爬 1, 2 或 3 階呢？</li>
-                                <li>如果某些階梯不能踩怎麼辦？</li>
-                                <li>能否優化空間複雜度到 O(1)？</li>
-                                <li>這個問題和 Fibonacci 數列有什麼關係？</li>
+                                <li>如何合併 K 個已排序的鏈結串列？</li>
+                                <li>能否原地合併不創建新節點？</li>
+                                <li>如果是降序排列該如何修改？</li>
+                                <li>遞迴和迭代哪個更好？</li>
                             </ul>
                         </div>
                         <div class="tip-box">
                             <h3>解題技巧</h3>
                             <ul>
-                                <li>識別出這是 Fibonacci 數列的變形</li>
-                                <li>從小規模開始找規律</li>
-                                <li>理解狀態轉移方程</li>
-                                <li>空間優化：只需保存前兩個狀態</li>
+                                <li>使用虛擬頭節點簡化邊界處理</li>
+                                <li>注意處理空串列的情況</li>
+                                <li>迭代法的空間複雜度更優</li>
+                                <li>遞迴法代碼更簡潔優雅</li>
                             </ul>
                         </div>
                         <div class="tip-box">
                             <h3>常見錯誤</h3>
                             <ul>
-                                <li>使用純遞迴導致超時</li>
-                                <li>初始條件設置錯誤</li>
-                                <li>陣列索引越界</li>
-                                <li>沒有考慮 n=1 或 n=2 的邊界情況</li>
+                                <li>忘記處理空串列的情況</li>
+                                <li>沒有連接剩餘的節點</li>
+                                <li>指標更新順序錯誤</li>
+                                <li>忘記返回 dummy.next 而非 dummy</li>
                             </ul>
                         </div>
-                    </div>
-                </section>
-
-                <section class="section">
-                    <h2>延伸思考</h2>
-                    <div class="content-box">
-                        <h3>變形題目</h3>
-                        <ol>
-                            <li><strong>可以爬 1, 2, 3 階</strong>：狀態轉移方程變為 <code>dp[i] = dp[i-1] + dp[i-2] + dp[i-3]</code></li>
-                            <li><strong>最小花費爬樓梯</strong>：每階有不同的花費，求最小總花費</li>
-                            <li><strong>帶限制的爬樓梯</strong>：某些階梯被阻擋不能踩</li>
-                        </ol>
                     </div>
                 </section>
             </div>

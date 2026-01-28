@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>#70 Climbing Stairs - HackerRank 程式題庫</title>
+    <title>#322 Coin Change - HackerRank 程式題庫</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
     
@@ -89,22 +89,22 @@
             <div class="problem-content">
                 <div class="problem-header">
                     <div class="problem-meta">
-                        <span class="problem-number">#70</span>
-                        <span class="difficulty easy">EASY</span>
+                        <span class="problem-number">#322</span>
+                        <span class="difficulty medium">MEDIUM</span>
                     </div>
-                    <h1 class="problem-title">Climbing Stairs</h1>
+                    <h1 class="problem-title">Coin Change</h1>
                     <div class="problem-tags">
-                        <span class="tag">Math</span>
+                        <span class="tag">Array</span>
                         <span class="tag">Dynamic Programming</span>
-                        <span class="tag">Memoization</span>
+                        <span class="tag">BFS</span>
                     </div>
                 </div>
 
                 <section class="section">
                     <h2>題目描述</h2>
                     <div class="content-box">
-                        <p>假設你正在爬樓梯。需要 <code>n</code> 階才能到達樓頂。</p>
-                        <p>每次你可以爬 <code>1</code> 或 <code>2</code> 個階梯。你有多少種不同的方法可以爬到樓頂呢？</p>
+                        <p>給定不同面額的硬幣 <code>coins</code> 和一個總金額 <code>amount</code>。編寫一個函數來計算可以湊成總金額所需的<strong>最少的硬幣個數</strong>。如果沒有任何一種硬幣組合能湊成總金額，返回 <code>-1</code>。</p>
+                        <p>你可以認為每種硬幣的數量是無限的。</p>
                     </div>
                 </section>
 
@@ -112,20 +112,19 @@
                     <h2>範例</h2>
                     <div class="example-box">
                         <h3>範例 1:</h3>
-                        <pre><code>輸入：n = 2
-輸出：2
-解釋：有兩種方法可以爬到樓頂。
-1. 1 階 + 1 階
-2. 2 階</code></pre>
+                        <pre><code>輸入：coins = [1,2,5], amount = 11
+輸出：3
+解釋：11 = 5 + 5 + 1</code></pre>
                     </div>
                     <div class="example-box">
                         <h3>範例 2:</h3>
-                        <pre><code>輸入：n = 3
-輸出：3
-解釋：有三種方法可以爬到樓頂。
-1. 1 階 + 1 階 + 1 階
-2. 1 階 + 2 階
-3. 2 階 + 1 階</code></pre>
+                        <pre><code>輸入：coins = [2], amount = 3
+輸出：-1</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：coins = [1], amount = 0
+輸出：0</code></pre>
                     </div>
                 </section>
 
@@ -133,7 +132,9 @@
                     <h2>限制條件</h2>
                     <div class="content-box">
                         <ul>
-                            <li><code>1 <= n <= 45</code></li>
+                            <li><code>1 <= coins.length <= 12</code></li>
+                            <li><code>1 <= coins[i] <= 2<sup>31</sup> - 1</code></li>
+                            <li><code>0 <= amount <= 10<sup>4</sup></code></li>
                         </ul>
                     </div>
                 </section>
@@ -141,29 +142,24 @@
                 <section class="section">
                     <h2>解題思路</h2>
                     <div class="content-box">
-                        <h3>核心觀察</h3>
-                        <p>這是一個經典的動態規劃問題，本質上就是 Fibonacci 數列：</p>
+                        <h3>動態規劃（推薦）</h3>
+                        <p>這是一個經典的完全背包問題：</p>
+                        <ol>
+                            <li>定義狀態：<code>dp[i]</code> 表示湊成金額 <code>i</code> 所需的最少硬幣數</li>
+                            <li>狀態轉移：<code>dp[i] = min(dp[i], dp[i - coin] + 1)</code> 對所有硬幣</li>
+                            <li>初始化：<code>dp[0] = 0</code>，其餘為無限大</li>
+                            <li>答案：<code>dp[amount]</code></li>
+                        </ol>
                         <ul>
-                            <li>到達第 n 階的方法數 = 到達第 (n-1) 階的方法數 + 到達第 (n-2) 階的方法數</li>
-                            <li>因為你可以從第 (n-1) 階爬 1 階，或從第 (n-2) 階爬 2 階到達第 n 階</li>
+                            <li>時間複雜度：O(amount × n) - n 為硬幣種類數</li>
+                            <li>空間複雜度：O(amount)</li>
                         </ul>
 
-                        <h3>方法一：動態規劃（推薦）</h3>
+                        <h3>BFS 解法</h3>
+                        <p>將問題視為圖的最短路徑問題，從 0 開始 BFS 到 amount。</p>
                         <ul>
-                            <li>時間複雜度：O(n)</li>
-                            <li>空間複雜度：O(1) - 只需要兩個變數</li>
-                        </ul>
-
-                        <h3>方法二：遞迴 + 記憶化</h3>
-                        <ul>
-                            <li>時間複雜度：O(n)</li>
-                            <li>空間複雜度：O(n)</li>
-                        </ul>
-
-                        <h3>方法三：純遞迴（不推薦）</h3>
-                        <ul>
-                            <li>時間複雜度：O(2^n) - 會超時</li>
-                            <li>空間複雜度：O(n)</li>
+                            <li>時間複雜度：O(amount × n)</li>
+                            <li>空間複雜度：O(amount)</li>
                         </ul>
                     </div>
                 </section>
@@ -180,117 +176,116 @@
                     <div class="code-content python active">
                         <h3>Python 解法</h3>
                         <pre><code class="language-python">class Solution:
-    def climbStairs(self, n: int) -> int:
+    def coinChange(self, coins: List[int], amount: int) -> int:
         """
-        動態規劃解法 - 最優解
+        動態規劃解法
         
-        時間複雜度：O(n)
-        空間複雜度：O(1)
+        時間複雜度：O(amount × n)
+        空間複雜度：O(amount)
         """
-        if n <= 2:
-            return n
+        # 初始化 dp 陣列，使用 amount + 1 作為無限大的值
+        dp = [amount + 1] * (amount + 1)
+        dp[0] = 0
         
-        # 初始化前兩階的方法數
-        prev2 = 1  # n=1 時的方法數
-        prev1 = 2  # n=2 時的方法數
+        # 對每個金額計算最少硬幣數
+        for i in range(1, amount + 1):
+            for coin in coins:
+                if coin <= i:
+                    dp[i] = min(dp[i], dp[i - coin] + 1)
         
-        # 從第 3 階開始計算
-        for i in range(3, n + 1):
-            current = prev1 + prev2
-            prev2 = prev1
-            prev1 = current
-        
-        return prev1
+        # 如果 dp[amount] 還是無限大，說明無解
+        return dp[amount] if dp[amount] != amount + 1 else -1
 
 
-# 方法二：使用陣列的 DP
+# 方法二：BFS 解法
+from collections import deque
+
 class Solution2:
-    def climbStairs(self, n: int) -> int:
+    def coinChange(self, coins: List[int], amount: int) -> int:
         """
-        使用陣列的動態規劃
+        BFS 解法 - 視為最短路徑問題
         
-        時間複雜度：O(n)
-        空間複雜度：O(n)
+        時間複雜度：O(amount × n)
+        空間複雜度：O(amount)
         """
-        if n <= 2:
-            return n
+        if amount == 0:
+            return 0
         
-        dp = [0] * (n + 1)
-        dp[1] = 1
-        dp[2] = 2
+        visited = {0}
+        queue = deque([(0, 0)])  # (當前金額, 步數)
         
-        for i in range(3, n + 1):
-            dp[i] = dp[i-1] + dp[i-2]
+        while queue:
+            current_amount, steps = queue.popleft()
+            
+            for coin in coins:
+                next_amount = current_amount + coin
+                
+                if next_amount == amount:
+                    return steps + 1
+                
+                if next_amount < amount and next_amount not in visited:
+                    visited.add(next_amount)
+                    queue.append((next_amount, steps + 1))
         
-        return dp[n]
+        return -1
 
 
-# 方法三：遞迴 + 記憶化
+# 方法三：記憶化遞迴
 class Solution3:
-    def climbStairs(self, n: int) -> int:
+    def coinChange(self, coins: List[int], amount: int) -> int:
         """
-        遞迴 + 記憶化
+        記憶化遞迴
         
-        時間複雜度：O(n)
-        空間複雜度：O(n)
+        時間複雜度：O(amount × n)
+        空間複雜度：O(amount)
         """
         memo = {}
         
-        def climb(n):
-            if n <= 2:
-                return n
+        def dp(remaining):
+            if remaining == 0:
+                return 0
+            if remaining < 0:
+                return -1
             
-            if n in memo:
-                return memo[n]
+            if remaining in memo:
+                return memo[remaining]
             
-            memo[n] = climb(n-1) + climb(n-2)
-            return memo[n]
+            min_coins = float('inf')
+            for coin in coins:
+                result = dp(remaining - coin)
+                if result >= 0:
+                    min_coins = min(min_coins, result + 1)
+            
+            memo[remaining] = min_coins if min_coins != float('inf') else -1
+            return memo[remaining]
         
-        return climb(n)
-
-
-# 方法四：數學公式（進階）
-class Solution4:
-    def climbStairs(self, n: int) -> int:
-        """
-        使用 Fibonacci 數列的數學公式
-        
-        時間複雜度：O(1)
-        空間複雜度：O(1)
-        """
-        import math
-        
-        sqrt5 = math.sqrt(5)
-        phi = (1 + sqrt5) / 2
-        psi = (1 - sqrt5) / 2
-        
-        # Binet's formula
-        result = (phi ** (n + 1) - psi ** (n + 1)) / sqrt5
-        return int(round(result))</code></pre>
+        return dp(amount)</code></pre>
                     </div>
 
                     <div class="code-content cpp">
                         <h3>C++ 解法</h3>
-                        <pre><code class="language-cpp">class Solution {
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;climits&gt;
+using namespace std;
+
+class Solution {
 public:
-    int climbStairs(int n) {
-        // 動態規劃解法
-        if (n <= 2) {
-            return n;
+    int coinChange(vector&lt;int&gt;& coins, int amount) {
+        // 初始化 dp 陣列
+        vector&lt;int&gt; dp(amount + 1, amount + 1);
+        dp[0] = 0;
+        
+        // 對每個金額計算最少硬幣數
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    dp[i] = min(dp[i], dp[i - coin] + 1);
+                }
+            }
         }
         
-        // 初始化前兩階的方法數
-        int prev2 = 1;  // n=1 時的方法數
-        int prev1 = 2;  // n=2 時的方法數
-        
-        // 從第 3 階開始計算
-        for (int i = 3; i <= n; i++) {
-            int current = prev1 + prev2;
-            prev2 = prev1;
-            prev1 = current;
-        }
-        
-        return prev1;
+        return dp[amount] > amount ? -1 : dp[amount];
     }
 };</code></pre>
                     </div>
@@ -298,24 +293,22 @@ public:
                     <div class="code-content java">
                         <h3>Java 解法</h3>
                         <pre><code class="language-java">class Solution {
-    public int climbStairs(int n) {
-        // 動態規劃解法
-        if (n <= 2) {
-            return n;
+    public int coinChange(int[] coins, int amount) {
+        // 初始化 dp 陣列
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        
+        // 對每個金額計算最少硬幣數
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (coin <= i) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
         }
         
-        // 初始化前兩階的方法數
-        int prev2 = 1;  // n=1 時的方法數
-        int prev1 = 2;  // n=2 時的方法數
-        
-        // 從第 3 階開始計算
-        for (int i = 3; i <= n; i++) {
-            int current = prev1 + prev2;
-            prev2 = prev1;
-            prev1 = current;
-        }
-        
-        return prev1;
+        return dp[amount] > amount ? -1 : dp[amount];
     }
 }</code></pre>
                     </div>
@@ -327,42 +320,30 @@ public:
                         <div class="tip-box">
                             <h3>常見追問</h3>
                             <ul>
-                                <li>如果每次可以爬 1, 2 或 3 階呢？</li>
-                                <li>如果某些階梯不能踩怎麼辦？</li>
-                                <li>能否優化空間複雜度到 O(1)？</li>
-                                <li>這個問題和 Fibonacci 數列有什麼關係？</li>
+                                <li>如何輸出具體使用了哪些硬幣？</li>
+                                <li>如果要求硬幣組合數而非最少數量？</li>
+                                <li>能否用貪心算法？為什麼不行？</li>
+                                <li>空間複雜度能否優化？</li>
                             </ul>
                         </div>
                         <div class="tip-box">
                             <h3>解題技巧</h3>
                             <ul>
-                                <li>識別出這是 Fibonacci 數列的變形</li>
-                                <li>從小規模開始找規律</li>
-                                <li>理解狀態轉移方程</li>
-                                <li>空間優化：只需保存前兩個狀態</li>
+                                <li>識別出這是完全背包問題</li>
+                                <li>理解狀態轉移方程的含義</li>
+                                <li>使用 amount + 1 作為無限大</li>
+                                <li>注意邊界條件（amount = 0）</li>
                             </ul>
                         </div>
                         <div class="tip-box">
                             <h3>常見錯誤</h3>
                             <ul>
-                                <li>使用純遞迴導致超時</li>
-                                <li>初始條件設置錯誤</li>
-                                <li>陣列索引越界</li>
-                                <li>沒有考慮 n=1 或 n=2 的邊界情況</li>
+                                <li>初始值設為 -1 而不是無限大</li>
+                                <li>忘記檢查硬幣是否小於當前金額</li>
+                                <li>貪心算法無法得到最優解</li>
+                                <li>沒有處理無解的情況</li>
                             </ul>
                         </div>
-                    </div>
-                </section>
-
-                <section class="section">
-                    <h2>延伸思考</h2>
-                    <div class="content-box">
-                        <h3>變形題目</h3>
-                        <ol>
-                            <li><strong>可以爬 1, 2, 3 階</strong>：狀態轉移方程變為 <code>dp[i] = dp[i-1] + dp[i-2] + dp[i-3]</code></li>
-                            <li><strong>最小花費爬樓梯</strong>：每階有不同的花費，求最小總花費</li>
-                            <li><strong>帶限制的爬樓梯</strong>：某些階梯被阻擋不能踩</li>
-                        </ol>
                     </div>
                 </section>
             </div>
