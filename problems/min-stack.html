@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#155 Min Stack - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#155</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Min Stack</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Stack</span>
+                        <span class="tag">Design</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>設計一個支援 push、pop、top 操作，並能在<strong>常數時間</strong>內檢索到最小元素的堆疊。</p>
+                        <p>實現 <code>MinStack</code> 類別：</p>
+                        <ul>
+                            <li><code>MinStack()</code> 初始化堆疊物件。</li>
+                            <li><code>void push(int val)</code> 將元素 val 推入堆疊。</li>
+                            <li><code>void pop()</code> 刪除堆疊頂端的元素。</li>
+                            <li><code>int top()</code> 獲取堆疊頂端的元素。</li>
+                            <li><code>int getMin()</code> 獲取堆疊中的最小元素。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+輸出
+[null,null,null,null,-3,null,0,-2]
+
+解釋
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // 返回 -3
+minStack.pop();
+minStack.top();    // 返回 0
+minStack.getMin(); // 返回 -2</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>-2<sup>31</sup> <= val <= 2<sup>31</sup> - 1</code></li>
+                            <li><code>pop</code>、<code>top</code> 和 <code>getMin</code> 操作總是在<strong>非空堆疊</strong>上調用</li>
+                            <li><code>push</code>、<code>pop</code>、<code>top</code> 和 <code>getMin</code> 最多被調用 <code>3 * 10<sup>4</sup></code> 次</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>核心挑戰</h3>
+                        <p>如何在 O(1) 時間內獲取最小值？</p>
+
+                        <h3>方法一：雙堆疊（推薦）</h3>
+                        <p>使用兩個堆疊：</p>
+                        <ul>
+                            <li><strong>主堆疊</strong>：存儲所有元素</li>
+                            <li><strong>最小堆疊</strong>：存儲當前的最小值</li>
+                        </ul>
+                        <p>當 push 時，如果新元素 ≤ 當前最小值，也推入最小堆疊。</p>
+                        <ul>
+                            <li>時間複雜度：O(1) - 所有操作</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+
+                        <h3>方法二：單堆疊 + 配對</h3>
+                        <p>每個元素與當前最小值配對存儲。</p>
+                        <ul>
+                            <li>時間複雜度：O(1)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+
+                        <h3>方法三：差值法（進階）</h3>
+                        <p>存儲與最小值的差值，可以節省空間。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class MinStack:
+    """
+    雙堆疊解法
+    
+    時間複雜度：O(1) - 所有操作
+    空間複雜度：O(n)
+    """
+    
+    def __init__(self):
+        # 主堆疊存儲所有元素
+        self.stack = []
+        # 最小堆疊存儲對應的最小值
+        self.min_stack = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        
+        # 如果最小堆疊為空或新值更小，推入最小堆疊
+        if not self.min_stack or val <= self.min_stack[-1]:
+            self.min_stack.append(val)
+
+    def pop(self) -> None:
+        if self.stack:
+            val = self.stack.pop()
+            # 如果彈出的是最小值，也從最小堆疊彈出
+            if val == self.min_stack[-1]:
+                self.min_stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1] if self.stack else None
+
+    def getMin(self) -> int:
+        return self.min_stack[-1] if self.min_stack else None
+
+
+# 方法二：單堆疊 + 配對
+class MinStack2:
+    """
+    每個元素與最小值配對
+    """
+    
+    def __init__(self):
+        # 存儲 (值, 當前最小值) 的元組
+        self.stack = []
+
+    def push(self, val: int) -> None:
+        if not self.stack:
+            self.stack.append((val, val))
+        else:
+            current_min = min(val, self.stack[-1][1])
+            self.stack.append((val, current_min))
+
+    def pop(self) -> None:
+        if self.stack:
+            self.stack.pop()
+
+    def top(self) -> int:
+        return self.stack[-1][0] if self.stack else None
+
+    def getMin(self) -> int:
+        return self.stack[-1][1] if self.stack else None
+
+
+# 方法三：差值法（進階）
+class MinStack3:
+    """
+    存儲與最小值的差值
+    """
+    
+    def __init__(self):
+        self.stack = []
+        self.min_val = None
+
+    def push(self, val: int) -> None:
+        if not self.stack:
+            self.stack.append(0)
+            self.min_val = val
+        else:
+            # 存儲差值
+            self.stack.append(val - self.min_val)
+            if val < self.min_val:
+                self.min_val = val
+
+    def pop(self) -> None:
+        if self.stack:
+            diff = self.stack.pop()
+            # 如果差值為負，需要恢復之前的最小值
+            if diff < 0:
+                self.min_val = self.min_val - diff
+
+    def top(self) -> int:
+        if self.stack:
+            diff = self.stack[-1]
+            if diff < 0:
+                return self.min_val
+            else:
+                return self.min_val + diff
+        return None
+
+    def getMin(self) -> int:
+        return self.min_val</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;stack&gt;
+using namespace std;
+
+class MinStack {
+private:
+    stack&lt;int&gt; mainStack;
+    stack&lt;int&gt; minStack;
+    
+public:
+    MinStack() {}
+    
+    void push(int val) {
+        mainStack.push(val);
+        
+        if (minStack.empty() || val <= minStack.top()) {
+            minStack.push(val);
+        }
+    }
+    
+    void pop() {
+        if (!mainStack.empty()) {
+            int val = mainStack.top();
+            mainStack.pop();
+            
+            if (val == minStack.top()) {
+                minStack.pop();
+            }
+        }
+    }
+    
+    int top() {
+        return mainStack.top();
+    }
+    
+    int getMin() {
+        return minStack.top();
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.Stack;
+
+class MinStack {
+    private Stack&lt;Integer&gt; mainStack;
+    private Stack&lt;Integer&gt; minStack;
+    
+    public MinStack() {
+        mainStack = new Stack&lt;&gt;();
+        minStack = new Stack&lt;&gt;();
+    }
+    
+    public void push(int val) {
+        mainStack.push(val);
+        
+        if (minStack.isEmpty() || val <= minStack.peek()) {
+            minStack.push(val);
+        }
+    }
+    
+    public void pop() {
+        if (!mainStack.isEmpty()) {
+            int val = mainStack.pop();
+            
+            if (val == minStack.peek()) {
+                minStack.pop();
+            }
+        }
+    }
+    
+    public int top() {
+        return mainStack.peek();
+    }
+    
+    public int getMin() {
+        return minStack.peek();
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何實現 Max Stack？</li>
+                                <li>能否只用一個堆疊？</li>
+                                <li>如何處理相同的最小值？</li>
+                                <li>空間複雜度能否優化？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>雙堆疊是最直觀的解法</li>
+                                <li>注意相等情況的處理</li>
+                                <li>配對法更易理解但空間略大</li>
+                                <li>差值法最優但較複雜</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記處理相等的最小值</li>
+                                <li>pop 時沒有同步最小堆疊</li>
+                                <li>空堆疊檢查遺漏</li>
+                                <li>比較條件用 < 而非 ≤</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>視覺化說明</h2>
+                    <div class="content-box">
+                        <h3>雙堆疊操作過程：</h3>
+                        <pre><code>操作序列：push(-2), push(0), push(-3), getMin(), pop()
+
+主堆疊        最小堆疊
+  -2            -2        push(-2)
+  -2  0         -2        push(0)  // 0 > -2，不推入
+  -2  0  -3     -2  -3    push(-3) // -3 ≤ -2，推入
+  
+getMin() → -3 (最小堆疊頂)
+
+  -2  0         -2        pop()    // -3 == -3，兩邊都彈出
+  
+getMin() → -2 (最小堆疊頂)</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

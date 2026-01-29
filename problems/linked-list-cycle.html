@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#141 Linked List Cycle - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#141</span>
+                        <span class="difficulty easy">EASY</span>
+                    </div>
+                    <h1 class="problem-title">Linked List Cycle</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Linked List</span>
+                        <span class="tag">Two Pointers</span>
+                        <span class="tag">Hash Table</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個鏈結串列的頭節點 <code>head</code>，判斷鏈結串列中是否有環。</p>
+                        <p>如果鏈結串列中有某個節點，可以通過連續跟蹤 <code>next</code> 指標再次到達，則鏈結串列中存在環。為了表示給定鏈結串列中的環，我們使用整數 <code>pos</code> 來表示鏈結串列尾部連接到鏈結串列中的位置（索引從 0 開始）。如果 <code>pos</code> 是 <code>-1</code>，則在該鏈結串列中沒有環。</p>
+                        <p><strong>注意：pos 不作為參數傳遞</strong>，僅僅是為了標識鏈結串列的實際情況。</p>
+                        <p>如果鏈結串列中存在環，則返回 <code>true</code>。否則，返回 <code>false</code>。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：head = [3,2,0,-4], pos = 1
+輸出：true
+解釋：鏈結串列中有一個環，其尾部連接到第二個節點。
+
+    3 → 2 → 0 → -4
+        ↑         ↓
+        ← ← ← ← ←</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：head = [1,2], pos = 0
+輸出：true
+解釋：鏈結串列中有一個環，其尾部連接到第一個節點。
+
+    1 → 2
+    ↑   ↓
+    ← ←</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：head = [1], pos = -1
+輸出：false
+解釋：鏈結串列中沒有環。
+
+    1</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li>鏈結串列中節點的數目範圍是 <code>[0, 10<sup>4</sup>]</code></li>
+                            <li><code>-10<sup>5</sup> <= Node.val <= 10<sup>5</sup></code></li>
+                            <li><code>pos</code> 為 <code>-1</code> 或者鏈結串列中的一個<strong>有效索引</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>進階要求</h2>
+                    <div class="content-box">
+                        <p>你能用 <code>O(1)</code>（即，常數）記憶體解決此問題嗎？</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：快慢指標（Floyd's Cycle Detection）- 推薦</h3>
+                        <p>使用兩個指標，一快一慢：</p>
+                        <ul>
+                            <li><strong>慢指標</strong>：每次移動一步</li>
+                            <li><strong>快指標</strong>：每次移動兩步</li>
+                            <li>如果有環，快慢指標最終會相遇</li>
+                            <li>如果無環，快指標會先到達 null</li>
+                        </ul>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>方法二：哈希表</h3>
+                        <p>用 Set 記錄訪問過的節點。</p>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        """
+        快慢指標法（Floyd's Cycle Detection）
+        
+        時間複雜度：O(n)
+        空間複雜度：O(1)
+        """
+        if not head or not head.next:
+            return False
+        
+        slow = head
+        fast = head.next
+        
+        while slow != fast:
+            # 快指標到達末尾，無環
+            if not fast or not fast.next:
+                return False
+            
+            slow = slow.next
+            fast = fast.next.next
+        
+        # 快慢指標相遇，有環
+        return True
+
+
+# 方法二：更簡潔的寫法
+class Solution2:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        """
+        快慢指標 - 簡潔版
+        """
+        slow = fast = head
+        
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            
+            if slow == fast:
+                return True
+        
+        return False
+
+
+# 方法三：哈希表
+class Solution3:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        """
+        哈希表法
+        
+        時間複雜度：O(n)
+        空間複雜度：O(n)
+        """
+        visited = set()
+        current = head
+        
+        while current:
+            if current in visited:
+                return True
+            visited.add(current)
+            current = current.next
+        
+        return False</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(nullptr) {}
+};
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (!head || !head->next) return false;
+        
+        ListNode *slow = head;
+        ListNode *fast = head->next;
+        
+        while (slow != fast) {
+            if (!fast || !fast->next) {
+                return false;
+            }
+            
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        return true;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x) {
+        val = x;
+        next = null;
+    }
+}
+
+class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) return false;
+        
+        ListNode slow = head;
+        ListNode fast = head.next;
+        
+        while (slow != fast) {
+            if (fast == null || fast.next == null) {
+                return false;
+            }
+            
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        return true;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何找出環的起始節點？（Linked List Cycle II）</li>
+                                <li>為什麼快慢指標一定會相遇？</li>
+                                <li>能否用 O(1) 空間解決？</li>
+                                <li>如何計算環的長度？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>快慢指標是經典技巧</li>
+                                <li>理解「龜兔賽跑」的比喻</li>
+                                <li>注意邊界條件（空串列、單節點）</li>
+                                <li>快指標每次走兩步是關鍵</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記檢查 fast.next 是否為空</li>
+                                <li>初始化快慢指標位置錯誤</li>
+                                <li>循環條件寫錯</li>
+                                <li>相遇判斷邏輯錯誤</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>快慢指標原理</h2>
+                    <div class="content-box">
+                        <h3>為什麼快慢指標一定會相遇？</h3>
+                        <p><strong>假設有環：</strong></p>
+                        <ul>
+                            <li>慢指標每次移動 1 步</li>
+                            <li>快指標每次移動 2 步</li>
+                            <li>快指標比慢指標多走 1 步</li>
+                            <li>當慢指標進入環後，快指標會逐漸縮小與慢指標的距離</li>
+                            <li>最終快指標會追上慢指標（相遇）</li>
+                        </ul>
+
+                        <h3>視覺化說明：</h3>
+                        <pre><code>環形鏈結串列：
+    1 → 2 → 3 → 4 → 5
+            ↑       ↓
+            8 ← 7 ← 6
+
+初始: slow=1, fast=1
+第1步: slow=2, fast=3
+第2步: slow=3, fast=5
+第3步: slow=4, fast=7
+第4步: slow=5, fast=3
+第5步: slow=6, fast=5
+第6步: slow=7, fast=7 ← 相遇！</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
