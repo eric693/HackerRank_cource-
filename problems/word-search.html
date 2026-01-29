@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#79 Word Search - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#79</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Word Search</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Backtracking</span>
+                        <span class="tag">Matrix</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個 <code>m x n</code> 二維字符網格 <code>board</code> 和一個字串 <code>word</code>。如果 <code>word</code> 存在於網格中，返回 <code>true</code>；否則，返回 <code>false</code>。</p>
+                        <p>單詞必須按照字母順序，通過<strong>相鄰的單元格</strong>內的字母構成，其中「相鄰」單元格是那些水平相鄰或垂直相鄰的單元格。<strong>同一個單元格內的字母不允許被重複使用。</strong></p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+輸出：true
+
+視覺化：
+A→B→C←C
+S F↓C S
+A D E→E→D</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+輸出：true
+
+視覺化：
+A B C E
+S F C→S
+A D→E→E</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+輸出：false
+解釋：字母 'B' 不能被重複使用。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>m == board.length</code></li>
+                            <li><code>n == board[i].length</code></li>
+                            <li><code>1 <= m, n <= 6</code></li>
+                            <li><code>1 <= word.length <= 15</code></li>
+                            <li><code>board</code> 和 <code>word</code> 僅由大小寫英文字母組成</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>回溯法（DFS）</h3>
+                        <p>這是回溯算法的經典應用：</p>
+                        <ol>
+                            <li>遍歷網格，找到與單詞首字母匹配的位置</li>
+                            <li>從該位置開始 DFS，向四個方向搜索</li>
+                            <li>標記當前位置為已訪問（避免重複使用）</li>
+                            <li>如果找到完整單詞，返回 true</li>
+                            <li>回溯：恢復當前位置的狀態</li>
+                        </ol>
+
+                        <h3>優化技巧</h3>
+                        <ul>
+                            <li>提前終止：如果當前字符不匹配，立即返回</li>
+                            <li>原地標記：可以直接修改 board 來標記訪問狀態</li>
+                            <li>剪枝：統計字符頻率，如果 board 中某字符數量少於 word，直接返回 false</li>
+                        </ul>
+
+                        <ul>
+                            <li>時間複雜度：O(m × n × 4^L) - L 為單詞長度</li>
+                            <li>空間複雜度：O(L) - 遞迴深度</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        """
+        回溯法（DFS）
+        
+        時間複雜度：O(m × n × 4^L)
+        空間複雜度：O(L)
+        """
+        if not board or not board[0]:
+            return False
+        
+        rows, cols = len(board), len(board[0])
+        
+        def backtrack(r, c, index):
+            # 找到完整單詞
+            if index == len(word):
+                return True
+            
+            # 邊界檢查和字符匹配檢查
+            if (r < 0 or r >= rows or c < 0 or c >= cols or 
+                board[r][c] != word[index]):
+                return False
+            
+            # 標記當前位置為已訪問
+            temp = board[r][c]
+            board[r][c] = '#'
+            
+            # 向四個方向搜索
+            found = (backtrack(r + 1, c, index + 1) or
+                    backtrack(r - 1, c, index + 1) or
+                    backtrack(r, c + 1, index + 1) or
+                    backtrack(r, c - 1, index + 1))
+            
+            # 回溯：恢復狀態
+            board[r][c] = temp
+            
+            return found
+        
+        # 從每個位置開始嘗試
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == word[0]:
+                    if backtrack(r, c, 0):
+                        return True
+        
+        return False
+
+
+# 方法二：使用 visited 集合
+class Solution2:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        """
+        使用 visited 集合（不修改原陣列）
+        """
+        rows, cols = len(board), len(board[0])
+        
+        def backtrack(r, c, index, visited):
+            if index == len(word):
+                return True
+            
+            if (r < 0 or r >= rows or c < 0 or c >= cols or 
+                (r, c) in visited or board[r][c] != word[index]):
+                return False
+            
+            visited.add((r, c))
+            
+            found = (backtrack(r + 1, c, index + 1, visited) or
+                    backtrack(r - 1, c, index + 1, visited) or
+                    backtrack(r, c + 1, index + 1, visited) or
+                    backtrack(r, c - 1, index + 1, visited))
+            
+            visited.remove((r, c))
+            
+            return found
+        
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == word[0]:
+                    if backtrack(r, c, 0, set()):
+                        return True
+        
+        return False</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Solution {
+public:
+    bool exist(vector&lt;vector&lt;char&gt;&gt;& board, string word) {
+        if (board.empty() || board[0].empty()) return false;
+        
+        rows = board.size();
+        cols = board[0].size();
+        
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board[r][c] == word[0]) {
+                    if (backtrack(board, word, r, c, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+private:
+    int rows, cols;
+    
+    bool backtrack(vector&lt;vector&lt;char&gt;&gt;& board, const string& word, 
+                   int r, int c, int index) {
+        if (index == word.length()) return true;
+        
+        if (r < 0 || r >= rows || c < 0 || c >= cols || 
+            board[r][c] != word[index]) {
+            return false;
+        }
+        
+        char temp = board[r][c];
+        board[r][c] = '#';
+        
+        bool found = backtrack(board, word, r + 1, c, index + 1) ||
+                    backtrack(board, word, r - 1, c, index + 1) ||
+                    backtrack(board, word, r, c + 1, index + 1) ||
+                    backtrack(board, word, r, c - 1, index + 1);
+        
+        board[r][c] = temp;
+        
+        return found;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class Solution {
+    private int rows, cols;
+    
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0) return false;
+        
+        rows = board.length;
+        cols = board[0].length;
+        
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board[r][c] == word.charAt(0)) {
+                    if (backtrack(board, word, r, c, 0)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    private boolean backtrack(char[][] board, String word, 
+                             int r, int c, int index) {
+        if (index == word.length()) return true;
+        
+        if (r < 0 || r >= rows || c < 0 || c >= cols || 
+            board[r][c] != word.charAt(index)) {
+            return false;
+        }
+        
+        char temp = board[r][c];
+        board[r][c] = '#';
+        
+        boolean found = backtrack(board, word, r + 1, c, index + 1) ||
+                       backtrack(board, word, r - 1, c, index + 1) ||
+                       backtrack(board, word, r, c + 1, index + 1) ||
+                       backtrack(board, word, r, c - 1, index + 1);
+        
+        board[r][c] = temp;
+        
+        return found;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何找出所有可能的路徑？</li>
+                                <li>能否不修改原陣列？</li>
+                                <li>如何優化性能？</li>
+                                <li>二維矩陣和圖的 DFS 有何不同？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>回溯三步：選擇、遞迴、撤銷</li>
+                                <li>原地標記避免額外空間</li>
+                                <li>四個方向的遍歷</li>
+                                <li>提前終止優化性能</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記回溯（恢復狀態）</li>
+                                <li>邊界檢查遺漏</li>
+                                <li>沒有標記已訪問導致重複使用</li>
+                                <li>終止條件寫錯</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>回溯過程視覺化</h2>
+                    <div class="content-box">
+                        <h3>搜索 "SEE" 的過程：</h3>
+                        <pre><code>網格：
+A B C E
+S F C S
+A D E E
+
+步驟 1: 找到 'S' 在 (1,0)
+A B C E
+S→    
+A D E E
+
+步驟 2: 向下搜索 'E'，失敗，回溯
+A B C E
+S      
+A↓     (找到 'A'，不匹配)
+
+步驟 3: 向右搜索 'E'，失敗
+A B C E
+S→F    (找到 'F'，不匹配)
+
+步驟 4: 找到另一個 'S' 在 (1,3)，成功找到路徑
+A B C E
+    C S
+  D→E→E ✓</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
