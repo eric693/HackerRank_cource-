@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#207 Course Schedule - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#207</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Course Schedule</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Graph</span>
+                        <span class="tag">DFS</span>
+                        <span class="tag">BFS</span>
+                        <span class="tag">Topological Sort</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>你這個學期必須選修 <code>numCourses</code> 門課程，記為 <code>0</code> 到 <code>numCourses - 1</code>。</p>
+                        <p>在選修某些課程之前需要一些先修課程。先修課程按陣列 <code>prerequisites</code> 給出，其中 <code>prerequisites[i] = [a<sub>i</sub>, b<sub>i</sub>]</code> 表示如果要學習課程 <code>a<sub>i</sub></code> 則<strong>必須</strong>先學習課程 <code>b<sub>i</sub></code>。</p>
+                        <p>例如，先修課程對 <code>[0, 1]</code> 表示：想要學習課程 <code>0</code>，你需要先完成課程 <code>1</code>。</p>
+                        <p>請你判斷是否可能完成所有課程的學習？如果可以，返回 <code>true</code>；否則，返回 <code>false</code>。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：numCourses = 2, prerequisites = [[1,0]]
+輸出：true
+解釋：總共有 2 門課程。學習課程 1 之前，你需要完成課程 0。這是可能的。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+輸出：false
+解釋：總共有 2 門課程。學習課程 1 之前，你需要先完成課程 0；
+     並且學習課程 0 之前，你還應先完成課程 1。這是不可能的。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= numCourses <= 2000</code></li>
+                            <li><code>0 <= prerequisites.length <= 5000</code></li>
+                            <li><code>prerequisites[i].length == 2</code></li>
+                            <li><code>0 <= a<sub>i</sub>, b<sub>i</sub> < numCourses</code></li>
+                            <li><code>prerequisites[i]</code> 中的所有課程對<strong>互不相同</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>核心問題</h3>
+                        <p>這是一個<strong>檢測有向圖是否有環</strong>的問題：</p>
+                        <ul>
+                            <li>如果圖中有環，則無法完成所有課程（死鎖）</li>
+                            <li>如果圖中無環，則可以完成所有課程</li>
+                        </ul>
+
+                        <h3>方法一：DFS + 三色標記（推薦）</h3>
+                        <p>使用三種狀態標記節點：</p>
+                        <ul>
+                            <li>白色（0）：未訪問</li>
+                            <li>灰色（1）：正在訪問（在當前路徑中）</li>
+                            <li>黑色（2）：已訪問完成</li>
+                        </ul>
+                        <p>如果訪問到灰色節點，說明有環。</p>
+                        <ul>
+                            <li>時間複雜度：O(V + E)</li>
+                            <li>空間複雜度：O(V + E)</li>
+                        </ul>
+
+                        <h3>方法二：BFS + 拓撲排序（Kahn's Algorithm）</h3>
+                        <p>統計每個節點的入度，從入度為 0 的節點開始：</p>
+                        <ol>
+                            <li>將所有入度為 0 的節點加入佇列</li>
+                            <li>取出節點，將其鄰居的入度減 1</li>
+                            <li>如果鄰居入度變為 0，加入佇列</li>
+                            <li>最後檢查是否所有節點都被處理</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(V + E)</li>
+                            <li>空間複雜度：O(V + E)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        """
+        DFS + 三色標記法
+        
+        時間複雜度：O(V + E)
+        空間複雜度：O(V + E)
+        """
+        # 建立鄰接表
+        graph = [[] for _ in range(numCourses)]
+        for course, prereq in prerequisites:
+            graph[course].append(prereq)
+        
+        # 0: 未訪問, 1: 正在訪問, 2: 已完成
+        visited = [0] * numCourses
+        
+        def has_cycle(course):
+            if visited[course] == 1:
+                # 遇到灰色節點，有環
+                return True
+            if visited[course] == 2:
+                # 已經訪問過，無環
+                return False
+            
+            # 標記為正在訪問
+            visited[course] = 1
+            
+            # 訪問所有先修課程
+            for prereq in graph[course]:
+                if has_cycle(prereq):
+                    return True
+            
+            # 標記為已完成
+            visited[course] = 2
+            return False
+        
+        # 檢查每門課程
+        for i in range(numCourses):
+            if has_cycle(i):
+                return False
+        
+        return True
+
+
+# 方法二：BFS + 拓撲排序
+from collections import deque
+
+class Solution2:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        """
+        BFS + Kahn's Algorithm
+        
+        時間複雜度：O(V + E)
+        空間複雜度：O(V + E)
+        """
+        # 建立鄰接表和入度陣列
+        graph = [[] for _ in range(numCourses)]
+        in_degree = [0] * numCourses
+        
+        for course, prereq in prerequisites:
+            graph[prereq].append(course)
+            in_degree[course] += 1
+        
+        # 將所有入度為 0 的課程加入佇列
+        queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        
+        # 記錄已處理的課程數
+        count = 0
+        
+        while queue:
+            course = queue.popleft()
+            count += 1
+            
+            # 處理該課程的後續課程
+            for next_course in graph[course]:
+                in_degree[next_course] -= 1
+                if in_degree[next_course] == 0:
+                    queue.append(next_course)
+        
+        # 如果所有課程都被處理，說明無環
+        return count == numCourses</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+class Solution {
+public:
+    bool canFinish(int numCourses, vector&lt;vector&lt;int&gt;&gt;& prerequisites) {
+        // 建立鄰接表
+        vector&lt;vector&lt;int&gt;&gt; graph(numCourses);
+        for (auto& p : prerequisites) {
+            graph[p[0]].push_back(p[1]);
+        }
+        
+        // 0: 未訪問, 1: 正在訪問, 2: 已完成
+        vector&lt;int&gt; visited(numCourses, 0);
+        
+        // 檢查每門課程
+        for (int i = 0; i < numCourses; i++) {
+            if (hasCycle(graph, visited, i)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+private:
+    bool hasCycle(vector&lt;vector&lt;int&gt;&gt;& graph, vector&lt;int&gt;& visited, int course) {
+        if (visited[course] == 1) return true;
+        if (visited[course] == 2) return false;
+        
+        visited[course] = 1;
+        
+        for (int prereq : graph[course]) {
+            if (hasCycle(graph, visited, prereq)) {
+                return true;
+            }
+        }
+        
+        visited[course] = 2;
+        return false;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        // 建立鄰接表
+        List&lt;List&lt;Integer&gt;&gt; graph = new ArrayList&lt;&gt;();
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList&lt;&gt;());
+        }
+        
+        for (int[] p : prerequisites) {
+            graph.get(p[0]).add(p[1]);
+        }
+        
+        // 0: 未訪問, 1: 正在訪問, 2: 已完成
+        int[] visited = new int[numCourses];
+        
+        // 檢查每門課程
+        for (int i = 0; i < numCourses; i++) {
+            if (hasCycle(graph, visited, i)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    private boolean hasCycle(List&lt;List&lt;Integer&gt;&gt; graph, int[] visited, int course) {
+        if (visited[course] == 1) return true;
+        if (visited[course] == 2) return false;
+        
+        visited[course] = 1;
+        
+        for (int prereq : graph.get(course)) {
+            if (hasCycle(graph, visited, prereq)) {
+                return true;
+            }
+        }
+        
+        visited[course] = 2;
+        return false;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何返回一個有效的課程順序？（Course Schedule II）</li>
+                                <li>DFS 和 BFS 哪個更好？</li>
+                                <li>什麼是拓撲排序？</li>
+                                <li>如何檢測無向圖的環？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>識別出這是有向圖環檢測問題</li>
+                                <li>三色標記法是經典 DFS 技巧</li>
+                                <li>拓撲排序適合依賴關係問題</li>
+                                <li>建圖是關鍵第一步</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>建圖方向錯誤</li>
+                                <li>只用兩種狀態無法檢測環</li>
+                                <li>忘記重置訪問狀態</li>
+                                <li>BFS 中入度計算錯誤</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>圖解說明</h2>
+                    <div class="content-box">
+                        <h3>範例：numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]</h3>
+                        <pre><code>依賴關係圖：
+    0
+   / \
+  1   2
+   \ /
+    3
+
+拓撲排序順序：0 → 1 → 2 → 3 （或 0 → 2 → 1 → 3）
+可以完成所有課程 ✓
+
+有環的例子：[[1,0],[0,1]]
+    0 ←→ 1
+無法完成 ✗</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

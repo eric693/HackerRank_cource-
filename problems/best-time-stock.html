@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#121 Best Time to Buy and Sell Stock - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#121</span>
+                        <span class="difficulty easy">EASY</span>
+                    </div>
+                    <h1 class="problem-title">Best Time to Buy and Sell Stock</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Dynamic Programming</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個陣列 <code>prices</code>，其中 <code>prices[i]</code> 是第 <code>i</code> 天某支股票的價格。</p>
+                        <p>你想要透過選擇<strong>某一天</strong>買入這支股票，並選擇在<strong>未來的某一個不同的日子</strong>賣出該股票，以最大化你的利潤。</p>
+                        <p>返回你可以從這筆交易中獲取的<strong>最大利潤</strong>。如果你不能獲取任何利潤，返回 <code>0</code>。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：prices = [7,1,5,3,6,4]
+輸出：5
+解釋：在第 2 天（股票價格 = 1）買入，在第 5 天（股票價格 = 6）賣出，
+     最大利潤 = 6 - 1 = 5。
+     注意：利潤不能是 7 - 1 = 6，因為賣出價格需要大於買入價格；
+     同時，你不能在買入前賣出股票。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：prices = [7,6,4,3,1]
+輸出：0
+解釋：在這種情況下，沒有交易完成，所以最大利潤為 0。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= prices.length <= 10<sup>5</sup></code></li>
+                            <li><code>0 <= prices[i] <= 10<sup>4</sup></code></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>一次遍歷（推薦）</h3>
+                        <p>關鍵觀察：要獲得最大利潤，需要找到「最低買入價」和「最高賣出價」的組合。</p>
+                        <ol>
+                            <li>維護一個變數記錄目前遇到的最低價格</li>
+                            <li>對每個價格，計算「今天賣出」能獲得的利潤</li>
+                            <li>更新最大利潤</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n) - 只需遍歷一次</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>暴力法（不推薦）</h3>
+                        <p>檢查所有可能的買入賣出組合。</p>
+                        <ul>
+                            <li>時間複雜度：O(n²) - 會超時</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        """
+        一次遍歷解法
+        
+        時間複雜度：O(n)
+        空間複雜度：O(1)
+        """
+        if not prices:
+            return 0
+        
+        min_price = float('inf')
+        max_profit = 0
+        
+        for price in prices:
+            # 更新最低價格
+            min_price = min(min_price, price)
+            
+            # 計算今天賣出的利潤
+            profit = price - min_price
+            
+            # 更新最大利潤
+            max_profit = max(max_profit, profit)
+        
+        return max_profit
+
+
+# 方法二：更簡潔的寫法
+class Solution2:
+    def maxProfit(self, prices: List[int]) -> int:
+        """
+        一行式寫法（不推薦，可讀性差）
+        """
+        min_price = float('inf')
+        max_profit = 0
+        
+        for price in prices:
+            min_price = min(min_price, price)
+            max_profit = max(max_profit, price - min_price)
+        
+        return max_profit
+
+
+# 方法三：動態規劃思維
+class Solution3:
+    def maxProfit(self, prices: List[int]) -> int:
+        """
+        動態規劃解法
+        
+        狀態定義：
+        - dp[i][0]: 第 i 天不持有股票的最大利潤
+        - dp[i][1]: 第 i 天持有股票的最大利潤
+        """
+        if not prices:
+            return 0
+        
+        # 初始狀態
+        hold = -prices[0]  # 持有股票
+        not_hold = 0       # 不持有股票
+        
+        for i in range(1, len(prices)):
+            # 今天不持有 = max(昨天不持有, 昨天持有今天賣)
+            not_hold = max(not_hold, hold + prices[i])
+            
+            # 今天持有 = max(昨天持有, 今天買入)
+            # 因為只能交易一次，所以買入成本就是 -prices[i]
+            hold = max(hold, -prices[i])
+        
+        return not_hold</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;climits&gt;
+using namespace std;
+
+class Solution {
+public:
+    int maxProfit(vector&lt;int&gt;& prices) {
+        if (prices.empty()) return 0;
+        
+        int minPrice = INT_MAX;
+        int maxProfit = 0;
+        
+        for (int price : prices) {
+            // 更新最低價格
+            minPrice = min(minPrice, price);
+            
+            // 計算今天賣出的利潤
+            int profit = price - minPrice;
+            
+            // 更新最大利潤
+            maxProfit = max(maxProfit, profit);
+        }
+        
+        return maxProfit;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+        
+        for (int price : prices) {
+            // 更新最低價格
+            minPrice = Math.min(minPrice, price);
+            
+            // 計算今天賣出的利潤
+            int profit = price - minPrice;
+            
+            // 更新最大利潤
+            maxProfit = Math.max(maxProfit, profit);
+        }
+        
+        return maxProfit;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如果可以多次買賣怎麼辦？（Best Time II）</li>
+                                <li>如果最多只能交易 k 次？（Best Time IV）</li>
+                                <li>如果有手續費？（Best Time with Fee）</li>
+                                <li>如何返回買賣的具體日期？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>追蹤最低買入價是關鍵</li>
+                                <li>對每個價格計算「今天賣出」的利潤</li>
+                                <li>一次遍歷即可解決</li>
+                                <li>這是 DP 系列題的入門</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>使用 O(n²) 暴力法導致超時</li>
+                                <li>忘記檢查空陣列</li>
+                                <li>沒有正確更新最低價格</li>
+                                <li>誤解題意，以為可以多次交易</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>延伸問題</h2>
+                    <div class="content-box">
+                        <h3>Best Time to Buy and Sell Stock 系列</h3>
+                        <ol>
+                            <li><strong>I（本題）</strong>：只能交易一次</li>
+                            <li><strong>II</strong>：可以多次交易（無限次）</li>
+                            <li><strong>III</strong>：最多交易兩次</li>
+                            <li><strong>IV</strong>：最多交易 k 次</li>
+                            <li><strong>with Cooldown</strong>：賣出後需要冷卻一天</li>
+                            <li><strong>with Transaction Fee</strong>：每次交易需要手續費</li>
+                        </ol>
+                        <p>這是一個經典的動態規劃系列題，由易到難，非常適合學習狀態機 DP。</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

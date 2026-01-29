@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#238 Product of Array Except Self - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#238</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Product of Array Except Self</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Prefix Sum</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個整數陣列 <code>nums</code>，返回一個陣列 <code>answer</code>，使得 <code>answer[i]</code> 等於 <code>nums</code> 中除 <code>nums[i]</code> 之外其餘各元素的乘積。</p>
+                        <p>題目保證陣列 <code>nums</code> 中任意元素的全部前綴元素和後綴元素的乘積都在 <strong>32 位</strong>整數範圍內。</p>
+                        <p><strong>請不要使用除法</strong>，且在 <code>O(n)</code> 時間複雜度內完成此題。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：nums = [1,2,3,4]
+輸出：[24,12,8,6]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：nums = [-1,1,0,-3,3]
+輸出：[0,0,9,0,0]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>2 <= nums.length <= 10<sup>5</sup></code></li>
+                            <li><code>-30 <= nums[i] <= 30</code></li>
+                            <li>保證陣列 <code>nums</code> 中任意元素的全部前綴元素和後綴元素的乘積都在 <strong>32 位</strong>整數範圍內</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>進階要求</h2>
+                    <div class="content-box">
+                        <p>你可以在 <code>O(1)</code> 的額外空間複雜度內完成這個題目嗎？（輸出陣列<strong>不被視為</strong>額外空間）</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>左右乘積列表（推薦）</h3>
+                        <p>關鍵觀察：<code>answer[i]</code> = 左邊所有數的乘積 × 右邊所有數的乘積</p>
+                        <ol>
+                            <li>先計算每個位置左邊所有數的乘積</li>
+                            <li>再計算每個位置右邊所有數的乘積</li>
+                            <li>將兩者相乘得到答案</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n) - 可優化到 O(1)</li>
+                        </ul>
+
+                        <h3>空間優化版</h3>
+                        <p>直接在輸出陣列上操作，省去額外空間。</p>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        """
+        空間優化版 - O(1) 額外空間
+        
+        時間複雜度：O(n)
+        空間複雜度：O(1)
+        """
+        n = len(nums)
+        answer = [1] * n
+        
+        # 第一次遍歷：計算左邊的乘積
+        left_product = 1
+        for i in range(n):
+            answer[i] = left_product
+            left_product *= nums[i]
+        
+        # 第二次遍歷：計算右邊的乘積並相乘
+        right_product = 1
+        for i in range(n - 1, -1, -1):
+            answer[i] *= right_product
+            right_product *= nums[i]
+        
+        return answer
+
+
+# 方法二：使用額外陣列（更好理解）
+class Solution2:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        """
+        使用左右陣列
+        
+        時間複雜度：O(n)
+        空間複雜度：O(n)
+        """
+        n = len(nums)
+        
+        # 左邊乘積陣列
+        left = [1] * n
+        for i in range(1, n):
+            left[i] = left[i-1] * nums[i-1]
+        
+        # 右邊乘積陣列
+        right = [1] * n
+        for i in range(n - 2, -1, -1):
+            right[i] = right[i+1] * nums[i+1]
+        
+        # 結合左右陣列
+        answer = [left[i] * right[i] for i in range(n)]
+        
+        return answer
+
+
+# 方法三：詳細註解版
+class Solution3:
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
+        """
+        詳細步驟說明
+        
+        例如：nums = [1, 2, 3, 4]
+        
+        左邊乘積：[1, 1, 2, 6]
+        (每個位置左邊所有數的乘積)
+        
+        右邊乘積：[24, 12, 4, 1]
+        (每個位置右邊所有數的乘積)
+        
+        最終結果：[24, 12, 8, 6]
+        (左邊乘積 × 右邊乘積)
+        """
+        n = len(nums)
+        answer = [1] * n
+        
+        # 計算左邊的累積乘積
+        # answer[i] = nums[0] * nums[1] * ... * nums[i-1]
+        left = 1
+        for i in range(n):
+            answer[i] = left
+            left *= nums[i]
+        
+        # 計算右邊的累積乘積並相乘
+        # answer[i] *= nums[i+1] * nums[i+2] * ... * nums[n-1]
+        right = 1
+        for i in range(n - 1, -1, -1):
+            answer[i] *= right
+            right *= nums[i]
+        
+        return answer</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;int&gt; productExceptSelf(vector&lt;int&gt;& nums) {
+        int n = nums.size();
+        vector&lt;int&gt; answer(n, 1);
+        
+        // 計算左邊的乘積
+        int leftProduct = 1;
+        for (int i = 0; i < n; i++) {
+            answer[i] = leftProduct;
+            leftProduct *= nums[i];
+        }
+        
+        // 計算右邊的乘積並相乘
+        int rightProduct = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            answer[i] *= rightProduct;
+            rightProduct *= nums[i];
+        }
+        
+        return answer;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int n = nums.length;
+        int[] answer = new int[n];
+        
+        // 計算左邊的乘積
+        int leftProduct = 1;
+        for (int i = 0; i < n; i++) {
+            answer[i] = leftProduct;
+            leftProduct *= nums[i];
+        }
+        
+        // 計算右邊的乘積並相乘
+        int rightProduct = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            answer[i] *= rightProduct;
+            rightProduct *= nums[i];
+        }
+        
+        return answer;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>為什麼不能使用除法？</li>
+                                <li>如何優化到 O(1) 空間？</li>
+                                <li>如果有 0 怎麼處理？</li>
+                                <li>能否用對數轉換？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>分解為「左邊乘積」和「右邊乘積」</li>
+                                <li>兩次遍歷即可完成</li>
+                                <li>直接在輸出陣列上操作節省空間</li>
+                                <li>前綴積（Prefix Product）的應用</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>使用除法（題目禁止）</li>
+                                <li>沒有正確初始化累積變數</li>
+                                <li>遍歷方向錯誤</li>
+                                <li>忘記處理邊界情況</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>視覺化說明</h2>
+                    <div class="content-box">
+                        <h3>以 nums = [1, 2, 3, 4] 為例：</h3>
+                        <pre><code>原陣列：     [1,  2,  3,  4]
+
+左邊乘積：   [1,  1,  2,  6]
+             ↑   ↑   ↑   ↑
+             1   1   1×2 1×2×3
+
+右邊乘積：   [24, 12, 4,  1]
+             ↑   ↑   ↑   ↑
+           2×3×4 3×4 4   1
+
+最終結果：   [24, 12, 8,  6]
+             ↑   ↑   ↑   ↑
+            1×24 1×12 2×4 6×1</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
