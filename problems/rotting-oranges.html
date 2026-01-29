@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#994 Rotting Oranges - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#994</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Rotting Oranges</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">BFS</span>
+                        <span class="tag">Matrix</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>在給定的 <code>m x n</code> 網格 <code>grid</code> 中，每個單元格可以有以下三個值之一：</p>
+                        <ul>
+                            <li>值 <code>0</code> 代表空單元格</li>
+                            <li>值 <code>1</code> 代表新鮮橘子</li>
+                            <li>值 <code>2</code> 代表腐爛的橘子</li>
+                        </ul>
+                        <p>每分鐘，腐爛的橘子周圍<strong>四個方向上相鄰</strong>的新鮮橘子都會腐爛。</p>
+                        <p>返回<strong>直到單元格中沒有新鮮橘子為止所必須經過的最小分鐘數</strong>。如果不可能，返回 <code>-1</code>。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：grid = [[2,1,1],[1,1,0],[0,1,1]]
+輸出：4
+
+過程：
+分鐘 0: [[2,1,1],    分鐘 1: [[2,2,1],
+        [1,1,0],            [2,1,0],
+        [0,1,1]]            [0,1,1]]
+
+分鐘 2: [[2,2,2],    分鐘 3: [[2,2,2],
+        [2,2,0],            [2,2,0],
+        [0,1,1]]            [0,2,1]]
+
+分鐘 4: [[2,2,2],
+        [2,2,0],
+        [0,2,2]]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：grid = [[2,1,1],[0,1,1],[1,0,1]]
+輸出：-1
+解釋：左下角的橘子（第 2 行，第 0 列）永遠不會腐爛，因為腐爛只會發生在 4 個方向上。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：grid = [[0,2]]
+輸出：0
+解釋：因為 0 分鐘時已經沒有新鮮橘子了，所以答案就是 0。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>m == grid.length</code></li>
+                            <li><code>n == grid[i].length</code></li>
+                            <li><code>1 <= m, n <= 10</code></li>
+                            <li><code>grid[i][j]</code> 僅為 <code>0</code>、<code>1</code> 或 <code>2</code></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>多源 BFS（推薦）</h3>
+                        <p>這是一個經典的多源 BFS 問題：</p>
+                        <ol>
+                            <li>將所有腐爛的橘子加入佇列作為起點</li>
+                            <li>統計新鮮橘子的數量</li>
+                            <li>BFS 擴散：每分鐘處理當前層的所有腐爛橘子</li>
+                            <li>腐爛相鄰的新鮮橘子，並加入佇列</li>
+                            <li>最後檢查是否還有新鮮橘子</li>
+                        </ol>
+
+                        <h3>關鍵點</h3>
+                        <ul>
+                            <li>多源 BFS：同時從多個起點開始</li>
+                            <li>層序遍歷：每層代表一分鐘</li>
+                            <li>四個方向擴散</li>
+                        </ul>
+
+                        <ul>
+                            <li>時間複雜度：O(m × n)</li>
+                            <li>空間複雜度：O(m × n)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">from collections import deque
+
+class Solution:
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        """
+        多源 BFS
+        
+        時間複雜度：O(m × n)
+        空間複雜度：O(m × n)
+        """
+        rows, cols = len(grid), len(grid[0])
+        queue = deque()
+        fresh_count = 0
+        
+        # 統計新鮮橘子數量，並將腐爛橘子加入佇列
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 2:
+                    queue.append((r, c))
+                elif grid[r][c] == 1:
+                    fresh_count += 1
+        
+        # 如果沒有新鮮橘子，直接返回 0
+        if fresh_count == 0:
+            return 0
+        
+        # 四個方向
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        minutes = 0
+        
+        # BFS
+        while queue:
+            # 處理當前層（一分鐘內的所有橘子）
+            size = len(queue)
+            
+            for _ in range(size):
+                r, c = queue.popleft()
+                
+                # 向四個方向擴散
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+                    
+                    # 檢查邊界和是否為新鮮橘子
+                    if (0 <= nr < rows and 0 <= nc < cols and 
+                        grid[nr][nc] == 1):
+                        # 腐爛這個橘子
+                        grid[nr][nc] = 2
+                        fresh_count -= 1
+                        queue.append((nr, nc))
+            
+            # 如果佇列還有元素，增加時間
+            if queue:
+                minutes += 1
+        
+        # 檢查是否還有新鮮橘子
+        return minutes if fresh_count == 0 else -1</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+class Solution {
+public:
+    int orangesRotting(vector&lt;vector&lt;int&gt;&gt;& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+        queue&lt;pair&lt;int, int&gt;&gt; q;
+        int freshCount = 0;
+        
+        // 統計新鮮橘子並收集腐爛橘子
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == 2) {
+                    q.push({r, c});
+                } else if (grid[r][c] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+        
+        if (freshCount == 0) return 0;
+        
+        int directions[4][2] = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        int minutes = 0;
+        
+        while (!q.empty()) {
+            int size = q.size();
+            
+            for (int i = 0; i < size; i++) {
+                auto [r, c] = q.front();
+                q.pop();
+                
+                for (auto& dir : directions) {
+                    int nr = r + dir[0];
+                    int nc = c + dir[1];
+                    
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && 
+                        grid[nr][nc] == 1) {
+                        grid[nr][nc] = 2;
+                        freshCount--;
+                        q.push({nr, nc});
+                    }
+                }
+            }
+            
+            if (!q.empty()) minutes++;
+        }
+        
+        return freshCount == 0 ? minutes : -1;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        Queue&lt;int[]&gt; queue = new LinkedList&lt;&gt;();
+        int freshCount = 0;
+        
+        // 統計新鮮橘子並收集腐爛橘子
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == 2) {
+                    queue.offer(new int[]{r, c});
+                } else if (grid[r][c] == 1) {
+                    freshCount++;
+                }
+            }
+        }
+        
+        if (freshCount == 0) return 0;
+        
+        int[][] directions = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+        int minutes = 0;
+        
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            
+            for (int i = 0; i < size; i++) {
+                int[] pos = queue.poll();
+                int r = pos[0], c = pos[1];
+                
+                for (int[] dir : directions) {
+                    int nr = r + dir[0];
+                    int nc = c + dir[1];
+                    
+                    if (nr >= 0 && nr < rows && nc >= 0 && nc < cols && 
+                        grid[nr][nc] == 1) {
+                        grid[nr][nc] = 2;
+                        freshCount--;
+                        queue.offer(new int[]{nr, nc});
+                    }
+                }
+            }
+            
+            if (!queue.isEmpty()) minutes++;
+        }
+        
+        return freshCount == 0 ? minutes : -1;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>為什麼用 BFS 而不是 DFS？</li>
+                                <li>如何處理多個起點？</li>
+                                <li>能否不修改原陣列？</li>
+                                <li>如何優化空間複雜度？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>多源 BFS 的經典應用</li>
+                                <li>層序遍歷計算時間</li>
+                                <li>統計剩餘新鮮橘子判斷可行性</li>
+                                <li>原地修改節省空間</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記處理初始無新鮮橘子的情況</li>
+                                <li>時間計算錯誤</li>
+                                <li>沒有檢查最後是否還有新鮮橘子</li>
+                                <li>邊界檢查遺漏</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>BFS 過程視覺化</h2>
+                    <div class="content-box">
+                        <h3>以 [[2,1,1],[1,1,0],[0,1,1]] 為例：</h3>
+                        <pre><code>初始狀態：
+2 1 1    佇列: [(0,0)]
+1 1 0    新鮮橘子: 6
+0 1 1
+
+第 1 分鐘：
+2 2 1    佇列: [(0,1), (1,0)]
+2 1 0    新鮮橘子: 4
+0 1 1
+
+第 2 分鐘：
+2 2 2    佇列: [(0,2), (1,1)]
+2 2 0    新鮮橘子: 2
+0 1 1
+
+第 3 分鐘：
+2 2 2    佇列: [(1,2)]
+2 2 0    新鮮橘子: 1
+0 2 1
+
+第 4 分鐘：
+2 2 2    佇列: [(2,2)]
+2 2 0    新鮮橘子: 0 ✓
+0 2 2
+
+答案：4 分鐘</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>為什麼用 BFS？</h2>
+                    <div class="content-box">
+                        <p>BFS 適合處理「層級」或「時間步」的問題：</p>
+                        <ul>
+                            <li><strong>層序遍歷</strong>：每層代表一個時間單位</li>
+                            <li><strong>最短路徑</strong>：BFS 保證找到最短時間</li>
+                            <li><strong>同時擴散</strong>：多個腐爛橘子同時向外擴散</li>
+                        </ul>
+                        <p>DFS 無法保證找到最短時間，因為它會一條路走到底。</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

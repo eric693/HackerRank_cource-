@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#215 Kth Largest Element in an Array - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#215</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Kth Largest Element in an Array</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Divide and Conquer</span>
+                        <span class="tag">Heap</span>
+                        <span class="tag">Quickselect</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定整數陣列 <code>nums</code> 和整數 <code>k</code>，請返回陣列中第 <code>k</code> 個最大的元素。</p>
+                        <p>請注意，你需要找的是陣列排序後的第 <code>k</code> 個最大的元素，而不是第 <code>k</code> 個不同的元素。</p>
+                        <p>你必須設計並實現時間複雜度為 <code>O(n)</code> 的算法解決此問題。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：nums = [3,2,1,5,6,4], k = 2
+輸出：5</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：nums = [3,2,3,1,2,4,5,5,6], k = 4
+輸出：4</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= k <= nums.length <= 10<sup>5</sup></code></li>
+                            <li><code>-10<sup>4</sup> <= nums[i] <= 10<sup>4</sup></code></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：快速選擇（Quickselect）- 推薦</h3>
+                        <p>基於快速排序的分治算法：</p>
+                        <ol>
+                            <li>選擇一個樞軸元素</li>
+                            <li>將陣列分為三部分：大於、等於、小於樞軸</li>
+                            <li>根據 k 的位置決定在哪一部分繼續搜索</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n) 平均，O(n²) 最壞</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>方法二：最小堆（Min Heap）</h3>
+                        <p>維護大小為 k 的最小堆：</p>
+                        <ul>
+                            <li>遍歷陣列，將元素加入堆</li>
+                            <li>如果堆大小超過 k，彈出最小元素</li>
+                            <li>最後堆頂元素就是第 k 大元素</li>
+                        </ul>
+                        <ul>
+                            <li>時間複雜度：O(n log k)</li>
+                            <li>空間複雜度：O(k)</li>
+                        </ul>
+
+                        <h3>方法三：排序（最簡單但不是最優）</h3>
+                        <ul>
+                            <li>時間複雜度：O(n log n)</li>
+                            <li>空間複雜度：O(1) 或 O(n)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">import heapq
+import random
+
+class Solution:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        快速選擇算法（Quickselect）
+        
+        時間複雜度：O(n) 平均
+        空間複雜度：O(1)
+        """
+        def quickselect(left, right):
+            # 隨機選擇樞軸避免最壞情況
+            pivot_index = random.randint(left, right)
+            pivot = nums[pivot_index]
+            
+            # 將樞軸移到最右邊
+            nums[pivot_index], nums[right] = nums[right], nums[pivot_index]
+            
+            # 分區
+            store_index = left
+            for i in range(left, right):
+                if nums[i] > pivot:
+                    nums[i], nums[store_index] = nums[store_index], nums[i]
+                    store_index += 1
+            
+            # 將樞軸放回正確位置
+            nums[store_index], nums[right] = nums[right], nums[store_index]
+            
+            # 判斷樞軸位置
+            if store_index == k - 1:
+                return nums[store_index]
+            elif store_index < k - 1:
+                return quickselect(store_index + 1, right)
+            else:
+                return quickselect(left, store_index - 1)
+        
+        return quickselect(0, len(nums) - 1)
+
+
+# 方法二：最小堆
+class Solution2:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        最小堆解法
+        
+        時間複雜度：O(n log k)
+        空間複雜度：O(k)
+        """
+        # 維護大小為 k 的最小堆
+        heap = []
+        
+        for num in nums:
+            heapq.heappush(heap, num)
+            if len(heap) > k:
+                heapq.heappop(heap)
+        
+        # 堆頂就是第 k 大元素
+        return heap[0]
+
+
+# 方法三：使用 Python 內建函數
+class Solution3:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        使用 heapq.nlargest
+        
+        時間複雜度：O(n log k)
+        """
+        return heapq.nlargest(k, nums)[-1]
+
+
+# 方法四：排序法（簡單但不是最優）
+class Solution4:
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        """
+        排序法
+        
+        時間複雜度：O(n log n)
+        """
+        nums.sort(reverse=True)
+        return nums[k - 1]</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+class Solution {
+public:
+    int findKthLargest(vector&lt;int&gt;& nums, int k) {
+        // 最小堆解法
+        priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt; minHeap;
+        
+        for (int num : nums) {
+            minHeap.push(num);
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+        
+        return minHeap.top();
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.PriorityQueue;
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // 最小堆解法
+        PriorityQueue&lt;Integer&gt; minHeap = new PriorityQueue&lt;&gt;();
+        
+        for (int num : nums) {
+            minHeap.offer(num);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        
+        return minHeap.peek();
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何優化到 O(n) 時間？</li>
+                                <li>快速選擇和快速排序的區別？</li>
+                                <li>為什麼用最小堆而不是最大堆？</li>
+                                <li>如何處理重複元素？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>快速選擇是最優解法</li>
+                                <li>最小堆適合數據流場景</li>
+                                <li>隨機樞軸避免最壞情況</li>
+                                <li>理解分治的思想</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>混淆第 k 大和第 k 小</li>
+                                <li>分區邏輯錯誤</li>
+                                <li>堆的大小控制不當</li>
+                                <li>忘記處理邊界情況</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>快速選擇算法視覺化</h2>
+                    <div class="content-box">
+                        <h3>以 nums = [3,2,1,5,6,4], k = 2 為例：</h3>
+                        <pre><code>目標：找第 2 大元素
+
+原陣列：[3, 2, 1, 5, 6, 4]
+
+選擇樞軸 4，分區後：
+[6, 5] 4 [3, 2, 1]
+  大於    等於  小於
+
+第 2 大在左邊部分（因為左邊有 2 個元素）
+
+繼續在 [6, 5] 中找第 2 大：
+選擇樞軸 5，分區後：
+[6] 5 []
+
+第 2 大就是 5 ✓</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>為什麼用最小堆？</h2>
+                    <div class="content-box">
+                        <p>維護大小為 k 的最小堆，堆頂是這 k 個元素中最小的：</p>
+                        <pre><code>例如找第 2 大，維護大小為 2 的最小堆：
+
+遍歷 [3, 2, 1, 5, 6, 4]：
+
+heap = [3]
+heap = [2, 3]
+heap = [2, 3] → pop 1
+heap = [3, 5] → pop 2
+heap = [5, 6] → pop 3
+heap = [5, 6] → pop 4
+
+最終 heap.top() = 5 （第 2 大）</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
