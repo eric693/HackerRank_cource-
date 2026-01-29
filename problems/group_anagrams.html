@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#49 Group Anagrams - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#49</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Group Anagrams</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Hash Table</span>
+                        <span class="tag">String</span>
+                        <span class="tag">Sorting</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個字串陣列 <code>strs</code>，將<strong>字母異位詞</strong>組合在一起。可以按任意順序返回結果列表。</p>
+                        <p><strong>字母異位詞</strong>是由重新排列源單詞的所有字母得到的一個新單詞。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：strs = ["eat","tea","tan","ate","nat","bat"]
+輸出：[["bat"],["nat","tan"],["ate","eat","tea"]]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：strs = [""]
+輸出：[[""]]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：strs = ["a"]
+輸出：[["a"]]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= strs.length <= 10<sup>4</sup></code></li>
+                            <li><code>0 <= strs[i].length <= 100</code></li>
+                            <li><code>strs[i]</code> 僅包含小寫英文字母</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>核心思想</h3>
+                        <p>字母異位詞的特徵：包含相同的字母，只是順序不同。</p>
+
+                        <h3>方法一：排序 + 哈希表（推薦）</h3>
+                        <p>將排序後的字串作為鍵：</p>
+                        <ol>
+                            <li>對每個字串排序</li>
+                            <li>排序後的字串作為哈希表的鍵</li>
+                            <li>相同鍵的字串分為一組</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n × k log k) - n 是字串數量，k 是字串長度</li>
+                            <li>空間複雜度：O(n × k)</li>
+                        </ul>
+
+                        <h3>方法二：字符計數 + 哈希表</h3>
+                        <p>用字符頻率作為鍵：</p>
+                        <ul>
+                            <li>統計每個字母出現的次數</li>
+                            <li>將計數陣列轉為元組作為鍵</li>
+                        </ul>
+                        <ul>
+                            <li>時間複雜度：O(n × k)</li>
+                            <li>空間複雜度：O(n × k)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">from collections import defaultdict
+
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        """
+        排序 + 哈希表
+        
+        時間複雜度：O(n × k log k)
+        空間複雜度：O(n × k)
+        """
+        anagrams = defaultdict(list)
+        
+        for s in strs:
+            # 排序後的字串作為鍵
+            key = ''.join(sorted(s))
+            anagrams[key].append(s)
+        
+        return list(anagrams.values())
+
+
+# 方法二：字符計數
+class Solution2:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        """
+        字符計數 + 哈希表
+        
+        時間複雜度：O(n × k)
+        空間複雜度：O(n × k)
+        """
+        anagrams = defaultdict(list)
+        
+        for s in strs:
+            # 統計字符頻率
+            count = [0] * 26
+            for char in s:
+                count[ord(char) - ord('a')] += 1
+            
+            # 將計數陣列轉為元組作為鍵
+            key = tuple(count)
+            anagrams[key].append(s)
+        
+        return list(anagrams.values())
+
+
+# 方法三：更簡潔的寫法
+class Solution3:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        """
+        簡潔版排序法
+        """
+        anagrams = {}
+        
+        for s in strs:
+            key = ''.join(sorted(s))
+            if key not in anagrams:
+                anagrams[key] = []
+            anagrams[key].append(s)
+        
+        return list(anagrams.values())</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;vector&lt;string&gt;&gt; groupAnagrams(vector&lt;string&gt;& strs) {
+        unordered_map&lt;string, vector&lt;string&gt;&gt; anagrams;
+        
+        for (const string& s : strs) {
+            string key = s;
+            sort(key.begin(), key.end());
+            anagrams[key].push_back(s);
+        }
+        
+        vector&lt;vector&lt;string&gt;&gt; result;
+        for (auto& pair : anagrams) {
+            result.push_back(pair.second);
+        }
+        
+        return result;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) {
+        Map&lt;String, List&lt;String&gt;&gt; anagrams = new HashMap&lt;&gt;();
+        
+        for (String s : strs) {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            
+            anagrams.computeIfAbsent(key, k -> new ArrayList&lt;&gt;()).add(s);
+        }
+        
+        return new ArrayList&lt;&gt;(anagrams.values());
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>能否優化到 O(n × k)？</li>
+                                <li>如何處理大小寫？</li>
+                                <li>如何處理 Unicode 字符？</li>
+                                <li>兩種方法的優劣比較？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>排序法最直觀易懂</li>
+                                <li>字符計數法更高效</li>
+                                <li>哈希表分組是關鍵</li>
+                                <li>理解字母異位詞的本質</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記處理空字串</li>
+                                <li>字符計數陣列大小錯誤</li>
+                                <li>鍵的生成方式不一致</li>
+                                <li>返回格式錯誤</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>算法比較</h2>
+                    <div class="content-box">
+                        <h3>方法一：排序</h3>
+                        <pre><code>"eat" → 排序 → "aet"
+"tea" → 排序 → "aet"  ← 相同鍵
+"tan" → 排序 → "ant"
+"ate" → 排序 → "aet"  ← 相同鍵
+"nat" → 排序 → "ant"  ← 相同鍵
+"bat" → 排序 → "abt"
+
+分組結果：
+"aet": ["eat", "tea", "ate"]
+"ant": ["tan", "nat"]
+"abt": ["bat"]</code></pre>
+
+                        <h3>方法二：字符計數</h3>
+                        <pre><code>"eat" → [1,0,0,0,1,0,...,1] (a:1, e:1, t:1)
+"tea" → [1,0,0,0,1,0,...,1] ← 相同鍵
+"bat" → [1,1,0,0,0,0,...,1] (a:1, b:1, t:1)
+
+優點：O(k) 時間生成鍵（不需要排序）
+缺點：空間稍大（26 個字母的計數）</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>擴展問題</h2>
+                    <div class="content-box">
+                        <h3>相關題目</h3>
+                        <ul>
+                            <li><strong>Valid Anagram</strong>：判斷兩個字串是否為字母異位詞</li>
+                            <li><strong>Find All Anagrams</strong>：在字串中找所有字母異位詞</li>
+                            <li><strong>Anagram Mappings</strong>：找字母異位詞的對應關係</li>
+                        </ul>
+
+                        <h3>實際應用</h3>
+                        <ul>
+                            <li>拼字遊戲（Scrabble）</li>
+                            <li>文本分析和相似度檢測</li>
+                            <li>數據去重和分類</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

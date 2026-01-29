@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#191 Number of 1 Bits - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#191</span>
+                        <span class="difficulty easy">EASY</span>
+                    </div>
+                    <h1 class="problem-title">Number of 1 Bits</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Bit Manipulation</span>
+                        <span class="tag">Divide and Conquer</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>編寫一個函數，輸入是一個無符號整數（以二進制形式），返回其二進制表達式中數字位數為 '1' 的個數（也被稱為<strong>漢明重量</strong>）。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：n = 00000000000000000000000000001011
+輸出：3
+解釋：輸入的二進制串 00000000000000000000000000001011 中，共有三位為 '1'。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：n = 00000000000000000000000010000000
+輸出：1
+解釋：輸入的二進制串 00000000000000000000000010000000 中，共有一位為 '1'。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：n = 11111111111111111111111111111101
+輸出：31
+解釋：輸入的二進制串 11111111111111111111111111111101 中，共有 31 位為 '1'。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li>輸入必須是長度為 <code>32</code> 的<strong>二進制串</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：Brian Kernighan 算法（推薦）</h3>
+                        <p>每次消除最右邊的 1：</p>
+                        <ul>
+                            <li><code>n & (n - 1)</code> 會將最右邊的 1 變為 0</li>
+                            <li>重複操作直到 n 變為 0</li>
+                            <li>操作次數 = 1 的個數</li>
+                        </ul>
+                        <ul>
+                            <li>時間複雜度：O(k) - k 為 1 的個數</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>方法二：逐位檢查</h3>
+                        <p>檢查每一位是否為 1：</p>
+                        <ul>
+                            <li>使用 <code>n & 1</code> 檢查最低位</li>
+                            <li>右移 n 繼續檢查</li>
+                        </ul>
+                        <ul>
+                            <li>時間複雜度：O(32) = O(1)</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+
+                        <h3>方法三：內建函數</h3>
+                        <p>使用語言內建的位元計數函數。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def hammingWeight(self, n: int) -> int:
+        """
+        Brian Kernighan 算法
+        
+        時間複雜度：O(k) - k 為 1 的個數
+        空間複雜度：O(1)
+        """
+        count = 0
+        while n:
+            n &= n - 1  # 消除最右邊的 1
+            count += 1
+        return count
+
+
+# 方法二：逐位檢查
+class Solution2:
+    def hammingWeight(self, n: int) -> int:
+        """
+        逐位檢查
+        
+        時間複雜度：O(32) = O(1)
+        空間複雜度：O(1)
+        """
+        count = 0
+        for i in range(32):
+            if n & (1 << i):  # 檢查第 i 位是否為 1
+                count += 1
+        return count
+
+
+# 方法三：右移檢查
+class Solution3:
+    def hammingWeight(self, n: int) -> int:
+        """
+        右移檢查
+        """
+        count = 0
+        while n:
+            count += n & 1  # 檢查最低位
+            n >>= 1         # 右移
+        return count
+
+
+# 方法四：內建函數
+class Solution4:
+    def hammingWeight(self, n: int) -> int:
+        """
+        使用內建函數
+        """
+        return bin(n).count('1')</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        int count = 0;
+        while (n) {
+            n &= (n - 1);  // Brian Kernighan 算法
+            count++;
+        }
+        return count;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">public class Solution {
+    public int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            n &= (n - 1);  // Brian Kernighan 算法
+            count++;
+        }
+        return count;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>Brian Kernighan 算法的原理？</li>
+                                <li>如何反轉位元？</li>
+                                <li>如何計算兩個數的漢明距離？</li>
+                                <li>位元操作的其他應用？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>n & (n-1) 消除最右邊的 1</li>
+                                <li>n & 1 檢查最低位</li>
+                                <li>n >> 1 右移一位</li>
+                                <li>理解位元操作的基本原理</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>無限循環（有符號整數問題）</li>
+                                <li>位元操作符號錯誤</li>
+                                <li>忘記處理 0 的情況</li>
+                                <li>優先級錯誤需要加括號</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>Brian Kernighan 算法原理</h2>
+                    <div class="content-box">
+                        <h3>為什麼 n & (n-1) 能消除最右邊的 1？</h3>
+                        <pre><code>以 n = 12 (二進制: 1100) 為例：
+
+n     = 1100
+n-1   = 1011  (借位導致最右邊的 1 變 0，右邊的 0 都變 1)
+n&(n-1)= 1000  (消除了最右邊的 1)
+
+再次操作：
+n     = 1000
+n-1   = 0111
+n&(n-1)= 0000  (消除了最後一個 1)
+
+共操作 2 次 = 2 個 1</code></pre>
+
+                        <h3>過程視覺化</h3>
+                        <pre><code>n = 11 (二進制: 1011)
+
+第 1 次：1011 & 1010 = 1010 (消除最右邊的 1)
+第 2 次：1010 & 1001 = 1000 (消除最右邊的 1)
+第 3 次：1000 & 0111 = 0000 (消除最後一個 1)
+
+共 3 次操作 = 3 個 1</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>位元操作技巧總結</h2>
+                    <div class="content-box">
+                        <h3>常用位元操作</h3>
+                        <ul>
+                            <li><code>n & (n-1)</code>：消除最右邊的 1</li>
+                            <li><code>n & 1</code>：檢查最低位是否為 1（判斷奇偶）</li>
+                            <li><code>n | (1 << i)</code>：將第 i 位設為 1</li>
+                            <li><code>n & ~(1 << i)</code>：將第 i 位設為 0</li>
+                            <li><code>n ^ (1 << i)</code>：翻轉第 i 位</li>
+                            <li><code>n >> 1</code>：右移一位（除以 2）</li>
+                            <li><code>n << 1</code>：左移一位（乘以 2）</li>
+                        </ul>
+
+                        <h3>相關題目</h3>
+                        <ul>
+                            <li><strong>Hamming Distance</strong>：計算兩個數的漢明距離</li>
+                            <li><strong>Reverse Bits</strong>：反轉 32 位整數的位元</li>
+                            <li><strong>Single Number</strong>：使用 XOR 找出單獨的數</li>
+                            <li><strong>Power of Two</strong>：判斷是否為 2 的冪</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

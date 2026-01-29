@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#438 Find All Anagrams in a String - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#438</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Find All Anagrams in a String</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Hash Table</span>
+                        <span class="tag">String</span>
+                        <span class="tag">Sliding Window</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定兩個字串 <code>s</code> 和 <code>p</code>，找到 <code>s</code> 中所有 <code>p</code> 的<strong>字母異位詞</strong>的子串，返回這些子串的起始索引。不考慮答案輸出的順序。</p>
+                        <p><strong>字母異位詞</strong>指由相同字母重排列形成的字串（包括相同的字串）。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：s = "cbaebabacd", p = "abc"
+輸出：[0,6]
+解釋：
+起始索引等於 0 的子串是 "cba"，它是 "abc" 的字母異位詞。
+起始索引等於 6 的子串是 "bac"，它是 "abc" 的字母異位詞。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：s = "abab", p = "ab"
+輸出：[0,1,2]
+解釋：
+起始索引等於 0 的子串是 "ab"，它是 "ab" 的字母異位詞。
+起始索引等於 1 的子串是 "ba"，它是 "ab" 的字母異位詞。
+起始索引等於 2 的子串是 "ab"，它是 "ab" 的字母異位詞。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= s.length, p.length <= 3 * 10<sup>4</sup></code></li>
+                            <li><code>s</code> 和 <code>p</code> 僅包含小寫英文字母</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>核心思想</h3>
+                        <p>使用<strong>滑動視窗</strong> + <strong>字符計數</strong>來高效檢查異位詞。</p>
+
+                        <h3>方法一：滑動視窗 + 字符計數（推薦）</h3>
+                        <ol>
+                            <li>統計 p 的字符頻率</li>
+                            <li>使用固定大小的滑動視窗（長度 = len(p)）</li>
+                            <li>維護視窗內的字符頻率</li>
+                            <li>比較視窗頻率與 p 的頻率</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n) - n 為 s 的長度</li>
+                            <li>空間複雜度：O(1) - 最多 26 個字母</li>
+                        </ul>
+
+                        <h3>優化技巧</h3>
+                        <ul>
+                            <li>用計數器而非每次比較陣列</li>
+                            <li>用變量 matches 記錄匹配的字符數</li>
+                            <li>只需維護視窗邊界的變化</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">from collections import Counter
+
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        """
+        滑動視窗 + 字符計數
+        
+        時間複雜度：O(n)
+        空間複雜度：O(1)
+        """
+        if len(p) > len(s):
+            return []
+        
+        result = []
+        p_count = Counter(p)
+        window_count = Counter()
+        
+        # 初始化視窗
+        for i in range(len(p)):
+            window_count[s[i]] += 1
+        
+        # 檢查第一個視窗
+        if window_count == p_count:
+            result.append(0)
+        
+        # 滑動視窗
+        for i in range(len(p), len(s)):
+            # 加入新字符
+            window_count[s[i]] += 1
+            
+            # 移除舊字符
+            left_char = s[i - len(p)]
+            window_count[left_char] -= 1
+            if window_count[left_char] == 0:
+                del window_count[left_char]
+            
+            # 檢查是否為異位詞
+            if window_count == p_count:
+                result.append(i - len(p) + 1)
+        
+        return result
+
+
+# 方法二：優化版 - 使用 matches 計數
+class Solution2:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        """
+        優化版滑動視窗
+        
+        時間複雜度：O(n)
+        空間複雜度：O(1)
+        """
+        if len(p) > len(s):
+            return []
+        
+        result = []
+        p_count = [0] * 26
+        s_count = [0] * 26
+        
+        # 統計 p 的字符頻率
+        for char in p:
+            p_count[ord(char) - ord('a')] += 1
+        
+        # 初始化視窗
+        for i in range(len(p)):
+            s_count[ord(s[i]) - ord('a')] += 1
+        
+        # 計算初始匹配數
+        matches = sum(1 for i in range(26) if p_count[i] == s_count[i])
+        
+        # 檢查第一個視窗
+        if matches == 26:
+            result.append(0)
+        
+        # 滑動視窗
+        for i in range(len(p), len(s)):
+            # 加入新字符
+            index = ord(s[i]) - ord('a')
+            s_count[index] += 1
+            if s_count[index] == p_count[index]:
+                matches += 1
+            elif s_count[index] == p_count[index] + 1:
+                matches -= 1
+            
+            # 移除舊字符
+            index = ord(s[i - len(p)]) - ord('a')
+            s_count[index] -= 1
+            if s_count[index] == p_count[index]:
+                matches += 1
+            elif s_count[index] == p_count[index] - 1:
+                matches -= 1
+            
+            # 檢查是否匹配
+            if matches == 26:
+                result.append(i - len(p) + 1)
+        
+        return result</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;string&gt;
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;int&gt; findAnagrams(string s, string p) {
+        vector&lt;int&gt; result;
+        if (p.length() > s.length()) return result;
+        
+        vector&lt;int&gt; pCount(26, 0), sCount(26, 0);
+        
+        // 統計 p 的字符頻率
+        for (char c : p) {
+            pCount[c - 'a']++;
+        }
+        
+        // 初始化視窗
+        for (int i = 0; i < p.length(); i++) {
+            sCount[s[i] - 'a']++;
+        }
+        
+        // 檢查第一個視窗
+        if (pCount == sCount) {
+            result.push_back(0);
+        }
+        
+        // 滑動視窗
+        for (int i = p.length(); i < s.length(); i++) {
+            sCount[s[i] - 'a']++;
+            sCount[s[i - p.length()] - 'a']--;
+            
+            if (pCount == sCount) {
+                result.push_back(i - p.length() + 1);
+            }
+        }
+        
+        return result;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public List&lt;Integer&gt; findAnagrams(String s, String p) {
+        List&lt;Integer&gt; result = new ArrayList&lt;&gt;();
+        if (p.length() > s.length()) return result;
+        
+        int[] pCount = new int[26];
+        int[] sCount = new int[26];
+        
+        // 統計 p 的字符頻率
+        for (char c : p.toCharArray()) {
+            pCount[c - 'a']++;
+        }
+        
+        // 初始化視窗
+        for (int i = 0; i < p.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
+        }
+        
+        // 檢查第一個視窗
+        if (Arrays.equals(pCount, sCount)) {
+            result.add(0);
+        }
+        
+        // 滑動視窗
+        for (int i = p.length(); i < s.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
+            sCount[s.charAt(i - p.length()) - 'a']--;
+            
+            if (Arrays.equals(pCount, sCount)) {
+                result.add(i - p.length() + 1);
+            }
+        }
+        
+        return result;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何優化到 O(n)？</li>
+                                <li>能否不使用額外空間？</li>
+                                <li>如何處理大小寫？</li>
+                                <li>matches 變量的作用？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>固定大小的滑動視窗</li>
+                                <li>字符計數比較</li>
+                                <li>matches 優化避免每次比較陣列</li>
+                                <li>注意視窗邊界處理</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>視窗大小計算錯誤</li>
+                                <li>起始索引計算錯誤</li>
+                                <li>字符計數更新遺漏</li>
+                                <li>忘記檢查第一個視窗</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>滑動視窗視覺化</h2>
+                    <div class="content-box">
+                        <h3>以 s = "cbaebabacd", p = "abc" 為例：</h3>
+                        <pre><code>p = "abc" → 計數: {a:1, b:1, c:1}
+
+視窗大小 = 3
+
+步驟 1: [c b a] e b a b a c d
+        計數: {c:1, b:1, a:1} ✓ 匹配！索引 0
+
+步驟 2: c [b a e] b a b a c d
+        計數: {b:1, a:1, e:1} ✗
+
+步驟 3: c b [a e b] a b a c d
+        計數: {a:1, e:1, b:1} ✗
+
+步驟 4: c b a [e b a] b a c d
+        計數: {e:1, b:1, a:1} ✗
+
+步驟 5: c b a e [b a b] a c d
+        計數: {b:2, a:1} ✗
+
+步驟 6: c b a e b [a b a] c d
+        計數: {a:2, b:1} ✗
+
+步驟 7: c b a e b a [b a c] d
+        計數: {b:1, a:1, c:1} ✓ 匹配！索引 6
+
+結果：[0, 6]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>matches 優化說明</h2>
+                    <div class="content-box">
+                        <p>使用 matches 變量避免每次比較整個陣列：</p>
+                        <ul>
+                            <li><strong>matches</strong>：記錄有多少個字符頻率匹配（共 26 個字母）</li>
+                            <li>當 matches == 26 時，視窗內容是異位詞</li>
+                            <li>只需維護邊界字符的 matches 變化</li>
+                        </ul>
+                        <p><strong>時間優化</strong>：從 O(26n) 降到 O(n)</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#235 Lowest Common Ancestor of a Binary Search Tree - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(0, 234, 100, 0.12); color: #00C853; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#235</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Lowest Common Ancestor of a Binary Search Tree</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Tree</span>
+                        <span class="tag">BST</span>
+                        <span class="tag">DFS</span>
+                        <span class="tag">Binary Tree</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個二元搜尋樹（BST）的根節點 <code>root</code>，以及 BST 中的兩個節點 <code>p</code> 和 <code>q</code>，請找出這兩個節點的<strong>最低公共祖先</strong>（LCA）。</p>
+                        <p><strong>最低公共祖先</strong>的定義為：「對於有根樹 T 的兩個節點 p、q，最低公共祖先表示為一個節點 x，滿足 x 是 p、q 的祖先且 x 的深度盡可能大（<strong>一個節點也可以是它自己的祖先</strong>）。」</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+輸出：6
+解釋：節點 2 和節點 8 的最低公共祖先是 6。
+
+樹結構：
+        6
+       / \
+      2   8
+     / \ / \
+    0  4 7  9
+      / \
+     3   5</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+輸出：2
+解釋：節點 2 和節點 4 的最低公共祖先是 2，因為根據定義最低公共祖先節點可以為節點本身。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 3:</h3>
+                        <pre><code>輸入：root = [2,1], p = 2, q = 1
+輸出：2</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li>樹中節點數量在範圍 <code>[2, 10<sup>5</sup>]</code> 內</li>
+                            <li><code>-10<sup>9</sup> <= Node.val <= 10<sup>9</sup></code></li>
+                            <li>所有 <code>Node.val</code> 互不相同</li>
+                            <li><code>p != q</code></li>
+                            <li><code>p</code> 和 <code>q</code> 均存在於給定的 BST 中</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>利用 BST 的性質</h3>
+                        <p>BST 的關鍵特性：左子樹 < 根節點 < 右子樹</p>
+
+                        <h3>核心觀察</h3>
+                        <p>LCA 是 p 和 q 的分岔點：</p>
+                        <ul>
+                            <li>如果 p 和 q 都小於當前節點 → LCA 在左子樹</li>
+                            <li>如果 p 和 q 都大於當前節點 → LCA 在右子樹</li>
+                            <li>否則，當前節點就是 LCA（分岔點）</li>
+                        </ul>
+
+                        <h3>方法一：遞迴（推薦）</h3>
+                        <ul>
+                            <li>時間複雜度：O(h) - h 為樹高</li>
+                            <li>空間複雜度：O(h) - 遞迴堆疊</li>
+                        </ul>
+
+                        <h3>方法二：迭代</h3>
+                        <ul>
+                            <li>時間複雜度：O(h)</li>
+                            <li>空間複雜度：O(1)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        """
+        遞迴解法 - 利用 BST 性質
+        
+        時間複雜度：O(h)
+        空間複雜度：O(h)
+        """
+        # 如果 p 和 q 都小於當前節點，LCA 在左子樹
+        if p.val < root.val and q.val < root.val:
+            return self.lowestCommonAncestor(root.left, p, q)
+        
+        # 如果 p 和 q 都大於當前節點，LCA 在右子樹
+        if p.val > root.val and q.val > root.val:
+            return self.lowestCommonAncestor(root.right, p, q)
+        
+        # 否則，當前節點就是 LCA（分岔點）
+        return root
+
+
+# 方法二：迭代
+class Solution2:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        """
+        迭代解法
+        
+        時間複雜度：O(h)
+        空間複雜度：O(1)
+        """
+        current = root
+        
+        while current:
+            # 都在左子樹
+            if p.val < current.val and q.val < current.val:
+                current = current.left
+            # 都在右子樹
+            elif p.val > current.val and q.val > current.val:
+                current = current.right
+            # 找到分岔點
+            else:
+                return current
+        
+        return None
+
+
+# 方法三：更簡潔的寫法
+class Solution3:
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        """
+        簡潔版遞迴
+        """
+        if (p.val < root.val and q.val < root.val):
+            return self.lowestCommonAncestor(root.left, p, q)
+        elif (p.val > root.val and q.val > root.val):
+            return self.lowestCommonAncestor(root.right, p, q)
+        else:
+            return root</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        // 都在左子樹
+        if (p->val < root->val && q->val < root->val) {
+            return lowestCommonAncestor(root->left, p, q);
+        }
+        
+        // 都在右子樹
+        if (p->val > root->val && q->val > root->val) {
+            return lowestCommonAncestor(root->right, p, q);
+        }
+        
+        // 分岔點
+        return root;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        // 都在左子樹
+        if (p.val < root.val && q.val < root.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        
+        // 都在右子樹
+        if (p.val > root.val && q.val > root.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        
+        // 分岔點
+        return root;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如果是普通二元樹怎麼做？</li>
+                                <li>能否用 O(1) 空間？</li>
+                                <li>如何處理節點不存在的情況？</li>
+                                <li>BST 和普通樹的 LCA 有何不同？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>充分利用 BST 的有序性</li>
+                                <li>理解分岔點的概念</li>
+                                <li>迭代版本更節省空間</li>
+                                <li>節點可以是自己的祖先</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記節點可以是自己的祖先</li>
+                                <li>比較邏輯錯誤</li>
+                                <li>沒有利用 BST 性質</li>
+                                <li>遞迴終止條件錯誤</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>算法視覺化</h2>
+                    <div class="content-box">
+                        <h3>以範例 1 為例：p = 2, q = 8</h3>
+                        <pre><code>        6  ← 當前節點
+       / \
+      2   8
+     / \ / \
+    0  4 7  9
+      / \
+     3   5
+
+步驟：
+1. 當前節點 = 6
+   p(2) < 6 ? Yes
+   q(8) < 6 ? No
+   → 2 和 8 在 6 的兩側，6 就是 LCA ✓
+
+---
+
+範例 2：p = 2, q = 4
+
+        6
+       / \
+      2  ← LCA
+     / \
+    0   4
+       / \
+      3   5
+
+步驟：
+1. 當前節點 = 6
+   p(2) < 6 and q(4) < 6 → 往左走
+
+2. 當前節點 = 2
+   p(2) = 2 and q(4) > 2
+   → 2 和 4 在不同側（一個等於當前節點）
+   → 2 就是 LCA ✓</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>BST vs 普通二元樹</h2>
+                    <div class="content-box">
+                        <h3>BST 的 LCA</h3>
+                        <ul>
+                            <li>利用 BST 的有序性</li>
+                            <li>只需比較值的大小</li>
+                            <li>時間複雜度：O(h)</li>
+                            <li>空間複雜度：O(1) 可能</li>
+                        </ul>
+
+                        <h3>普通二元樹的 LCA</h3>
+                        <ul>
+                            <li>需要遞迴搜索兩棵子樹</li>
+                            <li>更複雜的邏輯</li>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(h)</li>
+                        </ul>
+
+                        <p><strong>BST 的優勢</strong>：利用有序性，更高效地找到 LCA。</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#62 Unique Paths - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary-color: #00EA64; --bg-color: #F5F8FA; --card-bg: #FFFFFF; --code-bg: #282c34; --border-color: #D9E1E7; }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background: var(--bg-color); line-height: 1.8; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        .logo { font-size: 18px; font-weight: 600; }
+        .main { padding: 32px 0; }
+        .problem-content { background: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; background: rgba(255,193,7,0.12); color: #F57C00; }
+        .problem-title { font-size: 28px; font-weight: 700; margin: 12px 0; }
+        .tag { padding: 4px 12px; background: #EDF1F5; border-radius: 4px; font-size: 12px; margin-right: 8px; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+        .content-box { background: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin: 12px 0; }
+        code { font-family: 'Fira Code', monospace; background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        pre code { background: none; padding: 0; }
+        .example-box { background: var(--bg-color); padding: 16px; border-radius: 4px; margin: 12px 0; }
+        .example-box pre { background: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-weight: 600; }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; color: #abb2bf; }
+        .footer { text-align: center; padding: 24px; color: #69707D; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <span class="difficulty">MEDIUM</span>
+                <h1 class="problem-title">#62 Unique Paths</h1>
+                <div><span class="tag">Math</span><span class="tag">Dynamic Programming</span><span class="tag">Combinatorics</span></div>
+                
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>一個機器人位於 <code>m x n</code> 網格的左上角。機器人每次只能向下或向右移動一步。機器人試圖達到網格的右下角。問總共有多少條不同的路徑？</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：m = 3, n = 7
+輸出：28</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：m = 3, n = 2
+輸出：3
+解釋：從左上角到右下角一共有 3 條路徑：
+1. 右 → 下 → 下
+2. 下 → 下 → 右
+3. 下 → 右 → 下</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>動態規劃</h3>
+                        <p><code>dp[i][j]</code> = 到達位置 (i,j) 的路徑數</p>
+                        <p>狀態轉移：<code>dp[i][j] = dp[i-1][j] + dp[i][j-1]</code></p>
+                        <p>時間複雜度：O(m×n)，空間複雜度：O(m×n) 或 O(n) 優化</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <pre><code class="language-python">class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        # 動態規劃
+        dp = [[1] * n for _ in range(m)]
+        
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        
+        return dp[m-1][n-1]
+
+# 空間優化版
+class Solution2:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [1] * n
+        for i in range(1, m):
+            for j in range(1, n):
+                dp[j] += dp[j-1]
+        return dp[n-1]</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <pre><code class="language-cpp">class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector&lt;vector&lt;int&gt;&gt; dp(m, vector&lt;int&gt;(n, 1));
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i-1][j] + dp[i][j-1];
+            }
+        }
+        
+        return dp[m-1][n-1];
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <pre><code class="language-java">class Solution {
+    public int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 1;
+                } else {
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1];
+                }
+            }
+        }
+        
+        return dp[m-1][n-1];
+    }
+}</code></pre>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">HackerRank 程式題庫練習平台</footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.code-content').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
