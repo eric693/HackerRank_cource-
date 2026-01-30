@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>#SQL-2 Department Highest Salary - HackerRank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#F5F8FA;line-height:1.6}.container{max-width:1000px;margin:0 auto;padding:24px}.header{background:#FFF;padding:16px 0;margin-bottom:24px;border-bottom:1px solid #ddd}.back-link{color:#00EA64;text-decoration:none;font-weight:600}.content{background:#FFF;padding:32px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}.difficulty{display:inline-block;padding:4px 12px;background:rgba(255,193,7,0.12);color:#F57C00;border-radius:4px;font-size:12px;font-weight:600}h1{font-size:28px;margin:12px 0}h2{font-size:20px;margin:24px 0 12px}h3{font-size:16px;margin:16px 0 8px}.tag{display:inline-block;padding:4px 12px;background:#EDF1F5;border-radius:4px;font-size:12px;margin-right:8px}.content-box{background:#F5F8FA;border-left:3px solid #00EA64;padding:16px;border-radius:4px;margin:12px 0}pre{background:#282c34;color:#abb2bf;padding:16px;border-radius:6px;overflow-x:auto;margin:12px 0}table{width:100%;border-collapse:collapse;margin:12px 0;background:#FFF;border:1px solid #ddd}th{background:#f5f5f5;padding:12px;text-align:left;font-weight:600;border-bottom:2px solid #ddd}td{padding:12px;border-bottom:1px solid #ddd}tr:last-child td{border-bottom:none}ul{margin-left:24px}li{margin:8px 0}.tip-box{background:linear-gradient(135deg,#00EA64 0%,#00C853 100%);color:white;padding:20px;border-radius:8px;margin:12px 0}.tip-box h3{margin-bottom:12px;border-bottom:2px solid rgba(255,255,255,0.3);padding-bottom:8px}</style>
+</head>
+<body>
+    <div class="header"><div class="container"><a href="../index.html" class="back-link">← 返回題目列表</a></div></div>
+    <div class="container"><div class="content">
+        <span class="difficulty">MEDIUM</span>
+        <h1>#SQL-2 Department Highest Salary</h1>
+        <div><span class="tag">SQL</span><span class="tag">Database</span><span class="tag">JOIN</span></div>
+        
+        <h2>題目描述</h2>
+        <div class="content-box">
+            <p>找出每個部門薪資最高的員工，使用 JOIN 和子查詢。</p>
+        </div>
+        
+        <h2>資料表結構</h2>
+        <div class="content-box">
+            <h3>Employees 表格：</h3>
+            <table>
+                <tr><th>欄位</th><th>型態</th><th>說明</th></tr>
+                <tr><td>employee_id</td><td>INT</td><td>員工編號（主鍵）</td></tr>
+                <tr><td>name</td><td>VARCHAR</td><td>員工姓名</td></tr>
+                <tr><td>department_id</td><td>INT</td><td>部門編號（外鍵）</td></tr>
+                <tr><td>salary</td><td>DECIMAL</td><td>薪資</td></tr>
+            </table>
+            
+            <h3>Departments 表格：</h3>
+            <table>
+                <tr><th>欄位</th><th>型態</th><th>說明</th></tr>
+                <tr><td>department_id</td><td>INT</td><td>部門編號（主鍵）</td></tr>
+                <tr><td>department_name</td><td>VARCHAR</td><td>部門名稱</td></tr>
+            </table>
+        </div>
+        
+        <h2>範例資料</h2>
+        <div class="content-box">
+            <h3>Employees：</h3>
+            <table>
+                <tr><th>employee_id</th><th>name</th><th>department_id</th><th>salary</th></tr>
+                <tr><td>1</td><td>John</td><td>1</td><td>75000</td></tr>
+                <tr><td>2</td><td>Jane</td><td>2</td><td>85000</td></tr>
+                <tr><td>3</td><td>Bob</td><td>1</td><td>90000</td></tr>
+                <tr><td>4</td><td>Alice</td><td>2</td><td>70000</td></tr>
+                <tr><td>5</td><td>Charlie</td><td>3</td><td>65000</td></tr>
+            </table>
+            
+            <h3>Departments：</h3>
+            <table>
+                <tr><th>department_id</th><th>department_name</th></tr>
+                <tr><td>1</td><td>Engineering</td></tr>
+                <tr><td>2</td><td>Sales</td></tr>
+                <tr><td>3</td><td>Marketing</td></tr>
+            </table>
+        </div>
+        
+        <h2>SQL 解法</h2>
+        
+        <h3>方法一：使用子查詢</h3>
+        <pre><code class="language-sql">SELECT 
+    d.department_name,
+    e.name,
+    e.salary
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+WHERE (e.department_id, e.salary) IN (
+    SELECT department_id, MAX(salary)
+    FROM Employees
+    GROUP BY department_id
+)
+ORDER BY d.department_name;</code></pre>
+        
+        <h3>方法二：使用窗口函數（推薦）</h3>
+        <pre><code class="language-sql">WITH RankedSalaries AS (
+    SELECT 
+        e.name,
+        e.salary,
+        d.department_name,
+        RANK() OVER (PARTITION BY e.department_id ORDER BY e.salary DESC) as rank
+    FROM Employees e
+    JOIN Departments d ON e.department_id = d.department_id
+)
+SELECT 
+    department_name,
+    name,
+    salary
+FROM RankedSalaries
+WHERE rank = 1
+ORDER BY department_name;</code></pre>
+        
+        <h3>方法三：使用 JOIN 和聚合函數</h3>
+        <pre><code class="language-sql">SELECT 
+    d.department_name,
+    e.name,
+    e.salary
+FROM Employees e
+JOIN Departments d ON e.department_id = d.department_id
+JOIN (
+    SELECT department_id, MAX(salary) as max_salary
+    FROM Employees
+    GROUP BY department_id
+) max_dept ON e.department_id = max_dept.department_id 
+           AND e.salary = max_dept.max_salary
+ORDER BY d.department_name;</code></pre>
+        
+        <h2>預期輸出</h2>
+        <div class="content-box">
+            <table>
+                <tr><th>department_name</th><th>name</th><th>salary</th></tr>
+                <tr><td>Engineering</td><td>Bob</td><td>90000</td></tr>
+                <tr><td>Marketing</td><td>Charlie</td><td>65000</td></tr>
+                <tr><td>Sales</td><td>Jane</td><td>85000</td></tr>
+            </table>
+        </div>
+        
+        <h2>解題關鍵</h2>
+        <div class="content-box">
+            <h3>1. JOIN 的使用</h3>
+            <ul>
+                <li>INNER JOIN：只返回兩表都有的記錄</li>
+                <li>LEFT JOIN：保留左表所有記錄</li>
+                <li>RIGHT JOIN：保留右表所有記錄</li>
+            </ul>
+            
+            <h3>2. 子查詢</h3>
+            <ul>
+                <li>在 WHERE 中使用子查詢篩選</li>
+                <li>在 FROM 中使用子查詢作為臨時表</li>
+            </ul>
+            
+            <h3>3. GROUP BY 聚合</h3>
+            <ul>
+                <li>MAX()：找最大值</li>
+                <li>MIN()：找最小值</li>
+                <li>AVG()：計算平均值</li>
+                <li>COUNT()：計數</li>
+            </ul>
+        </div>
+        
+        <h2>面試要點</h2>
+        <div class="tip-box">
+            <h3>常見追問</h3>
+            <ul>
+                <li>如何處理多人同薪情況？</li>
+                <li>JOIN 和子查詢哪個效率更高？</li>
+                <li>如何找第二高薪資？</li>
+                <li>窗口函數的優勢是什麼？</li>
+            </ul>
+        </div>
+        
+        <div class="tip-box">
+            <h3>優化建議</h3>
+            <ul>
+                <li>在 JOIN 欄位上建立索引</li>
+                <li>優先使用窗口函數（更清晰）</li>
+                <li>避免多層嵌套子查詢</li>
+                <li>考慮使用 CTE 提高可讀性</li>
+            </ul>
+        </div>
+    </div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

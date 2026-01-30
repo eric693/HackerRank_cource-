@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#SQL-1 Employee Salary Query - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.easy { background-color: rgba(76, 175, 80, 0.12); color: #388E3C; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .sql-output { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 4px; overflow-x: auto; margin: 12px 0; }
+        .sql-output table { width: 100%; border-collapse: collapse; }
+        .sql-output th { background-color: #f5f5f5; padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--border-color); }
+        .sql-output td { padding: 12px; border-bottom: 1px solid var(--border-color); }
+        .sql-output tr:last-child td { border-bottom: none; }
+        pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 12px 0; }
+        pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#SQL-1</span>
+                        <span class="difficulty easy">EASY</span>
+                    </div>
+                    <h1 class="problem-title">Employee Salary Query</h1>
+                    <div class="problem-tags">
+                        <span class="tag">SQL</span>
+                        <span class="tag">Database</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>查詢員工薪資資訊，包含基本的 SELECT、WHERE、ORDER BY 操作。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>資料表結構</h2>
+                    <div class="content-box">
+                        <h3>Employees 表格：</h3>
+                        <div class="sql-output">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>欄位名稱</th>
+                                        <th>資料型態</th>
+                                        <th>說明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>employee_id</td>
+                                        <td>INT</td>
+                                        <td>員工編號（主鍵）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>name</td>
+                                        <td>VARCHAR(100)</td>
+                                        <td>員工姓名</td>
+                                    </tr>
+                                    <tr>
+                                        <td>department</td>
+                                        <td>VARCHAR(50)</td>
+                                        <td>部門</td>
+                                    </tr>
+                                    <tr>
+                                        <td>salary</td>
+                                        <td>DECIMAL(10,2)</td>
+                                        <td>薪資</td>
+                                    </tr>
+                                    <tr>
+                                        <td>hire_date</td>
+                                        <td>DATE</td>
+                                        <td>到職日期</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>問題列表</h2>
+                    
+                    <div class="example-box">
+                        <h3>問題 1：查詢所有員工資訊</h3>
+                        <p>查詢所有員工的姓名、部門和薪資。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 2：查詢薪資大於 50000 的員工</h3>
+                        <p>找出薪資超過 50000 的所有員工。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees
+WHERE salary > 50000;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 3：按薪資降序排列</h3>
+                        <p>查詢所有員工，按薪資從高到低排序。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees
+ORDER BY salary DESC;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 4：查詢特定部門員工</h3>
+                        <p>查詢 Engineering 部門的所有員工。</p>
+                        <pre><code class="language-sql">SELECT name, salary, hire_date
+FROM Employees
+WHERE department = 'Engineering'
+ORDER BY hire_date;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 5：薪資範圍查詢</h3>
+                        <p>查詢薪資在 40000 到 70000 之間的員工。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees
+WHERE salary BETWEEN 40000 AND 70000
+ORDER BY salary;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 6：多條件查詢</h3>
+                        <p>查詢 Sales 部門且薪資大於 45000 的員工。</p>
+                        <pre><code class="language-sql">SELECT name, salary
+FROM Employees
+WHERE department = 'Sales' AND salary > 45000
+ORDER BY salary DESC;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 7：使用 LIKE 模糊查詢</h3>
+                        <p>查詢姓名以 'J' 開頭的員工。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees
+WHERE name LIKE 'J%'
+ORDER BY name;</code></pre>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>問題 8：限制結果數量</h3>
+                        <p>查詢薪資最高的前 5 名員工。</p>
+                        <pre><code class="language-sql">SELECT name, department, salary
+FROM Employees
+ORDER BY salary DESC
+LIMIT 5;</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例資料</h2>
+                    <div class="content-box">
+                        <h3>Employees 表格資料：</h3>
+                        <div class="sql-output">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>employee_id</th>
+                                        <th>name</th>
+                                        <th>department</th>
+                                        <th>salary</th>
+                                        <th>hire_date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>John Smith</td><td>Engineering</td><td>75000</td><td>2020-01-15</td></tr>
+                                    <tr><td>2</td><td>Jane Doe</td><td>Sales</td><td>55000</td><td>2019-03-20</td></tr>
+                                    <tr><td>3</td><td>Bob Johnson</td><td>Engineering</td><td>80000</td><td>2018-07-10</td></tr>
+                                    <tr><td>4</td><td>Alice Brown</td><td>Marketing</td><td>45000</td><td>2021-05-01</td></tr>
+                                    <tr><td>5</td><td>Charlie Wilson</td><td>Sales</td><td>60000</td><td>2020-09-15</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>SQL 基礎語法回顧</h2>
+                    <div class="content-box">
+                        <h3>1. SELECT 語句</h3>
+                        <pre><code class="language-sql">SELECT column1, column2
+FROM table_name;</code></pre>
+
+                        <h3>2. WHERE 條件篩選</h3>
+                        <pre><code class="language-sql">SELECT * FROM table_name
+WHERE condition;</code></pre>
+
+                        <h3>3. ORDER BY 排序</h3>
+                        <pre><code class="language-sql">SELECT * FROM table_name
+ORDER BY column_name ASC;  -- 升序
+ORDER BY column_name DESC; -- 降序</code></pre>
+
+                        <h3>4. LIMIT 限制結果</h3>
+                        <pre><code class="language-sql">SELECT * FROM table_name
+LIMIT 10;</code></pre>
+
+                        <h3>5. 比較運算符</h3>
+                        <ul>
+                            <li><code>=</code>：等於</li>
+                            <li><code>!=</code> 或 <code>&lt;&gt;</code>：不等於</li>
+                            <li><code>&gt;</code>：大於</li>
+                            <li><code>&lt;</code>：小於</li>
+                            <li><code>&gt;=</code>：大於等於</li>
+                            <li><code>&lt;=</code>：小於等於</li>
+                            <li><code>BETWEEN</code>：在範圍內</li>
+                            <li><code>IN</code>：在列表中</li>
+                            <li><code>LIKE</code>：模糊匹配</li>
+                        </ul>
+
+                        <h3>6. 邏輯運算符</h3>
+                        <ul>
+                            <li><code>AND</code>：且（所有條件都必須為真）</li>
+                            <li><code>OR</code>：或（至少一個條件為真）</li>
+                            <li><code>NOT</code>：非（條件取反）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>基礎概念</h3>
+                            <ul>
+                                <li>理解 SELECT 語句結構</li>
+                                <li>掌握 WHERE 條件篩選</li>
+                                <li>熟悉 ORDER BY 排序</li>
+                                <li>了解 LIMIT 使用場景</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記在字串值加引號</li>
+                                <li>SQL 關鍵字大小寫混用</li>
+                                <li>WHERE 條件邏輯錯誤</li>
+                                <li>ORDER BY 忘記指定方向</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>優化技巧</h3>
+                            <ul>
+                                <li>只查詢需要的欄位</li>
+                                <li>合理使用索引</li>
+                                <li>避免 SELECT *</li>
+                                <li>WHERE 條件順序優化</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

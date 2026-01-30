@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>#SQL-4 Rank Scores - HackerRank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#F5F8FA;line-height:1.6}.container{max-width:1000px;margin:0 auto;padding:24px}.header{background:#FFF;padding:16px 0;margin-bottom:24px;border-bottom:1px solid #ddd}.back-link{color:#00EA64;text-decoration:none;font-weight:600}.content{background:#FFF;padding:32px;border-radius:8px}.difficulty{display:inline-block;padding:4px 12px;background:rgba(255,193,7,0.12);color:#F57C00;border-radius:4px;font-size:12px;font-weight:600}h1{font-size:28px;margin:12px 0}h2{font-size:20px;margin:24px 0 12px}h3{font-size:16px;margin:16px 0 8px}.tag{display:inline-block;padding:4px 12px;background:#EDF1F5;border-radius:4px;font-size:12px;margin-right:8px}.content-box{background:#F5F8FA;border-left:3px solid #00EA64;padding:16px;border-radius:4px;margin:12px 0}pre{background:#282c34;color:#abb2bf;padding:16px;border-radius:6px;overflow-x:auto;margin:12px 0}table{width:100%;border-collapse:collapse;margin:12px 0;background:#FFF;border:1px solid #ddd}th{background:#f5f5f5;padding:12px;text-align:left;font-weight:600;border-bottom:2px solid #ddd}td{padding:12px;border-bottom:1px solid #ddd}ul{margin-left:24px}li{margin:8px 0}</style>
+</head>
+<body>
+    <div class="header"><div class="container"><a href="../index.html" class="back-link">← 返回題目列表</a></div></div>
+    <div class="container"><div class="content">
+        <span class="difficulty">MEDIUM</span>
+        <h1>#SQL-4 Rank Scores</h1>
+        <div><span class="tag">SQL</span><span class="tag">Database</span><span class="tag">Window Function</span></div>
+        
+        <h2>題目描述</h2>
+        <div class="content-box">
+            <p>對分數進行排名，使用窗口函數（Window Function）。相同分數應該有相同的排名，且排名不能有間隙。</p>
+        </div>
+        
+        <h2>資料表結構</h2>
+        <div class="content-box">
+            <h3>Scores 表格：</h3>
+            <table>
+                <tr><th>欄位</th><th>型態</th><th>說明</th></tr>
+                <tr><td>id</td><td>INT</td><td>主鍵</td></tr>
+                <tr><td>score</td><td>DECIMAL(3,2)</td><td>分數</td></tr>
+            </table>
+        </div>
+        
+        <h2>範例資料</h2>
+        <div class="content-box">
+            <table>
+                <tr><th>id</th><th>score</th></tr>
+                <tr><td>1</td><td>3.50</td></tr>
+                <tr><td>2</td><td>3.65</td></tr>
+                <tr><td>3</td><td>4.00</td></tr>
+                <tr><td>4</td><td>3.85</td></tr>
+                <tr><td>5</td><td>4.00</td></tr>
+                <tr><td>6</td><td>3.65</td></tr>
+            </table>
+        </div>
+        
+        <h2>SQL 解法</h2>
+        
+        <h3>方法一：使用 DENSE_RANK()（推薦）</h3>
+        <pre><code class="language-sql">SELECT 
+    score,
+    DENSE_RANK() OVER (ORDER BY score DESC) AS 'rank'
+FROM Scores
+ORDER BY score DESC;</code></pre>
+        
+        <h3>方法二：使用子查詢計數</h3>
+        <pre><code class="language-sql">SELECT 
+    s1.score,
+    (SELECT COUNT(DISTINCT s2.score) 
+     FROM Scores s2 
+     WHERE s2.score >= s1.score) AS 'rank'
+FROM Scores s1
+ORDER BY s1.score DESC;</code></pre>
+        
+        <h3>方法三：使用 JOIN 和 COUNT</h3>
+        <pre><code class="language-sql">SELECT 
+    s1.score,
+    COUNT(DISTINCT s2.score) AS 'rank'
+FROM Scores s1
+JOIN Scores s2 ON s1.score <= s2.score
+GROUP BY s1.id, s1.score
+ORDER BY s1.score DESC;</code></pre>
+        
+        <h2>預期輸出</h2>
+        <div class="content-box">
+            <table>
+                <tr><th>score</th><th>rank</th></tr>
+                <tr><td>4.00</td><td>1</td></tr>
+                <tr><td>4.00</td><td>1</td></tr>
+                <tr><td>3.85</td><td>2</td></tr>
+                <tr><td>3.65</td><td>3</td></tr>
+                <tr><td>3.65</td><td>3</td></tr>
+                <tr><td>3.50</td><td>4</td></tr>
+            </table>
+        </div>
+        
+        <h2>窗口函數詳解</h2>
+        <div class="content-box">
+            <h3>RANK() vs DENSE_RANK() vs ROW_NUMBER()</h3>
+            <table>
+                <tr><th>函數</th><th>說明</th><th>範例</th></tr>
+                <tr>
+                    <td>ROW_NUMBER()</td>
+                    <td>連續排名，不考慮重複</td>
+                    <td>1, 2, 3, 4, 5</td>
+                </tr>
+                <tr>
+                    <td>RANK()</td>
+                    <td>相同值同排名，有間隙</td>
+                    <td>1, 1, 3, 4, 5</td>
+                </tr>
+                <tr>
+                    <td>DENSE_RANK()</td>
+                    <td>相同值同排名，無間隙</td>
+                    <td>1, 1, 2, 3, 4</td>
+                </tr>
+            </table>
+            
+            <h3>窗口函數語法：</h3>
+            <pre><code class="language-sql">FUNCTION_NAME() OVER (
+    [PARTITION BY column]
+    [ORDER BY column]
+    [ROWS/RANGE frame_clause]
+)</code></pre>
+            
+            <h3>常用窗口函數：</h3>
+            <ul>
+                <li><strong>RANK()</strong>：排名（有間隙）</li>
+                <li><strong>DENSE_RANK()</strong>：密集排名（無間隙）</li>
+                <li><strong>ROW_NUMBER()</strong>：行號</li>
+                <li><strong>LAG()</strong>：取前一行</li>
+                <li><strong>LEAD()</strong>：取後一行</li>
+                <li><strong>FIRST_VALUE()</strong>：第一個值</li>
+                <li><strong>LAST_VALUE()</strong>：最後一個值</li>
+            </ul>
+        </div>
+        
+        <h2>排名過程視覺化</h2>
+        <div class="content-box">
+            <pre>原始分數（降序）：
+score   ROW_NUMBER   RANK   DENSE_RANK
+4.00    1            1      1
+4.00    2            1      1  ← 相同分數
+3.85    3            3      2  ← RANK 跳到 3，DENSE_RANK 到 2
+3.65    4            4      3
+3.65    5            4      3
+3.50    6            6      4</pre>
+        </div>
+        
+        <h2>面試要點</h2>
+        <div class="content-box">
+            <h3>常見追問：</h3>
+            <ul>
+                <li>RANK 和 DENSE_RANK 的區別？</li>
+                <li>如何找第 N 高的分數？</li>
+                <li>PARTITION BY 的作用是什麼？</li>
+                <li>窗口函數和 GROUP BY 的區別？</li>
+            </ul>
+            
+            <h3>優化建議：</h3>
+            <ul>
+                <li>窗口函數比子查詢更高效</li>
+                <li>在 ORDER BY 欄位上建立索引</li>
+                <li>避免在窗口函數中使用複雜計算</li>
+                <li>合理使用 PARTITION BY 減少計算範圍</li>
+            </ul>
+            
+            <h3>實用場景：</h3>
+            <ul>
+                <li>排行榜系統</li>
+                <li>Top N 查詢</li>
+                <li>時間序列分析</li>
+                <li>移動平均計算</li>
+            </ul>
+        </div>
+    </div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
