@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設計停車場系統 - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#OOP-1</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">設計停車場系統</h1>
+                    <div class="problem-tags">
+                        <span class="tag">OOP</span>
+                        <span class="tag">Design</span>
+                        <span class="tag">System Design</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>設計一個停車場管理系統，需要考慮不同車型、收費規則、停車位管理等功能。</p>
+                        
+                        <h3>系統需求：</h3>
+                        <ol>
+                            <li>支援多種車型（機車、汽車、卡車）</li>
+                            <li>不同車型需要不同大小的停車位</li>
+                            <li>實作收費機制（按小時計費）</li>
+                            <li>追蹤停車位的佔用狀態</li>
+                            <li>提供車輛進出場的功能</li>
+                        </ol>
+
+                        <h3>收費標準：</h3>
+                        <ul>
+                            <li>機車：每小時 $10</li>
+                            <li>汽車：每小時 $20</li>
+                            <li>卡車：每小時 $40</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>功能需求</h2>
+                    <div class="content-box">
+                        <h3>必須實現的方法：</h3>
+                        <ul>
+                            <li><code>parkVehicle(vehicle)</code>：停放車輛，返回停車位編號</li>
+                            <li><code>removeVehicle(ticketId)</code>：取車，返回停車費用</li>
+                            <li><code>getAvailableSpots()</code>：獲取可用停車位數量</li>
+                            <li><code>getOccupiedSpots()</code>：獲取已佔用停車位數量</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>設計思路</h2>
+                    <div class="content-box">
+                        <h3>核心類別設計：</h3>
+                        <ol>
+                            <li><strong>Vehicle（車輛）</strong>
+                                <ul>
+                                    <li>屬性：車牌號碼、車型</li>
+                                    <li>類型：Motorcycle, Car, Truck</li>
+                                </ul>
+                            </li>
+                            <li><strong>ParkingSpot（停車位）</strong>
+                                <ul>
+                                    <li>屬性：編號、大小、是否可用</li>
+                                    <li>方法：佔用、釋放</li>
+                                </ul>
+                            </li>
+                            <li><strong>ParkingTicket（停車票）</strong>
+                                <ul>
+                                    <li>屬性：票號、車輛、停車位、入場時間</li>
+                                    <li>方法：計算費用</li>
+                                </ul>
+                            </li>
+                            <li><strong>ParkingLot（停車場）</strong>
+                                <ul>
+                                    <li>管理所有停車位</li>
+                                    <li>處理車輛進出</li>
+                                    <li>計算費用</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 實作</h3>
+                        <pre><code class="language-python">from enum import Enum
+from datetime import datetime
+from typing import Optional
+
+class VehicleType(Enum):
+    MOTORCYCLE = 1
+    CAR = 2
+    TRUCK = 3
+
+class Vehicle:
+    def __init__(self, license_plate: str, vehicle_type: VehicleType):
+        self.license_plate = license_plate
+        self.vehicle_type = vehicle_type
+    
+    def get_hourly_rate(self) -> int:
+        """獲取每小時費率"""
+        rates = {
+            VehicleType.MOTORCYCLE: 10,
+            VehicleType.CAR: 20,
+            VehicleType.TRUCK: 40
+        }
+        return rates[self.vehicle_type]
+
+class ParkingSpot:
+    def __init__(self, spot_id: int, spot_type: VehicleType):
+        self.spot_id = spot_id
+        self.spot_type = spot_type
+        self.is_available = True
+        self.vehicle: Optional[Vehicle] = None
+    
+    def can_fit_vehicle(self, vehicle: Vehicle) -> bool:
+        """檢查停車位是否適合該車型"""
+        # 大停車位可以停小車，小停車位不能停大車
+        return self.spot_type.value >= vehicle.vehicle_type.value
+    
+    def park_vehicle(self, vehicle: Vehicle) -> bool:
+        """停放車輛"""
+        if not self.is_available:
+            return False
+        if not self.can_fit_vehicle(vehicle):
+            return False
+        
+        self.vehicle = vehicle
+        self.is_available = False
+        return True
+    
+    def remove_vehicle(self):
+        """移除車輛"""
+        self.vehicle = None
+        self.is_available = True
+
+class ParkingTicket:
+    _ticket_counter = 0
+    
+    def __init__(self, vehicle: Vehicle, spot: ParkingSpot):
+        ParkingTicket._ticket_counter += 1
+        self.ticket_id = ParkingTicket._ticket_counter
+        self.vehicle = vehicle
+        self.spot = spot
+        self.entry_time = datetime.now()
+    
+    def calculate_fee(self) -> int:
+        """計算停車費用"""
+        exit_time = datetime.now()
+        duration = (exit_time - self.entry_time).total_seconds() / 3600  # 轉換為小時
+        hours = max(1, int(duration + 0.5))  # 向上取整，最少 1 小時
+        return hours * self.vehicle.get_hourly_rate()
+
+class ParkingLot:
+    def __init__(self, motorcycle_spots: int, car_spots: int, truck_spots: int):
+        self.spots = []
+        self.active_tickets = {}
+        
+        # 初始化停車位
+        spot_id = 1
+        for _ in range(motorcycle_spots):
+            self.spots.append(ParkingSpot(spot_id, VehicleType.MOTORCYCLE))
+            spot_id += 1
+        for _ in range(car_spots):
+            self.spots.append(ParkingSpot(spot_id, VehicleType.CAR))
+            spot_id += 1
+        for _ in range(truck_spots):
+            self.spots.append(ParkingSpot(spot_id, VehicleType.TRUCK))
+            spot_id += 1
+    
+    def park_vehicle(self, vehicle: Vehicle) -> Optional[int]:
+        """停放車輛，返回票號"""
+        # 尋找適合的停車位
+        for spot in self.spots:
+            if spot.is_available and spot.can_fit_vehicle(vehicle):
+                if spot.park_vehicle(vehicle):
+                    ticket = ParkingTicket(vehicle, spot)
+                    self.active_tickets[ticket.ticket_id] = ticket
+                    return ticket.ticket_id
+        
+        return None  # 沒有可用停車位
+    
+    def remove_vehicle(self, ticket_id: int) -> Optional[int]:
+        """取車，返回停車費用"""
+        if ticket_id not in self.active_tickets:
+            return None
+        
+        ticket = self.active_tickets[ticket_id]
+        fee = ticket.calculate_fee()
+        ticket.spot.remove_vehicle()
+        del self.active_tickets[ticket_id]
+        
+        return fee
+    
+    def get_available_spots(self) -> int:
+        """獲取可用停車位數量"""
+        return sum(1 for spot in self.spots if spot.is_available)
+    
+    def get_occupied_spots(self) -> int:
+        """獲取已佔用停車位數量"""
+        return sum(1 for spot in self.spots if not spot.is_available)
+
+
+# 使用範例
+if __name__ == "__main__":
+    # 創建停車場：10個機車位、20個汽車位、5個卡車位
+    parking_lot = ParkingLot(10, 20, 5)
+    
+    # 停放車輛
+    car1 = Vehicle("ABC-1234", VehicleType.CAR)
+    ticket1 = parking_lot.park_vehicle(car1)
+    print(f"車輛已停放，票號：{ticket1}")
+    
+    motorcycle1 = Vehicle("XYZ-5678", VehicleType.MOTORCYCLE)
+    ticket2 = parking_lot.park_vehicle(motorcycle1)
+    print(f"機車已停放，票號：{ticket2}")
+    
+    print(f"可用停車位：{parking_lot.get_available_spots()}")
+    print(f"已佔用停車位：{parking_lot.get_occupied_spots()}")
+    
+    # 取車
+    fee = parking_lot.remove_vehicle(ticket1)
+    print(f"停車費用：${fee}")
+    print(f"可用停車位：{parking_lot.get_available_spots()}")</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 實作</h3>
+                        <pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;unordered_map&gt;
+#include &lt;ctime&gt;
+#include &lt;cmath&gt;
+
+enum class VehicleType {
+    MOTORCYCLE = 1,
+    CAR = 2,
+    TRUCK = 3
+};
+
+class Vehicle {
+public:
+    std::string licensePlate;
+    VehicleType vehicleType;
+    
+    Vehicle(std::string plate, VehicleType type) 
+        : licensePlate(plate), vehicleType(type) {}
+    
+    int getHourlyRate() const {
+        switch(vehicleType) {
+            case VehicleType::MOTORCYCLE: return 10;
+            case VehicleType::CAR: return 20;
+            case VehicleType::TRUCK: return 40;
+        }
+        return 0;
+    }
+};
+
+class ParkingSpot {
+public:
+    int spotId;
+    VehicleType spotType;
+    bool isAvailable;
+    Vehicle* vehicle;
+    
+    ParkingSpot(int id, VehicleType type) 
+        : spotId(id), spotType(type), isAvailable(true), vehicle(nullptr) {}
+    
+    bool canFitVehicle(const Vehicle& v) const {
+        return static_cast<int>(spotType) >= static_cast<int>(v.vehicleType);
+    }
+    
+    bool parkVehicle(Vehicle* v) {
+        if (!isAvailable || !canFitVehicle(*v)) {
+            return false;
+        }
+        vehicle = v;
+        isAvailable = false;
+        return true;
+    }
+    
+    void removeVehicle() {
+        vehicle = nullptr;
+        isAvailable = true;
+    }
+};
+
+class ParkingTicket {
+public:
+    int ticketId;
+    Vehicle* vehicle;
+    ParkingSpot* spot;
+    time_t entryTime;
+    
+    static int ticketCounter;
+    
+    ParkingTicket(Vehicle* v, ParkingSpot* s) 
+        : vehicle(v), spot(s) {
+        ticketId = ++ticketCounter;
+        entryTime = time(nullptr);
+    }
+    
+    int calculateFee() const {
+        time_t exitTime = time(nullptr);
+        double hours = difftime(exitTime, entryTime) / 3600.0;
+        int billingHours = std::max(1, static_cast<int>(std::ceil(hours)));
+        return billingHours * vehicle->getHourlyRate();
+    }
+};
+
+int ParkingTicket::ticketCounter = 0;
+
+class ParkingLot {
+private:
+    std::vector&lt;ParkingSpot*&gt; spots;
+    std::unordered_map&lt;int, ParkingTicket*&gt; activeTickets;
+    
+public:
+    ParkingLot(int motorcycleSpots, int carSpots, int truckSpots) {
+        int spotId = 1;
+        for (int i = 0; i < motorcycleSpots; i++) {
+            spots.push_back(new ParkingSpot(spotId++, VehicleType::MOTORCYCLE));
+        }
+        for (int i = 0; i < carSpots; i++) {
+            spots.push_back(new ParkingSpot(spotId++, VehicleType::CAR));
+        }
+        for (int i = 0; i < truckSpots; i++) {
+            spots.push_back(new ParkingSpot(spotId++, VehicleType::TRUCK));
+        }
+    }
+    
+    int parkVehicle(Vehicle* vehicle) {
+        for (auto spot : spots) {
+            if (spot->isAvailable && spot->canFitVehicle(*vehicle)) {
+                if (spot->parkVehicle(vehicle)) {
+                    ParkingTicket* ticket = new ParkingTicket(vehicle, spot);
+                    activeTickets[ticket->ticketId] = ticket;
+                    return ticket->ticketId;
+                }
+            }
+        }
+        return -1;  // 沒有可用停車位
+    }
+    
+    int removeVehicle(int ticketId) {
+        if (activeTickets.find(ticketId) == activeTickets.end()) {
+            return -1;
+        }
+        
+        ParkingTicket* ticket = activeTickets[ticketId];
+        int fee = ticket->calculateFee();
+        ticket->spot->removeVehicle();
+        activeTickets.erase(ticketId);
+        delete ticket;
+        
+        return fee;
+    }
+    
+    int getAvailableSpots() const {
+        int count = 0;
+        for (auto spot : spots) {
+            if (spot->isAvailable) count++;
+        }
+        return count;
+    }
+    
+    ~ParkingLot() {
+        for (auto spot : spots) {
+            delete spot;
+        }
+        for (auto& pair : activeTickets) {
+            delete pair.second;
+        }
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 實作</h3>
+                        <pre><code class="language-java">import java.util.*;
+import java.time.*;
+
+enum VehicleType {
+    MOTORCYCLE(1, 10),
+    CAR(2, 20),
+    TRUCK(3, 40);
+    
+    private final int size;
+    private final int hourlyRate;
+    
+    VehicleType(int size, int rate) {
+        this.size = size;
+        this.hourlyRate = rate;
+    }
+    
+    public int getSize() { return size; }
+    public int getHourlyRate() { return hourlyRate; }
+}
+
+class Vehicle {
+    private String licensePlate;
+    private VehicleType vehicleType;
+    
+    public Vehicle(String plate, VehicleType type) {
+        this.licensePlate = plate;
+        this.vehicleType = type;
+    }
+    
+    public VehicleType getVehicleType() { return vehicleType; }
+    public int getHourlyRate() { return vehicleType.getHourlyRate(); }
+}
+
+class ParkingSpot {
+    private int spotId;
+    private VehicleType spotType;
+    private boolean isAvailable;
+    private Vehicle vehicle;
+    
+    public ParkingSpot(int id, VehicleType type) {
+        this.spotId = id;
+        this.spotType = type;
+        this.isAvailable = true;
+    }
+    
+    public boolean canFitVehicle(Vehicle v) {
+        return spotType.getSize() >= v.getVehicleType().getSize();
+    }
+    
+    public boolean parkVehicle(Vehicle v) {
+        if (!isAvailable || !canFitVehicle(v)) {
+            return false;
+        }
+        this.vehicle = v;
+        this.isAvailable = false;
+        return true;
+    }
+    
+    public void removeVehicle() {
+        this.vehicle = null;
+        this.isAvailable = true;
+    }
+    
+    public boolean isAvailable() { return isAvailable; }
+}
+
+class ParkingTicket {
+    private static int ticketCounter = 0;
+    private int ticketId;
+    private Vehicle vehicle;
+    private ParkingSpot spot;
+    private LocalDateTime entryTime;
+    
+    public ParkingTicket(Vehicle v, ParkingSpot s) {
+        this.ticketId = ++ticketCounter;
+        this.vehicle = v;
+        this.spot = s;
+        this.entryTime = LocalDateTime.now();
+    }
+    
+    public int getTicketId() { return ticketId; }
+    public ParkingSpot getSpot() { return spot; }
+    
+    public int calculateFee() {
+        LocalDateTime exitTime = LocalDateTime.now();
+        long minutes = Duration.between(entryTime, exitTime).toMinutes();
+        int hours = Math.max(1, (int) Math.ceil(minutes / 60.0));
+        return hours * vehicle.getHourlyRate();
+    }
+}
+
+class ParkingLot {
+    private List&lt;ParkingSpot&gt; spots;
+    private Map&lt;Integer, ParkingTicket&gt; activeTickets;
+    
+    public ParkingLot(int motorcycleSpots, int carSpots, int truckSpots) {
+        spots = new ArrayList&lt;&gt;();
+        activeTickets = new HashMap&lt;&gt;();
+        
+        int spotId = 1;
+        for (int i = 0; i < motorcycleSpots; i++) {
+            spots.add(new ParkingSpot(spotId++, VehicleType.MOTORCYCLE));
+        }
+        for (int i = 0; i < carSpots; i++) {
+            spots.add(new ParkingSpot(spotId++, VehicleType.CAR));
+        }
+        for (int i = 0; i < truckSpots; i++) {
+            spots.add(new ParkingSpot(spotId++, VehicleType.TRUCK));
+        }
+    }
+    
+    public Integer parkVehicle(Vehicle vehicle) {
+        for (ParkingSpot spot : spots) {
+            if (spot.isAvailable() && spot.canFitVehicle(vehicle)) {
+                if (spot.parkVehicle(vehicle)) {
+                    ParkingTicket ticket = new ParkingTicket(vehicle, spot);
+                    activeTickets.put(ticket.getTicketId(), ticket);
+                    return ticket.getTicketId();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public Integer removeVehicle(int ticketId) {
+        ParkingTicket ticket = activeTickets.get(ticketId);
+        if (ticket == null) {
+            return null;
+        }
+        
+        int fee = ticket.calculateFee();
+        ticket.getSpot().removeVehicle();
+        activeTickets.remove(ticketId);
+        
+        return fee;
+    }
+    
+    public int getAvailableSpots() {
+        return (int) spots.stream().filter(ParkingSpot::isAvailable).count();
+    }
+    
+    public int getOccupiedSpots() {
+        return spots.size() - getAvailableSpots();
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>設計要點</h2>
+                    <div class="content-box">
+                        <h3>SOLID 原則應用：</h3>
+                        <ul>
+                            <li><strong>單一職責原則</strong>：每個類別只負責一個功能</li>
+                            <li><strong>開放封閉原則</strong>：容易擴展新的車型</li>
+                            <li><strong>里氏替換原則</strong>：不同車型可以互相替換</li>
+                        </ul>
+
+                        <h3>擴展性考慮：</h3>
+                        <ul>
+                            <li>可以輕鬆添加新的車型</li>
+                            <li>可以修改收費規則（如會員折扣）</li>
+                            <li>可以增加多層停車場</li>
+                            <li>可以添加預約系統</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>設計考慮</h3>
+                            <ul>
+                                <li>如何處理並發停車請求？</li>
+                                <li>如何優化停車位分配策略？</li>
+                                <li>如何處理超時停車？</li>
+                                <li>如何實現會員系統？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何實現多層停車場？</li>
+                                <li>如何處理電動車充電？</li>
+                                <li>如何實現預約功能？</li>
+                                <li>如何統計營收報表？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>優化方向</h3>
+                            <ul>
+                                <li>使用策略模式處理收費</li>
+                                <li>使用觀察者模式監控車位</li>
+                                <li>使用工廠模式創建車輛</li>
+                                <li>考慮線程安全問題</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

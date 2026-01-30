@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>#OOP-2 設計電梯系統 - HackerRank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#F5F8FA;line-height:1.6}.container{max-width:1000px;margin:0 auto;padding:24px}.header{background:#FFF;padding:16px 0;margin-bottom:24px;border-bottom:1px solid #ddd}.back-link{color:#00EA64;text-decoration:none;font-weight:600}.content{background:#FFF;padding:32px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}.difficulty{display:inline-block;padding:4px 12px;background:rgba(255,193,7,0.12);color:#F57C00;border-radius:4px;font-size:12px;font-weight:600}h1{font-size:28px;margin:12px 0}h2{font-size:20px;margin:24px 0 12px}h3{font-size:16px;margin:16px 0 8px}.tag{display:inline-block;padding:4px 12px;background:#EDF1F5;border-radius:4px;font-size:12px;margin-right:8px}.content-box{background:#F5F8FA;border-left:3px solid #00EA64;padding:16px;border-radius:4px;margin:12px 0}pre{background:#282c34;color:#abb2bf;padding:16px;border-radius:6px;overflow-x:auto;margin:12px 0}.code-tabs{display:flex;gap:8px;border-bottom:1px solid #ddd;margin:12px 0}.tab-btn{padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:600}.tab-btn.active{color:#00EA64;border-bottom-color:#00EA64}.code-content{display:none}.code-content.active{display:block}ul{margin-left:24px}li{margin:8px 0}</style>
+</head>
+<body>
+    <div class="header"><div class="container"><a href="../index.html" class="back-link">← 返回題目列表</a></div></div>
+    <div class="container"><div class="content">
+        <span class="difficulty">MEDIUM</span>
+        <h1>#OOP-2 設計電梯系統</h1>
+        <div><span class="tag">OOP</span><span class="tag">Design</span><span class="tag">Algorithm</span></div>
+        
+        <h2>題目描述</h2>
+        <div class="content-box">
+            <p>設計一個電梯控制系統，包含多台電梯的調度邏輯、樓層管理等功能。</p>
+            <h3>系統需求：</h3>
+            <ul>
+                <li>支援多台電梯運作</li>
+                <li>實現請求調度算法（最近樓層優先）</li>
+                <li>追蹤電梯的當前狀態和方向</li>
+                <li>處理內部和外部請求</li>
+                <li>電梯門的開關控制</li>
+            </ul>
+        </div>
+        
+        <h2>核心類別設計</h2>
+        <div class="content-box">
+            <ol>
+                <li><strong>Direction（方向枚舉）</strong>: UP, DOWN, IDLE</li>
+                <li><strong>Request（請求）</strong>: 起始樓層、目標樓層</li>
+                <li><strong>Elevator（電梯）</strong>: 當前樓層、方向、請求隊列</li>
+                <li><strong>ElevatorController（控制器）</strong>: 管理多台電梯、分配請求</li>
+            </ol>
+        </div>
+        
+        <h2>程式碼實作</h2>
+        <div class="code-tabs">
+            <button class="tab-btn active" data-lang="python">Python</button>
+            <button class="tab-btn" data-lang="java">Java</button>
+        </div>
+        
+        <div class="code-content python active">
+            <pre><code class="language-python">from enum import Enum
+from typing import List
+
+class Direction(Enum):
+    UP = 1
+    DOWN = -1
+    IDLE = 0
+
+class Request:
+    def __init__(self, from_floor: int, to_floor: int):
+        self.from_floor = from_floor
+        self.to_floor = to_floor
+
+class Elevator:
+    def __init__(self, elevator_id: int, total_floors: int):
+        self.id = elevator_id
+        self.current_floor = 1
+        self.direction = Direction.IDLE
+        self.requests = []
+        self.total_floors = total_floors
+    
+    def add_request(self, floor: int):
+        """添加請求樓層"""
+        if floor not in self.requests:
+            self.requests.append(floor)
+            self.requests.sort()
+    
+    def move(self):
+        """移動電梯"""
+        if not self.requests:
+            self.direction = Direction.IDLE
+            return
+        
+        # 選擇下一個目標樓層
+        if self.direction == Direction.UP or self.direction == Direction.IDLE:
+            next_floor = min([f for f in self.requests if f >= self.current_floor], 
+                           default=max(self.requests))
+        else:
+            next_floor = max([f for f in self.requests if f <= self.current_floor],
+                           default=min(self.requests))
+        
+        # 移動到目標樓層
+        if next_floor > self.current_floor:
+            self.direction = Direction.UP
+            self.current_floor += 1
+        elif next_floor < self.current_floor:
+            self.direction = Direction.DOWN
+            self.current_floor -= 1
+        else:
+            # 到達目標樓層
+            self.requests.remove(next_floor)
+            print(f"電梯 {self.id} 到達 {self.current_floor} 樓")
+    
+    def get_distance(self, floor: int) -> int:
+        """計算到目標樓層的距離"""
+        return abs(self.current_floor - floor)
+
+class ElevatorController:
+    def __init__(self, num_elevators: int, total_floors: int):
+        self.elevators = [Elevator(i, total_floors) for i in range(num_elevators)]
+    
+    def request_elevator(self, from_floor: int, to_floor: int):
+        """請求電梯（外部請求）"""
+        # 選擇最近的電梯
+        best_elevator = min(self.elevators, 
+                           key=lambda e: e.get_distance(from_floor))
+        best_elevator.add_request(from_floor)
+        best_elevator.add_request(to_floor)
+        print(f"分配電梯 {best_elevator.id} 到 {from_floor} 樓")
+    
+    def step(self):
+        """系統運行一步"""
+        for elevator in self.elevators:
+            elevator.move()
+
+# 使用範例
+controller = ElevatorController(num_elevators=3, total_floors=10)
+controller.request_elevator(5, 8)
+controller.request_elevator(2, 7)
+
+for _ in range(10):
+    controller.step()</code></pre>
+        </div>
+        
+        <div class="code-content java">
+            <pre><code class="language-java">import java.util.*;
+
+enum Direction {
+    UP, DOWN, IDLE
+}
+
+class Elevator {
+    private int id;
+    private int currentFloor;
+    private Direction direction;
+    private List&lt;Integer&gt; requests;
+    
+    public Elevator(int id, int totalFloors) {
+        this.id = id;
+        this.currentFloor = 1;
+        this.direction = Direction.IDLE;
+        this.requests = new ArrayList&lt;&gt;();
+    }
+    
+    public void addRequest(int floor) {
+        if (!requests.contains(floor)) {
+            requests.add(floor);
+            Collections.sort(requests);
+        }
+    }
+    
+    public void move() {
+        if (requests.isEmpty()) {
+            direction = Direction.IDLE;
+            return;
+        }
+        
+        int nextFloor = findNextFloor();
+        
+        if (nextFloor > currentFloor) {
+            direction = Direction.UP;
+            currentFloor++;
+        } else if (nextFloor < currentFloor) {
+            direction = Direction.DOWN;
+            currentFloor--;
+        } else {
+            requests.remove(Integer.valueOf(nextFloor));
+            System.out.println("電梯 " + id + " 到達 " + currentFloor + " 樓");
+        }
+    }
+    
+    private int findNextFloor() {
+        if (direction == Direction.UP || direction == Direction.IDLE) {
+            for (int floor : requests) {
+                if (floor >= currentFloor) return floor;
+            }
+        }
+        for (int i = requests.size() - 1; i >= 0; i--) {
+            if (requests.get(i) <= currentFloor) return requests.get(i);
+        }
+        return requests.get(0);
+    }
+    
+    public int getDistance(int floor) {
+        return Math.abs(currentFloor - floor);
+    }
+}
+
+class ElevatorController {
+    private List&lt;Elevator&gt; elevators;
+    
+    public ElevatorController(int numElevators, int totalFloors) {
+        elevators = new ArrayList&lt;&gt;();
+        for (int i = 0; i < numElevators; i++) {
+            elevators.add(new Elevator(i, totalFloors));
+        }
+    }
+    
+    public void requestElevator(int fromFloor, int toFloor) {
+        Elevator best = elevators.stream()
+            .min(Comparator.comparingInt(e -> e.getDistance(fromFloor)))
+            .orElse(elevators.get(0));
+        
+        best.addRequest(fromFloor);
+        best.addRequest(toFloor);
+    }
+    
+    public void step() {
+        for (Elevator elevator : elevators) {
+            elevator.move();
+        }
+    }
+}</code></pre>
+        </div>
+        
+        <h2>設計要點</h2>
+        <div class="content-box">
+            <h3>調度算法：</h3>
+            <ul>
+                <li>FCFS（先來先服務）</li>
+                <li>SCAN（電梯算法）- 推薦</li>
+                <li>LOOK（改進的 SCAN）</li>
+            </ul>
+            <h3>優化考慮：</h3>
+            <ul>
+                <li>負載平衡：平均分配請求</li>
+                <li>方向優先：同方向請求優先處理</li>
+                <li>節能模式：閒置電梯返回基準樓層</li>
+            </ul>
+        </div>
+    </div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();document.querySelectorAll('.tab-btn').forEach(btn=>{btn.addEventListener('click',function(){const lang=this.dataset.lang;document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.code-content').forEach(c=>c.classList.remove('active'));this.classList.add('active');document.querySelector(`.code-content.${lang}`).classList.add('active');})});</script>
+</body>
+</html>

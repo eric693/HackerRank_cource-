@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>#OOP-3 設計圖書館管理系統 - HackerRank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#F5F8FA;line-height:1.6}.container{max-width:1000px;margin:0 auto;padding:24px}.header{background:#FFF;padding:16px 0;margin-bottom:24px;border-bottom:1px solid #ddd}.back-link{color:#00EA64;text-decoration:none;font-weight:600}.content{background:#FFF;padding:32px;border-radius:8px}.difficulty{display:inline-block;padding:4px 12px;background:rgba(76,175,80,0.12);color:#388E3C;border-radius:4px;font-size:12px;font-weight:600}h1{font-size:28px;margin:12px 0}h2{font-size:20px;margin:24px 0 12px}.tag{display:inline-block;padding:4px 12px;background:#EDF1F5;border-radius:4px;font-size:12px;margin-right:8px}.content-box{background:#F5F8FA;border-left:3px solid #00EA64;padding:16px;border-radius:4px;margin:12px 0}pre{background:#282c34;color:#abb2bf;padding:16px;border-radius:6px;overflow-x:auto;margin:12px 0}.code-tabs{display:flex;gap:8px;border-bottom:1px solid #ddd;margin:12px 0}.tab-btn{padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:600}.tab-btn.active{color:#00EA64;border-bottom-color:#00EA64}.code-content{display:none}.code-content.active{display:block}ul{margin-left:24px}li{margin:8px 0}</style>
+</head>
+<body>
+    <div class="header"><div class="container"><a href="../index.html" class="back-link">← 返回題目列表</a></div></div>
+    <div class="container"><div class="content">
+        <span class="difficulty">EASY</span>
+        <h1>#OOP-3 設計圖書館管理系統</h1>
+        <div><span class="tag">OOP</span><span class="tag">Design</span></div>
+        
+        <h2>題目描述</h2>
+        <div class="content-box">
+            <p>設計一個圖書館管理系統，包含借書、還書、會員管理、書籍管理等功能。</p>
+            <h3>系統需求：</h3>
+            <ul>
+                <li>書籍管理：新增、刪除、查詢</li>
+                <li>會員管理：註冊、註銷</li>
+                <li>借閱管理：借書、還書、續借</li>
+                <li>逾期管理：計算罰款</li>
+            </ul>
+        </div>
+        
+        <h2>程式碼實作</h2>
+        <div class="code-tabs">
+            <button class="tab-btn active" data-lang="python">Python</button>
+        </div>
+        
+        <div class="code-content python active">
+            <pre><code class="language-python">from datetime import datetime, timedelta
+
+class Book:
+    def __init__(self, isbn: str, title: str, author: str):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.is_available = True
+
+class Member:
+    def __init__(self, member_id: str, name: str):
+        self.member_id = member_id
+        self.name = name
+        self.borrowed_books = []
+    
+    def can_borrow(self) -> bool:
+        return len(self.borrowed_books) < 5  # 最多借 5 本
+
+class BorrowRecord:
+    def __init__(self, book: Book, member: Member):
+        self.book = book
+        self.member = member
+        self.borrow_date = datetime.now()
+        self.due_date = self.borrow_date + timedelta(days=14)
+        self.return_date = None
+    
+    def calculate_fine(self) -> int:
+        """計算罰款（每天 $5）"""
+        if not self.return_date:
+            self.return_date = datetime.now()
+        
+        if self.return_date <= self.due_date:
+            return 0
+        
+        overdue_days = (self.return_date - self.due_date).days
+        return overdue_days * 5
+
+class Library:
+    def __init__(self):
+        self.books = {}  # isbn -> Book
+        self.members = {}  # member_id -> Member
+        self.borrow_records = []
+    
+    def add_book(self, book: Book):
+        self.books[book.isbn] = book
+    
+    def register_member(self, member: Member):
+        self.members[member.member_id] = member
+    
+    def borrow_book(self, isbn: str, member_id: str) -> bool:
+        if isbn not in self.books or member_id not in self.members:
+            return False
+        
+        book = self.books[isbn]
+        member = self.members[member_id]
+        
+        if not book.is_available or not member.can_borrow():
+            return False
+        
+        book.is_available = False
+        member.borrowed_books.append(book)
+        record = BorrowRecord(book, member)
+        self.borrow_records.append(record)
+        
+        return True
+    
+    def return_book(self, isbn: str, member_id: str) -> int:
+        """還書並返回罰款"""
+        member = self.members.get(member_id)
+        if not member:
+            return -1
+        
+        book = next((b for b in member.borrowed_books if b.isbn == isbn), None)
+        if not book:
+            return -1
+        
+        # 找到借閱記錄
+        record = next((r for r in self.borrow_records 
+                      if r.book == book and r.member == member and not r.return_date),
+                     None)
+        
+        if not record:
+            return -1
+        
+        # 計算罰款
+        fine = record.calculate_fine()
+        
+        # 更新狀態
+        book.is_available = True
+        member.borrowed_books.remove(book)
+        
+        return fine
+
+# 使用範例
+library = Library()
+
+# 新增書籍
+book1 = Book("978-1234567890", "Python 編程", "作者 A")
+library.add_book(book1)
+
+# 註冊會員
+member1 = Member("M001", "張三")
+library.register_member(member1)
+
+# 借書
+if library.borrow_book("978-1234567890", "M001"):
+    print("借書成功")
+
+# 還書
+fine = library.return_book("978-1234567890", "M001")
+print(f"罰款：${fine}")</code></pre>
+        </div>
+        
+        <h2>設計要點</h2>
+        <div class="content-box">
+            <h3>功能擴展：</h3>
+            <ul>
+                <li>預約系統：書籍被借出時可預約</li>
+                <li>分類管理：書籍分類和搜索</li>
+                <li>通知系統：到期提醒</li>
+                <li>統計報表：借閱統計</li>
+            </ul>
+        </div>
+    </div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

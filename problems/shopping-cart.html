@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>#OOP-4 設計線上購物車 - HackerRank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;background:#F5F8FA;line-height:1.6}.container{max-width:1000px;margin:0 auto;padding:24px}.header{background:#FFF;padding:16px 0;margin-bottom:24px;border-bottom:1px solid #ddd}.back-link{color:#00EA64;text-decoration:none;font-weight:600}.content{background:#FFF;padding:32px;border-radius:8px}.difficulty{display:inline-block;padding:4px 12px;background:rgba(255,193,7,0.12);color:#F57C00;border-radius:4px;font-size:12px;font-weight:600}h1{font-size:28px;margin:12px 0}h2{font-size:20px;margin:24px 0 12px}.tag{display:inline-block;padding:4px 12px;background:#EDF1F5;border-radius:4px;font-size:12px;margin-right:8px}.content-box{background:#F5F8FA;border-left:3px solid #00EA64;padding:16px;border-radius:4px;margin:12px 0}pre{background:#282c34;color:#abb2bf;padding:16px;border-radius:6px;overflow-x:auto;margin:12px 0}.code-tabs{display:flex;gap:8px;border-bottom:1px solid #ddd;margin:12px 0}.tab-btn{padding:8px 16px;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:600}.tab-btn.active{color:#00EA64;border-bottom-color:#00EA64}.code-content{display:none}.code-content.active{display:block}ul{margin-left:24px}li{margin:8px 0}</style>
+</head>
+<body>
+    <div class="header"><div class="container"><a href="../index.html" class="back-link">← 返回題目列表</a></div></div>
+    <div class="container"><div class="content">
+        <span class="difficulty">MEDIUM</span>
+        <h1>#OOP-4 設計線上購物車</h1>
+        <div><span class="tag">OOP</span><span class="tag">Design</span></div>
+        
+        <h2>題目描述</h2>
+        <div class="content-box">
+            <p>設計一個線上購物車系統，需要處理商品管理、價格計算、優惠券等功能。</p>
+            <h3>系統需求：</h3>
+            <ul>
+                <li>商品管理：新增、刪除、修改數量</li>
+                <li>價格計算：小計、總計</li>
+                <li>優惠券：折扣碼、滿減</li>
+                <li>庫存管理：檢查庫存</li>
+            </ul>
+        </div>
+        
+        <h2>程式碼實作</h2>
+        <div class="code-tabs">
+            <button class="tab-btn active" data-lang="python">Python</button>
+        </div>
+        
+        <div class="code-content python active">
+            <pre><code class="language-python">from typing import Dict, List
+
+class Product:
+    def __init__(self, product_id: str, name: str, price: float, stock: int):
+        self.product_id = product_id
+        self.name = name
+        self.price = price
+        self.stock = stock
+    
+    def has_stock(self, quantity: int) -> bool:
+        return self.stock >= quantity
+
+class CartItem:
+    def __init__(self, product: Product, quantity: int):
+        self.product = product
+        self.quantity = quantity
+    
+    def get_subtotal(self) -> float:
+        return self.product.price * self.quantity
+
+class Coupon:
+    def __init__(self, code: str, discount_percent: float, min_amount: float = 0):
+        self.code = code
+        self.discount_percent = discount_percent
+        self.min_amount = min_amount
+    
+    def can_apply(self, amount: float) -> bool:
+        return amount >= self.min_amount
+    
+    def calculate_discount(self, amount: float) -> float:
+        if self.can_apply(amount):
+            return amount * (self.discount_percent / 100)
+        return 0
+
+class ShoppingCart:
+    def __init__(self):
+        self.items: Dict[str, CartItem] = {}
+        self.coupon: Coupon = None
+    
+    def add_item(self, product: Product, quantity: int) -> bool:
+        """添加商品到購物車"""
+        if not product.has_stock(quantity):
+            return False
+        
+        if product.product_id in self.items:
+            self.items[product.product_id].quantity += quantity
+        else:
+            self.items[product.product_id] = CartItem(product, quantity)
+        
+        return True
+    
+    def remove_item(self, product_id: str):
+        """移除商品"""
+        if product_id in self.items:
+            del self.items[product_id]
+    
+    def update_quantity(self, product_id: str, quantity: int) -> bool:
+        """更新商品數量"""
+        if product_id not in self.items:
+            return False
+        
+        item = self.items[product_id]
+        if not item.product.has_stock(quantity):
+            return False
+        
+        item.quantity = quantity
+        return True
+    
+    def apply_coupon(self, coupon: Coupon):
+        """使用優惠券"""
+        self.coupon = coupon
+    
+    def get_subtotal(self) -> float:
+        """計算小計"""
+        return sum(item.get_subtotal() for item in self.items.values())
+    
+    def get_discount(self) -> float:
+        """計算折扣金額"""
+        if not self.coupon:
+            return 0
+        return self.coupon.calculate_discount(self.get_subtotal())
+    
+    def get_total(self) -> float:
+        """計算總計"""
+        return self.get_subtotal() - self.get_discount()
+    
+    def checkout(self) -> bool:
+        """結帳"""
+        # 檢查庫存
+        for item in self.items.values():
+            if not item.product.has_stock(item.quantity):
+                return False
+        
+        # 扣除庫存
+        for item in self.items.values():
+            item.product.stock -= item.quantity
+        
+        # 清空購物車
+        self.items.clear()
+        self.coupon = None
+        
+        return True
+
+# 使用範例
+# 創建商品
+laptop = Product("P001", "筆記型電腦", 30000, 10)
+mouse = Product("P002", "滑鼠", 500, 50)
+
+# 創建購物車
+cart = ShoppingCart()
+
+# 添加商品
+cart.add_item(laptop, 1)
+cart.add_item(mouse, 2)
+
+print(f"小計：${cart.get_subtotal()}")
+
+# 使用優惠券（滿 10000 打 9 折）
+coupon = Coupon("SAVE10", 10, 10000)
+cart.apply_coupon(coupon)
+
+print(f"折扣：${cart.get_discount()}")
+print(f"總計：${cart.get_total()}")
+
+# 結帳
+if cart.checkout():
+    print("結帳成功")</code></pre>
+        </div>
+        
+        <h2>設計要點</h2>
+        <div class="content-box">
+            <h3>擴展功能：</h3>
+            <ul>
+                <li>多種優惠券類型（百分比、固定金額）</li>
+                <li>購物車持久化</li>
+                <li>運費計算</li>
+                <li>支付集成</li>
+            </ul>
+        </div>
+    </div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
