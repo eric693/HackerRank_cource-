@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#72 Edit Distance - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#72</span>
+                        <span class="difficulty hard">HARD</span>
+                    </div>
+                    <h1 class="problem-title">Edit Distance</h1>
+                    <div class="problem-tags">
+                        <span class="tag">String</span>
+                        <span class="tag">Dynamic Programming</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給你兩個單詞 <code>word1</code> 和 <code>word2</code>，請計算出將 <code>word1</code> 轉換成 <code>word2</code> 所使用的最少操作數。</p>
+                        <p>你可以對一個單詞進行如下三種操作：</p>
+                        <ul>
+                            <li>插入一個字符</li>
+                            <li>刪除一個字符</li>
+                            <li>替換一個字符</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：word1 = "horse", word2 = "ros"
+輸出：3
+解釋：
+horse -> rorse (將 'h' 替換為 'r')
+rorse -> rose (刪除 'r')
+rose -> ros (刪除 'e')</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：word1 = "intention", word2 = "execution"
+輸出：5
+解釋：
+intention -> inention (刪除 't')
+inention -> enention (將 'i' 替換為 'e')
+enention -> exention (將 'n' 替換為 'x')
+exention -> exection (將 'n' 替換為 'c')
+exection -> execution (插入 'u')</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>0 <= word1.length, word2.length <= 500</code></li>
+                            <li><code>word1</code> 和 <code>word2</code> 由小寫英文字母組成</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>動態規劃</h3>
+                        <p>定義 <code>dp[i][j]</code> 表示 word1 的前 i 個字符轉換成 word2 的前 j 個字符所需的最少操作數。</p>
+                        
+                        <h3>狀態轉移方程：</h3>
+                        <ul>
+                            <li>如果 <code>word1[i-1] == word2[j-1]</code>：<code>dp[i][j] = dp[i-1][j-1]</code></li>
+                            <li>否則，取三種操作的最小值：
+                                <ul>
+                                    <li>插入：<code>dp[i][j-1] + 1</code></li>
+                                    <li>刪除：<code>dp[i-1][j] + 1</code></li>
+                                    <li>替換：<code>dp[i-1][j-1] + 1</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        
+                        <h3>邊界條件：</h3>
+                        <ul>
+                            <li><code>dp[i][0] = i</code>（word1 前 i 個字符轉換為空字符串需要 i 次刪除）</li>
+                            <li><code>dp[0][j] = j</code>（空字符串轉換為 word2 前 j 個字符需要 j 次插入）</li>
+                        </ul>
+                        
+                        <ul>
+                            <li>時間複雜度：O(m × n)</li>
+                            <li>空間複雜度：O(m × n)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def minDistance(self, word1: str, word2: str) -> int:
+        """
+        動態規劃解法
+        
+        時間複雜度：O(m × n)
+        空間複雜度：O(m × n)
+        """
+        m, n = len(word1), len(word2)
+        
+        # 初始化 DP 表格
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        
+        # 邊界條件
+        for i in range(m + 1):
+            dp[i][0] = i
+        for j in range(n + 1):
+            dp[0][j] = j
+        
+        # 填充 DP 表格
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if word1[i-1] == word2[j-1]:
+                    # 字符相同，不需要操作
+                    dp[i][j] = dp[i-1][j-1]
+                else:
+                    # 取三種操作的最小值
+                    dp[i][j] = min(
+                        dp[i-1][j] + 1,    # 刪除
+                        dp[i][j-1] + 1,    # 插入
+                        dp[i-1][j-1] + 1   # 替換
+                    )
+        
+        return dp[m][n]
+
+
+# 空間優化版本（使用一維陣列）
+class Solution2:
+    def minDistance(self, word1: str, word2: str) -> int:
+        """
+        空間優化版本
+        
+        時間複雜度：O(m × n)
+        空間複雜度：O(n)
+        """
+        m, n = len(word1), len(word2)
+        
+        # 只需要保存兩行
+        prev = list(range(n + 1))
+        
+        for i in range(1, m + 1):
+            curr = [i] + [0] * n
+            for j in range(1, n + 1):
+                if word1[i-1] == word2[j-1]:
+                    curr[j] = prev[j-1]
+                else:
+                    curr[j] = min(prev[j], curr[j-1], prev[j-1]) + 1
+            prev = curr
+        
+        return prev[n]</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m = word1.length();
+        int n = word2.length();
+        
+        // 初始化 DP 表格
+        vector&lt;vector&lt;int&gt;&gt; dp(m + 1, vector&lt;int&gt;(n + 1, 0));
+        
+        // 邊界條件
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+        
+        // 填充 DP 表格
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1[i-1] == word2[j-1]) {
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    dp[i][j] = min({
+                        dp[i-1][j] + 1,    // 刪除
+                        dp[i][j-1] + 1,    // 插入
+                        dp[i-1][j-1] + 1   // 替換
+                    });
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">class Solution {
+    public int minDistance(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+        
+        // 初始化 DP 表格
+        int[][] dp = new int[m + 1][n + 1];
+        
+        // 邊界條件
+        for (int i = 0; i <= m; i++) {
+            dp[i][0] = i;
+        }
+        for (int j = 0; j <= n; j++) {
+            dp[0][j] = j;
+        }
+        
+        // 填充 DP 表格
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (word1.charAt(i-1) == word2.charAt(j-1)) {
+                    dp[i][j] = dp[i-1][j-1];
+                } else {
+                    dp[i][j] = Math.min(
+                        Math.min(dp[i-1][j], dp[i][j-1]),
+                        dp[i-1][j-1]
+                    ) + 1;
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>DP 表格示例</h2>
+                    <div class="content-box">
+                        <h3>word1 = "horse", word2 = "ros"</h3>
+                        <pre><code>    ""  r  o  s
+""   0  1  2  3
+h    1  1  2  3
+o    2  2  1  2
+r    3  2  2  2
+s    4  3  3  2
+e    5  4  4  3
+
+最終答案：dp[5][3] = 3</code></pre>
+                        
+                        <h3>填充過程說明：</h3>
+                        <ul>
+                            <li>dp[1][1]：'h' vs 'r'，不同，取 min(0,1,1)+1 = 1</li>
+                            <li>dp[2][2]：'o' vs 'o'，相同，dp[1][1] = 1</li>
+                            <li>dp[3][1]：'r' vs 'r'，相同，dp[2][0] = 2</li>
+                            <li>最終 dp[5][3] = 3，表示需要 3 步操作</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>如何輸出具體的操作步驟？</li>
+                                <li>能否優化空間複雜度？</li>
+                                <li>三種操作的代價不同怎麼辦？</li>
+                                <li>如何處理大小寫敏感？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>理解 DP 表格的含義</li>
+                                <li>正確設置邊界條件</li>
+                                <li>字符相同時不需要操作</li>
+                                <li>可以用滾動陣列優化空間</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記初始化邊界條件</li>
+                                <li>索引錯位（i-1, j-1）</li>
+                                <li>三種操作考慮不全</li>
+                                <li>空字符串的處理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>相關題目</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><strong>One Edit Distance</strong>：判斷兩個字符串是否只相差一次編輯</li>
+                            <li><strong>Delete Operation for Two Strings</strong>：只能刪除操作的編輯距離</li>
+                            <li><strong>Minimum ASCII Delete Sum</strong>：考慮 ASCII 值的編輯距離</li>
+                            <li><strong>Longest Common Subsequence</strong>：與編輯距離密切相關</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

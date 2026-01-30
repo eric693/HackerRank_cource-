@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#297 Serialize and Deserialize Binary Tree - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.hard { background-color: rgba(244, 67, 54, 0.12); color: #D32F2F; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#297</span>
+                        <span class="difficulty hard">HARD</span>
+                    </div>
+                    <h1 class="problem-title">Serialize and Deserialize Binary Tree</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Tree</span>
+                        <span class="tag">DFS</span>
+                        <span class="tag">BFS</span>
+                        <span class="tag">Design</span>
+                        <span class="tag">String</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>序列化是將一個資料結構或者物件轉換為連續的比特位的操作，進而可以將轉換後的資料存儲在一個檔案或者記憶體中，同時也可以通過網路傳輸到另一個電腦環境，採取相反方式重構得到原資料。</p>
+                        <p>請設計一個算法來實現二元樹的序列化與反序列化。這裡不限定你的序列/反序列化算法執行邏輯，你只需要保證一個二元樹可以被序列化為一個字串並且將這個字串反序列化為原始的樹結構。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：root = [1,2,3,null,null,4,5]
+輸出：[1,2,3,null,null,4,5]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：root = []
+輸出：[]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li>樹中節點數在範圍 <code>[0, 10<sup>4</sup>]</code> 內</li>
+                            <li><code>-1000 <= Node.val <= 1000</code></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：前序遍歷（DFS）- 推薦</h3>
+                        <p><strong>序列化</strong>：使用前序遍歷將樹轉換為字串</p>
+                        <ul>
+                            <li>遍歷順序：根節點 → 左子樹 → 右子樹</li>
+                            <li>使用特殊標記（如 "null"）表示空節點</li>
+                            <li>節點之間用分隔符（如逗號）分隔</li>
+                        </ul>
+                        
+                        <p><strong>反序列化</strong>：根據字串重建樹</p>
+                        <ul>
+                            <li>將字串分割成節點列表</li>
+                            <li>使用遞迴按前序遍歷順序重建</li>
+                            <li>遇到 "null" 則返回空節點</li>
+                        </ul>
+                        
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+
+                        <h3>方法二：層序遍歷（BFS）</h3>
+                        <p>使用隊列進行層序遍歷，記錄每層的節點。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python"># Definition for a binary tree node.
+class TreeNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+
+class Codec:
+    """
+    前序遍歷 DFS 解法
+    
+    時間複雜度：O(n)
+    空間複雜度：O(n)
+    """
+    
+    def serialize(self, root):
+        """將樹序列化為字符串
+        
+        Args:
+            root: TreeNode
+        Returns:
+            str
+        """
+        def dfs(node):
+            if not node:
+                return "null,"
+            # 前序遍歷：根 -> 左 -> 右
+            return str(node.val) + "," + dfs(node.left) + dfs(node.right)
+        
+        return dfs(root)
+    
+    def deserialize(self, data):
+        """將字符串反序列化為樹
+        
+        Args:
+            data: str
+        Returns:
+            TreeNode
+        """
+        def dfs():
+            val = next(vals)
+            if val == "null":
+                return None
+            # 重建節點
+            node = TreeNode(int(val))
+            node.left = dfs()
+            node.right = dfs()
+            return node
+        
+        vals = iter(data.split(","))
+        return dfs()
+
+
+# 方法二：BFS 層序遍歷
+class Codec2:
+    def serialize(self, root):
+        if not root:
+            return ""
+        
+        from collections import deque
+        queue = deque([root])
+        result = []
+        
+        while queue:
+            node = queue.popleft()
+            if node:
+                result.append(str(node.val))
+                queue.append(node.left)
+                queue.append(node.right)
+            else:
+                result.append("null")
+        
+        return ",".join(result)
+    
+    def deserialize(self, data):
+        if not data:
+            return None
+        
+        from collections import deque
+        vals = data.split(",")
+        root = TreeNode(int(vals[0]))
+        queue = deque([root])
+        i = 1
+        
+        while queue and i < len(vals):
+            node = queue.popleft()
+            
+            if vals[i] != "null":
+                node.left = TreeNode(int(vals[i]))
+                queue.append(node.left)
+            i += 1
+            
+            if i < len(vals) and vals[i] != "null":
+                node.right = TreeNode(int(vals[i]))
+                queue.append(node.right)
+            i += 1
+        
+        return root</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;string&gt;
+#include &lt;queue&gt;
+#include &lt;sstream&gt;
+using namespace std;
+
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+};
+
+class Codec {
+public:
+    // 序列化
+    string serialize(TreeNode* root) {
+        if (!root) return "null,";
+        
+        return to_string(root->val) + "," +
+               serialize(root->left) +
+               serialize(root->right);
+    }
+
+    // 反序列化
+    TreeNode* deserialize(string data) {
+        queue&lt;string&gt; nodes;
+        string val;
+        
+        // 分割字符串
+        for (char c : data) {
+            if (c == ',') {
+                nodes.push(val);
+                val.clear();
+            } else {
+                val += c;
+            }
+        }
+        
+        return helper(nodes);
+    }
+    
+private:
+    TreeNode* helper(queue&lt;string&gt;& nodes) {
+        string val = nodes.front();
+        nodes.pop();
+        
+        if (val == "null") return nullptr;
+        
+        TreeNode* node = new TreeNode(stoi(val));
+        node->left = helper(nodes);
+        node->right = helper(nodes);
+        return node;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+public class Codec {
+    
+    // 序列化
+    public String serialize(TreeNode root) {
+        if (root == null) {
+            return "null,";
+        }
+        
+        return root.val + "," +
+               serialize(root.left) +
+               serialize(root.right);
+    }
+
+    // 反序列化
+    public TreeNode deserialize(String data) {
+        Queue&lt;String&gt; nodes = new LinkedList&lt;&gt;(
+            Arrays.asList(data.split(","))
+        );
+        return helper(nodes);
+    }
+    
+    private TreeNode helper(Queue&lt;String&gt; nodes) {
+        String val = nodes.poll();
+        
+        if (val.equals("null")) {
+            return null;
+        }
+        
+        TreeNode node = new TreeNode(Integer.parseInt(val));
+        node.left = helper(nodes);
+        node.right = helper(nodes);
+        return node;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>算法過程視覺化</h2>
+                    <div class="content-box">
+                        <h3>序列化過程（前序遍歷）：</h3>
+                        <pre><code>原始樹：
+      1
+     / \
+    2   3
+       / \
+      4   5
+
+前序遍歷順序：1 -> 2 -> 3 -> 4 -> 5
+
+序列化結果：
+"1,2,null,null,3,4,null,null,5,null,null,"
+
+解析：
+1,              # 根節點 1
+2,null,null,    # 左子樹：節點 2（無左右子節點）
+3,              # 右子樹：節點 3
+4,null,null,    # 3 的左子節點 4
+5,null,null     # 3 的右子節點 5</code></pre>
+
+                        <h3>反序列化過程：</h3>
+                        <pre><code>輸入："1,2,null,null,3,4,null,null,5,null,null,"
+
+步驟：
+1. 讀取 "1" → 創建根節點 1
+2. 遞迴處理左子樹：
+   - 讀取 "2" → 創建節點 2
+   - 讀取 "null" → 左子節點為空
+   - 讀取 "null" → 右子節點為空
+3. 遞迴處理右子樹：
+   - 讀取 "3" → 創建節點 3
+   - 遞迴左子樹：讀取 "4" → 創建節點 4
+   - 遞迴右子樹：讀取 "5" → 創建節點 5
+
+重建完成！</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>為什麼選擇前序遍歷？</li>
+                                <li>能否用其他遍歷方式？</li>
+                                <li>如何處理特殊字符？</li>
+                                <li>空間優化的可能性？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>前序遍歷便於重建根節點</li>
+                                <li>使用分隔符避免歧義</li>
+                                <li>null 標記表示空節點</li>
+                                <li>遞迴實現簡潔清晰</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記處理空節點</li>
+                                <li>分隔符選擇不當</li>
+                                <li>遞迴終止條件錯誤</li>
+                                <li>字符串分割問題</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>為什麼使用前序遍歷？</h2>
+                    <div class="content-box">
+                        <p><strong>前序遍歷的優勢：</strong></p>
+                        <ul>
+                            <li>根節點在最前面，便於首先創建根節點</li>
+                            <li>然後依次處理左右子樹，符合遞迴邏輯</li>
+                            <li>重建時可以立即確定樹的結構</li>
+                        </ul>
+                        
+                        <p><strong>其他遍歷方式：</strong></p>
+                        <ul>
+                            <li><strong>後序遍歷</strong>：也可以，但需要從後往前讀取</li>
+                            <li><strong>中序遍歷</strong>：單獨使用無法唯一確定樹結構</li>
+                            <li><strong>層序遍歷</strong>：可以，但實現稍複雜</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>相關題目</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><strong>Encode and Decode Strings</strong>：字符串的編碼解碼</li>
+                            <li><strong>Construct Binary Tree from Preorder and Inorder</strong>：從遍歷序列重建樹</li>
+                            <li><strong>Serialize and Deserialize BST</strong>：BST 的序列化</li>
+                            <li><strong>Serialize and Deserialize N-ary Tree</strong>：N 叉樹的序列化</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

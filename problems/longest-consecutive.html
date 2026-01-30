@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#128 Longest Consecutive Sequence - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family:Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#128</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Longest Consecutive Sequence</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Hash Table</span>
+                        <span class="tag">Union Find</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給定一個未排序的整數陣列 <code>nums</code>，找出數字連續的最長序列（不要求序列元素在原陣列中連續）的長度。</p>
+                        <p>請你設計並實現時間複雜度為 <code>O(n)</code> 的算法解決此問題。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：nums = [100,4,200,1,3,2]
+輸出：4
+解釋：最長數字連續序列是 [1, 2, 3, 4]。它的長度為 4。</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：nums = [0,3,7,2,5,8,4,6,0,1]
+輸出：9
+解釋：最長連續序列是 [0,1,2,3,4,5,6,7,8]。</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>0 <= nums.length <= 10<sup>5</sup></code></li>
+                            <li><code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>哈希集合法（推薦）- O(n)</h3>
+                        <p><strong>關鍵觀察</strong>：只從序列的起點開始計數</p>
+                        
+                        <h3>算法步驟：</h3>
+                        <ol>
+                            <li>將所有數字放入哈希集合中</li>
+                            <li>遍歷每個數字 num：
+                                <ul>
+                                    <li>如果 <code>num - 1</code> 在集合中，跳過（不是起點）</li>
+                                    <li>如果 <code>num - 1</code> 不在集合中，從 num 開始計數</li>
+                                </ul>
+                            </li>
+                            <li>持續檢查 num+1, num+2, ... 是否在集合中</li>
+                            <li>記錄最長序列長度</li>
+                        </ol>
+                        
+                        <h3>為什麼是 O(n)？</h3>
+                        <p>雖然有嵌套循環，但每個數字最多被訪問兩次：</p>
+                        <ul>
+                            <li>一次在外層循環中檢查是否為起點</li>
+                            <li>一次在內層循環中作為序列的一部分</li>
+                        </ul>
+                        
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        """
+        哈希集合 O(n) 解法
+        
+        時間複雜度：O(n)
+        空間複雜度：O(n)
+        """
+        if not nums:
+            return 0
+        
+        # 將所有數字放入集合
+        num_set = set(nums)
+        longest = 0
+        
+        for num in num_set:
+            # 只從序列起點開始計數
+            # 如果 num-1 存在，說明不是起點，跳過
+            if num - 1 not in num_set:
+                current_num = num
+                current_length = 1
+                
+                # 向後延伸序列
+                while current_num + 1 in num_set:
+                    current_num += 1
+                    current_length += 1
+                
+                longest = max(longest, current_length)
+        
+        return longest
+
+
+# 方法二：排序後掃描（O(n log n)）
+class Solution2:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        """
+        排序解法（不符合 O(n) 要求，但思路簡單）
+        
+        時間複雜度：O(n log n)
+        空間複雜度：O(1)
+        """
+        if not nums:
+            return 0
+        
+        nums.sort()
+        longest = 1
+        current_length = 1
+        
+        for i in range(1, len(nums)):
+            if nums[i] == nums[i-1]:
+                continue  # 跳過重複
+            elif nums[i] == nums[i-1] + 1:
+                current_length += 1
+                longest = max(longest, current_length)
+            else:
+                current_length = 1
+        
+        return longest</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;unordered_set&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+
+class Solution {
+public:
+    int longestConsecutive(vector&lt;int&gt;& nums) {
+        if (nums.empty()) return 0;
+        
+        // 將所有數字放入集合
+        unordered_set&lt;int&gt; numSet(nums.begin(), nums.end());
+        int longest = 0;
+        
+        for (int num : numSet) {
+            // 只從序列起點開始
+            if (numSet.find(num - 1) == numSet.end()) {
+                int currentNum = num;
+                int currentLength = 1;
+                
+                // 向後延伸序列
+                while (numSet.find(currentNum + 1) != numSet.end()) {
+                    currentNum++;
+                    currentLength++;
+                }
+                
+                longest = max(longest, currentLength);
+            }
+        }
+        
+        return longest;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if (nums.length == 0) return 0;
+        
+        // 將所有數字放入集合
+        Set&lt;Integer&gt; numSet = new HashSet&lt;&gt;();
+        for (int num : nums) {
+            numSet.add(num);
+        }
+        
+        int longest = 0;
+        
+        for (int num : numSet) {
+            // 只從序列起點開始
+            if (!numSet.contains(num - 1)) {
+                int currentNum = num;
+                int currentLength = 1;
+                
+                // 向後延伸序列
+                while (numSet.contains(currentNum + 1)) {
+                    currentNum++;
+                    currentLength++;
+                }
+                
+                longest = Math.max(longest, currentLength);
+            }
+        }
+        
+        return longest;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>算法過程視覺化</h2>
+                    <div class="content-box">
+                        <h3>以 nums = [100, 4, 200, 1, 3, 2] 為例：</h3>
+                        <pre><code>步驟 1：建立集合
+集合: {100, 4, 200, 1, 3, 2}
+
+步驟 2：遍歷每個數字
+
+檢查 100:
+  99 不在集合中 → 是起點
+  檢查 101... 不在
+  序列長度 = 1
+
+檢查 4:
+  3 在集合中 → 不是起點，跳過
+
+檢查 200:
+  199 不在集合中 → 是起點
+  檢查 201... 不在
+  序列長度 = 1
+
+檢查 1:
+  0 不在集合中 → 是起點 ✓
+  檢查 2 → 在 ✓
+  檢查 3 → 在 ✓
+  檢查 4 → 在 ✓
+  檢查 5 → 不在
+  序列長度 = 4 (最長) ✓
+
+檢查 3:
+  2 在集合中 → 不是起點，跳過
+
+檢查 2:
+  1 在集合中 → 不是起點，跳過
+
+最終答案 = 4</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>為什麼時間複雜度是 O(n)？</li>
+                                <li>能否不使用額外空間？</li>
+                                <li>如何處理重複元素？</li>
+                                <li>Union Find 如何實現？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>只從序列起點開始是關鍵</li>
+                                <li>哈希集合實現 O(1) 查找</li>
+                                <li>每個數字最多被訪問 2 次</li>
+                                <li>重複元素會被集合自動去除</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>忘記檢查是否為序列起點</li>
+                                <li>使用排序導致 O(n log n)</li>
+                                <li>重複計算同一序列</li>
+                                <li>忘記處理空陣列情況</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>相關題目</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><strong>Binary Tree Longest Consecutive Sequence</strong>：二元樹中的最長連續序列</li>
+                            <li><strong>Missing Ranges</strong>：找出缺失的區間</li>
+                            <li><strong>Find All Numbers Disappeared</strong>：找出缺失的數字</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

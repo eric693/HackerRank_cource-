@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#347 Top K Frequent Elements - HackerRank 程式題庫</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #00EA64;
+            --primary-dark: #00C853;
+            --bg-color: #F5F8FA;
+            --card-bg: #FFFFFF;
+            --text-primary: #1E2022;
+            --text-secondary: #39424E;
+            --text-muted: #69707D;
+            --border-color: #D9E1E7;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: var(--bg-color); color: var(--text-primary); line-height: 1.8; }
+        code { font-family: 'Fira Code', 'Courier New', monospace; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .header { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100; padding: 16px 0; }
+        .header .container { display: flex; justify-content: space-between; align-items: center; }
+        .back-link { color: var(--primary-color); text-decoration: none; font-weight: 500; font-size: 14px; }
+        .back-link:hover { color: var(--primary-dark); }
+        .logo { font-size: 18px; font-weight: 600; color: var(--text-primary); }
+        .main { padding: 32px 0; }
+        .problem-content { background-color: var(--card-bg); border-radius: 8px; padding: 32px; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .problem-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color); }
+        .problem-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .problem-number { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+        .difficulty { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .difficulty.medium { background-color: rgba(255, 193, 7, 0.12); color: #F57C00; }
+        .problem-title { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+        .problem-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { padding: 4px 12px; background-color: #EDF1F5; color: var(--text-secondary); border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .section { margin-bottom: 32px; }
+        .section h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+        .section h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-top: 16px; margin-bottom: 8px; }
+        .content-box { background-color: var(--bg-color); border-left: 3px solid var(--primary-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .content-box p { margin-bottom: 12px; }
+        .content-box p:last-child { margin-bottom: 0; }
+        .content-box ul, .content-box ol { margin-left: 24px; margin-top: 8px; }
+        .content-box li { margin-bottom: 8px; }
+        .content-box code { background-color: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+        .example-box { background-color: var(--bg-color); padding: 16px; border-radius: 4px; margin-bottom: 12px; }
+        .example-box h3 { margin-top: 0; }
+        .example-box pre { background-color: var(--code-bg); color: #abb2bf; padding: 12px; border-radius: 4px; overflow-x: auto; margin-top: 8px; }
+        .example-box pre code { background-color: transparent; padding: 0; color: inherit; }
+        .code-tabs { display: flex; gap: 8px; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); }
+        .tab-btn { padding: 8px 16px; background-color: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-muted); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
+        .code-content { display: none; }
+        .code-content.active { display: block; }
+        .code-content pre { background-color: var(--code-bg); border-radius: 6px; padding: 16px; overflow-x: auto; margin-top: 12px; }
+        .code-content pre code { color: #abb2bf; font-size: 14px; line-height: 1.6; }
+        .interview-tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .tip-box { background: linear-gradient(135deg, #00EA64 0%, #00C853 100%); color: white; padding: 20px; border-radius: 8px; }
+        .tip-box h3 { font-size: 16px; margin-bottom: 12px; margin-top: 0; color: white; border-bottom: 2px solid rgba(255, 255, 255, 0.3); padding-bottom: 8px; }
+        .tip-box ul { list-style: none; padding-left: 0; }
+        .tip-box li { padding-left: 20px; position: relative; margin-bottom: 8px; }
+        .tip-box li:before { content: "→"; position: absolute; left: 0; color: rgba(255, 255, 255, 0.8); font-weight: bold; }
+        .footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); padding: 24px 0; text-align: center; color: var(--text-muted); margin-top: 48px; }
+        .footer a { color: var(--primary-color); text-decoration: none; }
+        @media (max-width: 768px) {
+            .problem-content { padding: 20px; }
+            .problem-title { font-size: 24px; }
+            .interview-tips { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="back-link">← 返回題目列表</a>
+            <span class="logo">HackerRank 程式題庫</span>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="problem-content">
+                <div class="problem-header">
+                    <div class="problem-meta">
+                        <span class="problem-number">#347</span>
+                        <span class="difficulty medium">MEDIUM</span>
+                    </div>
+                    <h1 class="problem-title">Top K Frequent Elements</h1>
+                    <div class="problem-tags">
+                        <span class="tag">Array</span>
+                        <span class="tag">Hash Table</span>
+                        <span class="tag">Heap</span>
+                        <span class="tag">Bucket Sort</span>
+                    </div>
+                </div>
+
+                <section class="section">
+                    <h2>題目描述</h2>
+                    <div class="content-box">
+                        <p>給你一個整數陣列 <code>nums</code> 和一個整數 <code>k</code>，請你返回其中出現頻率前 <code>k</code> 高的元素。你可以按<strong>任意順序</strong>返回答案。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>範例</h2>
+                    <div class="example-box">
+                        <h3>範例 1:</h3>
+                        <pre><code>輸入：nums = [1,1,1,2,2,3], k = 2
+輸出：[1,2]</code></pre>
+                    </div>
+                    <div class="example-box">
+                        <h3>範例 2:</h3>
+                        <pre><code>輸入：nums = [1], k = 1
+輸出：[1]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>限制條件</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><code>1 <= nums.length <= 10<sup>5</sup></code></li>
+                            <li><code>-10<sup>4</sup> <= nums[i] <= 10<sup>4</sup></code></li>
+                            <li><code>k</code> 的取值範圍是 <code>[1, 陣列中不相同的元素的個數]</code></li>
+                            <li>題目資料保證答案唯一，換句話說，陣列中前 k 個高頻元素的集合是唯一的</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>解題思路</h2>
+                    <div class="content-box">
+                        <h3>方法一：桶排序（推薦）- O(n)</h3>
+                        <p>利用頻率作為桶的索引：</p>
+                        <ol>
+                            <li>統計每個元素的出現頻率</li>
+                            <li>創建大小為 n+1 的桶陣列（頻率最高為 n）</li>
+                            <li>將元素按頻率放入對應的桶中</li>
+                            <li>從高頻到低頻收集前 k 個元素</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+
+                        <h3>方法二：最小堆 - O(n log k)</h3>
+                        <p>維護大小為 k 的最小堆：</p>
+                        <ol>
+                            <li>統計每個元素的出現頻率</li>
+                            <li>維護一個大小為 k 的最小堆</li>
+                            <li>遍歷所有元素，將頻率較高的保留在堆中</li>
+                        </ol>
+                        <ul>
+                            <li>時間複雜度：O(n log k)</li>
+                            <li>空間複雜度：O(n)</li>
+                        </ul>
+
+                        <h3>方法三：快速選擇 - O(n) 平均</h3>
+                        <p>類似快速排序的分區思想。</p>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>程式碼實作</h2>
+                    
+                    <div class="code-tabs">
+                        <button class="tab-btn active" data-lang="python">Python</button>
+                        <button class="tab-btn" data-lang="cpp">C++</button>
+                        <button class="tab-btn" data-lang="java">Java</button>
+                    </div>
+
+                    <div class="code-content python active">
+                        <h3>Python 解法</h3>
+                        <pre><code class="language-python">from collections import Counter
+from typing import List
+import heapq
+
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        """
+        方法一：桶排序 O(n)
+        
+        時間複雜度：O(n)
+        空間複雜度：O(n)
+        """
+        # 統計頻率
+        count = Counter(nums)
+        
+        # 創建桶（頻率作為索引）
+        buckets = [[] for _ in range(len(nums) + 1)]
+        
+        # 將元素放入對應頻率的桶中
+        for num, freq in count.items():
+            buckets[freq].append(num)
+        
+        # 從高頻到低頻收集結果
+        result = []
+        for i in range(len(buckets) - 1, 0, -1):
+            result.extend(buckets[i])
+            if len(result) >= k:
+                return result[:k]
+        
+        return result
+
+
+class Solution2:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        """
+        方法二：最小堆 O(n log k)
+        
+        時間複雜度：O(n log k)
+        空間複雜度：O(n)
+        """
+        count = Counter(nums)
+        
+        # 使用 heapq.nlargest 獲取頻率最高的 k 個元素
+        return heapq.nlargest(k, count.keys(), key=count.get)
+
+
+class Solution3:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        """
+        方法三：手動維護最小堆
+        
+        時間複雜度：O(n log k)
+        空間複雜度：O(n)
+        """
+        count = Counter(nums)
+        
+        # 維護大小為 k 的最小堆
+        heap = []
+        for num, freq in count.items():
+            heapq.heappush(heap, (freq, num))
+            if len(heap) > k:
+                heapq.heappop(heap)
+        
+        return [num for freq, num in heap]</code></pre>
+                    </div>
+
+                    <div class="code-content cpp">
+                        <h3>C++ 解法</h3>
+                        <pre><code class="language-cpp">#include &lt;vector&gt;
+#include &lt;unordered_map&gt;
+#include &lt;queue&gt;
+using namespace std;
+
+class Solution {
+public:
+    vector&lt;int&gt; topKFrequent(vector&lt;int&gt;& nums, int k) {
+        // 統計頻率
+        unordered_map&lt;int, int&gt; count;
+        for (int num : nums) {
+            count[num]++;
+        }
+        
+        // 創建桶
+        vector&lt;vector&lt;int&gt;&gt; buckets(nums.size() + 1);
+        for (auto& p : count) {
+            buckets[p.second].push_back(p.first);
+        }
+        
+        // 從高頻到低頻收集結果
+        vector&lt;int&gt; result;
+        for (int i = buckets.size() - 1; i >= 0 && result.size() < k; i--) {
+            result.insert(result.end(), buckets[i].begin(), buckets[i].end());
+        }
+        
+        result.resize(k);
+        return result;
+    }
+};
+
+// 方法二：使用優先隊列（最小堆）
+class Solution2 {
+public:
+    vector&lt;int&gt; topKFrequent(vector&lt;int&gt;& nums, int k) {
+        unordered_map&lt;int, int&gt; count;
+        for (int num : nums) {
+            count[num]++;
+        }
+        
+        // 最小堆：pair&lt;頻率, 數字&gt;
+        priority_queue&lt;pair&lt;int,int&gt;, vector&lt;pair&lt;int,int&gt;&gt;, greater&lt;pair&lt;int,int&gt;&gt;&gt; minHeap;
+        
+        for (auto& p : count) {
+            minHeap.push({p.second, p.first});
+            if (minHeap.size() > k) {
+                minHeap.pop();
+            }
+        }
+        
+        vector&lt;int&gt; result;
+        while (!minHeap.empty()) {
+            result.push_back(minHeap.top().second);
+            minHeap.pop();
+        }
+        
+        return result;
+    }
+};</code></pre>
+                    </div>
+
+                    <div class="code-content java">
+                        <h3>Java 解法</h3>
+                        <pre><code class="language-java">import java.util.*;
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        // 統計頻率
+        Map&lt;Integer, Integer&gt; count = new HashMap&lt;&gt;();
+        for (int num : nums) {
+            count.put(num, count.getOrDefault(num, 0) + 1);
+        }
+        
+        // 創建桶
+        List&lt;Integer&gt;[] buckets = new List[nums.length + 1];
+        for (int i = 0; i < buckets.length; i++) {
+            buckets[i] = new ArrayList&lt;&gt;();
+        }
+        
+        for (Map.Entry&lt;Integer, Integer&gt; entry : count.entrySet()) {
+            buckets[entry.getValue()].add(entry.getKey());
+        }
+        
+        // 從高頻到低頻收集結果
+        int[] result = new int[k];
+        int index = 0;
+        for (int i = buckets.length - 1; i >= 0 && index < k; i--) {
+            for (int num : buckets[i]) {
+                result[index++] = num;
+                if (index == k) break;
+            }
+        }
+        
+        return result;
+    }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>桶排序過程視覺化</h2>
+                    <div class="content-box">
+                        <h3>以 nums = [1,1,1,2,2,3], k = 2 為例：</h3>
+                        <pre><code>步驟 1：統計頻率
+count = {1: 3, 2: 2, 3: 1}
+
+步驟 2：創建桶（頻率作為索引）
+buckets = [
+  [],      # 頻率 0
+  [3],     # 頻率 1
+  [2],     # 頻率 2
+  [1],     # 頻率 3
+  [],      # 頻率 4
+  [],      # 頻率 5
+  []       # 頻率 6
+]
+
+步驟 3：從高頻到低頻收集
+i = 6: buckets[6] = [] → result = []
+i = 5: buckets[5] = [] → result = []
+i = 4: buckets[4] = [] → result = []
+i = 3: buckets[3] = [1] → result = [1]
+i = 2: buckets[2] = [2] → result = [1, 2] ✓
+
+已收集 k=2 個元素，返回 [1, 2]</code></pre>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>面試要點</h2>
+                    <div class="interview-tips">
+                        <div class="tip-box">
+                            <h3>常見追問</h3>
+                            <ul>
+                                <li>為什麼桶排序是 O(n)？</li>
+                                <li>如果 k 很小，哪種方法更好？</li>
+                                <li>如何處理頻率相同的元素？</li>
+                                <li>能否在 O(n log n) 內解決？</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>解題技巧</h3>
+                            <ul>
+                                <li>桶排序適合頻率範圍有限</li>
+                                <li>最小堆適合 k 很小的情況</li>
+                                <li>Counter 可快速統計頻率</li>
+                                <li>理解不同方法的權衡</li>
+                            </ul>
+                        </div>
+                        <div class="tip-box">
+                            <h3>常見錯誤</h3>
+                            <ul>
+                                <li>桶的大小設置錯誤</li>
+                                <li>忘記處理空桶</li>
+                                <li>收集結果時超出 k 個</li>
+                                <li>堆的大小控制不當</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <h2>相關題目</h2>
+                    <div class="content-box">
+                        <ul>
+                            <li><strong>Kth Largest Element</strong>：找第 k 大的元素</li>
+                            <li><strong>Word Frequency</strong>：統計單詞頻率</li>
+                            <li><strong>Sort Characters By Frequency</strong>：按頻率排序字符</li>
+                            <li><strong>Top K Frequent Words</strong>：頻率相同時按字典序</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>HackerRank 程式題庫練習平台 | <a href="../index.html">返回首頁</a></p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+    
+    <script>
+        hljs.highlightAll();
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const codeContents = document.querySelectorAll('.code-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                codeContents.forEach(content => content.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`.code-content.${lang}`).classList.add('active');
+                const activeCode = document.querySelector(`.code-content.${lang}`);
+                if (activeCode) {
+                    activeCode.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
